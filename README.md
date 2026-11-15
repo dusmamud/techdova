@@ -11,8 +11,8 @@ the reference design.
 
 ## Locked stack
 
-Single project, one `package.json` at the root, **no `pnpm-workspace.yaml`**
-and no monorepo. Core versions are pinned exactly (no `^`):
+Single project, one `package.json` at the root, npm + `package-lock.json`
+(no workspaces, no monorepo). Core versions are pinned exactly (no `^`):
 
 | Package | Version |
 |---|---|
@@ -36,25 +36,25 @@ layout). Dynamic product routes export `entries()`. The adapter fallback is
 
 ## Run locally
 
-Requires Node.js 26 + pnpm (the project was built with Node v26.13.1 and
-pnpm 12.18.0).
+Requires Node.js 26 + npm (the project was built with Node v26.13.1 and
+npm 11.20.0).
 
 ```sh
-pnpm install
-pnpm run dev      # local dev server
-pnpm run build    # prerendered static output in build/
-pnpm run preview  # serve the production build locally
+npm install
+npm run dev      # local dev server
+npm run build    # prerendered static output in build/
+npm run preview  # serve the production build locally
 ```
 
 Quality gates:
 
 ```sh
-pnpm run check    # svelte-kit sync + svelte-check (0 errors, 0 warnings)
-pnpm run test     # Vitest unit tests (32)
-pnpm run test:e2e # Playwright smoke tests (9); uses the cached headless
+npm run check    # svelte-kit sync + svelte-check (0 errors, 0 warnings)
+npm run test     # Vitest unit tests (32)
+npm run test:e2e # Playwright smoke tests (9); uses the cached headless
                   # shell, no browser downloads. Override the port with
                   # E2E_PORT (default 4173).
-pnpm run qa       # Playwright visual QA: screenshots + horizontal-overflow
+npm run qa       # Playwright visual QA: screenshots + horizontal-overflow
                   # checks (30) + branded-404 + image-load checks; writes
                   # qa/shots/*.png and qa/qa-report.json
 ```
@@ -150,9 +150,9 @@ How it works:
    `src/lib/i18n/index.ts`: `xx,`.
 3. Add the new locale's strings to the product/category data
    (`src/lib/data/products.ts`, `src/lib/data/categories.ts`): every
-   localized field is typed per locale, so `pnpm run check` lists each
+   localized field is typed per locale, so `npm run check` lists each
    missing string. No component changes are needed.
-4. Run `pnpm run check && pnpm run test && pnpm run build`. Routes,
+4. Run `npm run check && npm run test && npm run build`. Routes,
    `entries()`, sitemap, hreflang, the language switcher and `<html lang>`
    all derive from the registry automatically.
 
@@ -173,9 +173,10 @@ How it works:
 
 ## Configuration before deploying
 
-- `SITE_URL` in `src/lib/config.ts` is a placeholder
-  (`https://techdova.example.com`). Update it to the real domain: canonical
-  URLs, hreflang, sitemap, `og:` URLs and JSON-LD all derive from it.
+- `SITE_URL` in `src/lib/config.ts` is the live Cloudflare Pages URL
+  (`https://techdova.pages.dev`). Canonical URLs, hreflang, sitemap,
+  `og:` URLs and JSON-LD all derive from it — update it there if the
+  domain ever changes.
 - Contact details in `src/lib/config.ts` are placeholders
   (`support@techdova.example.com`, `+213 21 00 00 00`).
 - The site is a static build (`build/`): any static host works. No

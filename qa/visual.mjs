@@ -1,6 +1,6 @@
 // Visual QA: screenshots (desktop + mobile, EN + FR) and horizontal-overflow
 // checks across widths. Serves the prerendered build/ via qa/serve.mjs on a
-// scratch port. Run after `pnpm run build`. Exits 1 if overflow or the
+// scratch port. Run after `npm run build`. Exits 1 if overflow or the
 // branded-404 check fails. No browser downloads: uses the Playwright browser
 // already present in ~/.cache/ms-playwright.
 import { spawn } from 'node:child_process';

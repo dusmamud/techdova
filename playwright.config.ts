@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
 // Port is configurable so e2e never collides with another local server:
-// E2E_PORT=4191 pnpm run test:e2e
+// E2E_PORT=4191 npm run test:e2e
 const port = Number(process.env.E2E_PORT ?? 4173);
 
 export default defineConfig({
