@@ -1,9 +1,9 @@
 /**
- * Site-wide constants. SITE_URL is a placeholder until the site is deployed —
- * update it in this one place and canonical / hreflang / sitemap URLs follow.
+ * Site-wide constants. SITE_URL is the live Cloudflare Pages URL —
+ * canonical / hreflang / sitemap URLs derive from it in this one place.
  */
 export const SITE_NAME = 'TechDova';
-export const SITE_URL = 'https://techdova.example.com';
+export const SITE_URL = 'https://techdova.pages.dev';
 export const SITE_YEAR = 2026;
 
 /** Demo contact details (nothing is sent anywhere). */
