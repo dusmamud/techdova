@@ -1,0 +1,236 @@
+{
+  "generatedAt": "2026-11-15T14:08:28.633Z",
+  "screenshots": [
+    "home-en-desktop.png",
+    "shop-en-desktop.png",
+    "product-en-desktop.png",
+    "home-en-mobile.png",
+    "shop-en-mobile.png",
+    "product-en-mobile.png",
+    "home-fr-desktop.png",
+    "shop-fr-desktop.png",
+    "product-fr-desktop.png",
+    "home-fr-mobile.png",
+    "shop-fr-mobile.png",
+    "product-fr-mobile.png",
+    "not-found-en-desktop.png"
+  ],
+  "overflow": [
+    {
+      "width": 320,
+      "page": "home-en",
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "page": "home-fr",
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "page": "shop-en",
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "page": "product-en",
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "page": "cart-en",
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "page": "contact-en",
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "page": "home-en",
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "page": "home-fr",
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "page": "shop-en",
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "page": "product-en",
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "page": "cart-en",
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "page": "contact-en",
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "page": "home-en",
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "page": "home-fr",
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "page": "shop-en",
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "page": "product-en",
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "page": "cart-en",
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "page": "contact-en",
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "page": "home-en",
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "page": "home-fr",
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "page": "shop-en",
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "page": "product-en",
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "page": "cart-en",
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "page": "contact-en",
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "home-en",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "home-fr",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "shop-en",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "product-en",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "cart-en",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "contact-en",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    }
+  ],
+  "unloadedImages": [],
+  "notFoundCheck": {
+    "status": 404,
+    "branded": true
+  },
+  "consoleErrors": []
+}

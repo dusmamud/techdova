@@ -1,0 +1,58 @@
+@import '@fontsource-variable/inter';
+@import 'tailwindcss';
+
+@theme {
+	--font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+	--color-brand-50: #eff8f3;
+	--color-brand-100: #dcefe4;
+	--color-brand-200: #bbdfcc;
+	--color-brand-300: #8cc9a9;
+	--color-brand-400: #52ac82;
+	--color-brand-500: #2e9268;
+	--color-brand-600: #1c7a55;
+	--color-brand-700: #146147;
+	--color-brand-800: #114e3a;
+	--color-brand-900: #0c3b2c;
+	--color-brand-950: #062a1f;
+
+	--color-ink: #101828;
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+		/* Sticky header is 64px (72px on desktop): keep anchor targets and
+		   focused content from sliding underneath it (WCAG 2.4.11). */
+		scroll-padding-top: 5.5rem;
+	}
+
+	body {
+		@apply bg-white font-sans text-neutral-900 antialiased;
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-brand-700);
+		outline-offset: 2px;
+		border-radius: 4px;
+	}
+
+	::selection {
+		background-color: var(--color-brand-200);
+		color: var(--color-brand-950);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+		}
+	}
+}
