@@ -28,6 +28,7 @@ export type Product = {
 	imageAlt: LocalizedString;
 	specs: ProductSpec[];
 	featured?: boolean;
+	isNew?: boolean;
 };
 
 export const products: Product[] = [
@@ -90,7 +91,8 @@ export const products: Product[] = [
 			{ label: { en: 'Chip', fr: 'Puce' }, value: { en: 'Snapdragon 8 Gen 3', fr: 'Snapdragon 8 Gen 3' } },
 			{ label: { en: 'Storage', fr: 'Stockage' }, value: { en: '256 GB', fr: '256 Go' } },
 			{ label: { en: 'Battery', fr: 'Batterie' }, value: { en: '4000 mAh', fr: '4 000 mAh' } }
-		]
+		],
+		isNew: true
 	},
 	{
 		slug: 'macbook-air-m2',
@@ -212,7 +214,8 @@ export const products: Product[] = [
 			{ label: { en: 'Drivers', fr: 'Transducteurs' }, value: { en: '30 mm', fr: '30 mm' } },
 			{ label: { en: 'Bluetooth', fr: 'Bluetooth' }, value: { en: '5.2', fr: '5.2' } },
 			{ label: { en: 'Weight', fr: 'Poids' }, value: { en: '250 g', fr: '250 g' } }
-		]
+		],
+		isNew: true
 	},
 	{
 		slug: 'galaxy-watch-6',
@@ -273,7 +276,8 @@ export const products: Product[] = [
 			{ label: { en: 'Chip', fr: 'Puce' }, value: { en: 'S9 SiP', fr: 'S9 SiP' } },
 			{ label: { en: 'Battery', fr: 'Batterie' }, value: { en: 'Up to 18 hours', fr: 'Jusqu’à 18 heures' } },
 			{ label: { en: 'Water resistance', fr: 'Résistance à l’eau' }, value: { en: '50 m', fr: '50 m' } }
-		]
+		],
+		isNew: true
 	},
 	{
 		slug: 'dualsense-controller',
@@ -333,7 +337,8 @@ export const products: Product[] = [
 			{ label: { en: 'Battery', fr: 'Batterie' }, value: { en: '4.5–9 hours', fr: '4,5–9 heures' } },
 			{ label: { en: 'Storage', fr: 'Stockage' }, value: { en: '32 GB', fr: '32 Go' } },
 			{ label: { en: 'Modes', fr: 'Modes' }, value: { en: 'TV, tabletop, handheld', fr: 'TV, sur table, portable' } }
-		]
+		],
+		isNew: true
 	},
 	{
 		slug: 'magsafe-charger',
@@ -407,6 +412,44 @@ export function getProductsByCategory(category: CategorySlug): Product[] {
 
 export function getFeaturedProducts(): Product[] {
 	return products.filter((p) => p.featured);
+}
+
+export function getNewProducts(): Product[] {
+	return products.filter((p) => p.isNew);
+}
+
+function discountPercent(product: Product): number {
+	if (!product.badge || !product.oldPrice) return 0;
+	return ((product.oldPrice - product.price) / product.oldPrice) * 100;
+}
+
+/** Discounted products (badge + oldPrice), largest discount first. */
+export function getDiscountedProducts(): Product[] {
+	return products
+		.filter((p) => p.badge && p.oldPrice)
+		.sort((a, b) => discountPercent(b) - discountPercent(a));
+}
+
+/** Complementary categories for "pairs well with" suggestions. */
+const pairsWellWithMap: Record<CategorySlug, CategorySlug[]> = {
+	smartphones: ['accessories', 'audio'],
+	computers: ['accessories'],
+	audio: ['smartphones'],
+	smartwatches: ['smartphones'],
+	gaming: ['audio'],
+	accessories: ['computers']
+};
+
+/** Complementary-category products first, then the rest, never the product itself. */
+export function getPairsWellWith(product: Product, count = 3): Product[] {
+	const complements = pairsWellWithMap[product.category] ?? [];
+	const paired = products.filter(
+		(p) => p.slug !== product.slug && complements.includes(p.category)
+	);
+	const others = products.filter(
+		(p) => p.slug !== product.slug && !complements.includes(p.category)
+	);
+	return [...paired, ...others].slice(0, count);
 }
 
 /** Same-category products first, then the rest, never the product itself. */

@@ -14,19 +14,69 @@ export const fr: Dictionary = {
 		shopTitle: 'Boutique | TechDova',
 		shopDescription:
 			'Parcourez tous nos produits technologiques : smartphones, ordinateurs, audio, montres connectées, gaming et accessoires.',
+		categoryTitle: '{category} | TechDova',
+		categoryDescription:
+			'{category} chez TechDova : des produits originaux, des prix honnêtes et une livraison rapide.',
+		searchTitle: 'Recherche | TechDova',
+		searchDescription:
+			'Recherchez dans le catalogue TechDova : smartphones, ordinateurs, audio, montres connectées, gaming et accessoires.',
+		wishlistTitle: 'Favoris | TechDova',
+		wishlistDescription: 'Vos produits TechDova enregistrés, réunis au même endroit.',
+		compareTitle: 'Comparer les produits | TechDova',
+		compareDescription:
+			'Comparez les produits TechDova côte à côte : prix, notes, disponibilité et caractéristiques.',
+		dealsTitle: 'Promotions | TechDova',
+		dealsDescription:
+			'Économisez sur une sélection de produits TechDova — des offres à durée limitée sur les smartphones, les ordinateurs, l’audio et bien plus.',
 		aboutTitle: 'À propos | TechDova',
 		aboutDescription:
 			'Découvrez TechDova, votre univers technologique : des produits originaux, une livraison rapide et un service client à votre écoute.',
+		testimonialsTitle: 'Témoignages | TechDova',
+		testimonialsDescription:
+			'Lisez ce que les clients de TechDova disent de nos produits, de la livraison et du support — des témoignages démo fictifs.',
+		blogTitle: 'Blog | TechDova',
+		blogDescription:
+			'Guides d’achat et conseils TechDova en langage clair : casques, ordinateurs portables, montres connectées et plus encore.',
 		contactTitle: 'Contact | TechDova',
 		contactDescription:
 			'Contactez l’équipe TechDova pour toute question sur nos produits, vos commandes ou la livraison.',
 		cartTitle: 'Panier | TechDova',
 		cartDescription:
 			'Consultez votre panier TechDova, modifiez les quantités et finalisez votre commande (démo).',
+		checkoutTitle: 'Commander | TechDova',
+		checkoutDescription:
+			'Finalisez votre commande démo : contact, livraison et paiement — rien n’est envoyé.',
+		orderConfirmationTitle: 'Commande confirmée | TechDova',
+		orderConfirmationDescription:
+			'Votre commande démo est confirmée. Consultez votre numéro de commande et son récapitulatif.',
+		trackOrderTitle: 'Suivre votre commande | TechDova',
+		trackOrderDescription:
+			'Suivez votre commande démo grâce à son code et consultez son statut de livraison.',
+		accountTitle: 'Compte | TechDova',
+		accountDescription:
+			'Votre compte démo TechDova : connectez-vous localement et consultez vos commandes démo.',
 		termsTitle: 'Conditions générales | TechDova',
 		termsDescription: 'Conditions générales démo de la boutique TechDova.',
 		privacyTitle: 'Politique de confidentialité | TechDova',
 		privacyDescription: 'Politique de confidentialité démo de la boutique TechDova.',
+		faqTitle: 'Questions fréquentes | TechDova',
+		faqDescription:
+			'Réponses démo aux questions fréquentes sur la livraison, les retours, le paiement, la garantie et les commandes chez TechDova.',
+		shippingTitle: 'Informations de livraison | TechDova',
+		shippingDescription:
+			'Informations de livraison démo pour TechDova : livraison standard gratuite en 24/48h, régions et suivi.',
+		returnsTitle: 'Retours et échanges | TechDova',
+		returnsDescription:
+			'Politique de retours démo pour TechDova : retours sous 30 jours, retour gratuit et remboursements en 5–7 jours ouvrés.',
+		paymentTitle: 'Moyens de paiement | TechDova',
+		paymentDescription:
+			'Moyens de paiement démo chez TechDova : cartes, paiement à la livraison et versements. Aucun paiement réel n’est traité.',
+		accessibilityTitle: 'Déclaration d’accessibilité | TechDova',
+		accessibilityDescription:
+			'Déclaration d’accessibilité de la boutique démo TechDova : objectif WCAG 2.2 AA, fonctionnalités prises en charge et limites.',
+		sitemapTitle: 'Plan du site | TechDova',
+		sitemapDescription:
+			'Plan du site lisible de la boutique démo TechDova, en anglais et en français.',
 		notFoundTitle: 'Page introuvable | TechDova',
 		notFoundDescription: 'La page demandée est introuvable.'
 	},
@@ -46,11 +96,24 @@ export const fr: Dictionary = {
 		close: 'Fermer',
 		language: 'Langue',
 		skipToContent: 'Aller au contenu principal',
-		switchTo: 'Passer au {language}'
+		switchTo: 'Passer au {language}',
+		deals: 'Offres',
+		wishlist: 'Favoris',
+		compare: 'Comparer'
 	},
 	live: {
 		addedToCart: 'Ajouté au panier : {name}.',
 		removedFromCart: 'Retiré du panier : {name}.'
+	},
+	announcementBar: {
+		text: 'Livraison gratuite sur toutes les commandes — livré en 24/48h',
+		linkLabel: 'Infos livraison'
+	},
+	searchAutocomplete: {
+		popular: ['iPhone', 'Casque', 'Ordinateur portable', 'Montre connectée'],
+		noResults: 'Aucun produit ne correspond à votre recherche',
+		viewAllResults: 'Voir tous les résultats',
+		suggestionsLabel: 'Produits suggérés'
 	},
 	hero: {
 		slides: [
@@ -114,6 +177,52 @@ export const fr: Dictionary = {
 		reviewsLabel: '{count} avis',
 		ratingLabel: 'Note de {rating} sur 5'
 	},
+	toast: {
+		dismiss: 'Fermer la notification'
+	},
+	backToTop: {
+		label: 'Retour en haut'
+	},
+	recentlyViewed: {
+		heading: 'Récemment consultés'
+	},
+	countdown: {
+		days: 'Jours',
+		hours: 'Heures',
+		minutes: 'Min',
+		seconds: 'Sec',
+		expired: 'Cette offre est terminée.'
+	},
+	checkoutSteps: {
+		contact: 'Contact',
+		shipping: 'Livraison',
+		payment: 'Paiement'
+	},
+	testimonialsSection: {
+		eyebrow: 'Témoignages',
+		heading: 'Ce que disent nos clients',
+		aggregate: 'Moyenne de {rating} sur 5 d’après {count} témoignages démo',
+		demoNote: 'Ces témoignages sont des contenus démo fictifs, écrits à titre d’illustration.'
+	},
+	reviews: {
+		heading: 'Avis clients',
+		demoNote: 'Ces avis sont des contenus démo fictifs, écrits à titre d’illustration.',
+		writeTitle: 'Écrire un avis (démo)',
+		nameLabel: 'Votre nom',
+		ratingLabel: 'Note',
+		titleLabel: 'Titre de l’avis',
+		textLabel: 'Votre avis',
+		submit: 'Envoyer l’avis',
+		successNote: 'Merci ! Votre avis démo apparaît ci-dessus pour cette session uniquement.',
+		helpful: 'Utile ({count})',
+		helpfulVoted: 'Utile — merci pour votre vote ({count})',
+		basedOn: 'Basé sur {count} avis',
+		breakdownLabel: 'Répartition des notes',
+		nameError: 'Veuillez saisir votre nom.',
+		titleError: 'Veuillez saisir un titre d’avis.',
+		textError: 'Veuillez écrire au moins 10 caractères.',
+		ratingOption: '{n} étoiles sur 5'
+	},
 	promo: {
 		eyebrow: 'Offre spéciale',
 		titleA: 'Jusqu’à -20%',
@@ -130,6 +239,32 @@ export const fr: Dictionary = {
 			{ title: 'Support client', subtitle: 'Toujours à votre écoute' }
 		]
 	},
+	newArrivals: {
+		eyebrow: 'Derniers arrivages',
+		heading: 'Nouveautés',
+		viewAll: 'Voir tous les produits'
+	},
+	dealOfDay: {
+		eyebrow: 'Offre à durée limitée',
+		heading: 'Offre du jour',
+		viewAll: 'Voir toutes les offres',
+		endsLabel: 'Cette offre se termine dans'
+	},
+	brandStory: {
+		eyebrow: 'Notre histoire',
+		heading: 'La technologie à portée de main',
+		text: 'TechDova est née d’une idée simple : les dernières technologies doivent être faciles à découvrir, à comparer et dignes de confiance. Chaque produit est original, couvert par une garantie constructeur et livré rapidement.',
+		cta: 'En savoir plus sur nous',
+		imageAlt: 'Smartphone, ordinateur portable, montre connectée et écouteurs sur un podium blanc'
+	},
+	newsletterBand: {
+		title: 'Restez informé',
+		text: 'Recevez nos nouveautés, nos derniers arrivages et nos offres spéciales — sans spam, désinscription à tout moment (démo).'
+	},
+	quickView: {
+		label: 'Aperçu rapide',
+		viewDetails: 'Voir la fiche complète'
+	},
 	footer: {
 		tagline: 'Votre univers technologique',
 		usefulLinks: 'Liens utiles',
@@ -143,7 +278,24 @@ export const fr: Dictionary = {
 		subscribeError: 'Veuillez saisir une adresse e-mail valide.',
 		rights: 'Tous droits réservés.',
 		terms: 'Conditions générales',
-		privacy: 'Politique de confidentialité'
+		privacy: 'Politique de confidentialité',
+		shopTitle: 'Boutique',
+		helpTitle: 'Aide',
+		companyTitle: 'Entreprise',
+		accountTitle: 'Compte',
+		deals: 'Offres',
+		shipping: 'Livraison',
+		returns: 'Retours',
+		payment: 'Modes de paiement',
+		faq: 'FAQ',
+		trackOrder: 'Suivre ma commande',
+		testimonials: 'Témoignages',
+		blog: 'Blog',
+		sitemap: 'Plan du site',
+		accessibility: 'Accessibilité',
+		account: 'Compte',
+		wishlist: 'Favoris',
+		compare: 'Comparer'
 	},
 	shop: {
 		title: 'Boutique',
@@ -167,6 +319,71 @@ export const fr: Dictionary = {
 		clearFilters: 'Effacer les filtres',
 		filtersLabel: 'Filtres'
 	},
+	categoryPage: {
+		breadcrumbLabel: 'Fil d’Ariane',
+		results: '{count} produits',
+		resultOne: '1 produit',
+		backToShop: 'Retour à la boutique'
+	},
+	searchPage: {
+		title: 'Recherche',
+		hint: 'Recherchez dans tout le catalogue par nom de produit, catégorie ou caractéristique.',
+		searchLabel: 'Rechercher des produits',
+		searchPlaceholder: 'Rechercher des produits…',
+		popularLabel: 'Recherches populaires',
+		popularSearches: ['iPhone', 'casque', 'ordinateur portable', 'montre connectée'],
+		results: '{count} résultats pour « {query} »',
+		resultOne: '1 résultat pour « {query} »',
+		noResults: 'Aucun résultat pour « {query} »',
+		noResultsHint: 'Vérifiez l’orthographe ou essayez un mot plus général.',
+		suggestionsLabel: 'Essayez l’une de ces recherches populaires',
+		browseShop: 'Voir la boutique'
+	},
+	wishlistPage: {
+		title: 'Vos favoris',
+		description: 'Vos produits enregistrés, réunis au même endroit.',
+		count: '{count} produits enregistrés',
+		countOne: '1 produit enregistré',
+		empty: 'Votre liste de favoris est vide',
+		emptyHint: 'Touchez le cœur d’un produit pour l’enregistrer ici.',
+		browseShop: 'Voir la boutique',
+		moveToCart: 'Déplacer vers le panier',
+		moveToCartLabel: 'Déplacer {name} vers le panier',
+		remove: 'Retirer {name}'
+	},
+	comparePage: {
+		title: 'Comparer les produits',
+		description: 'Comparez jusqu’à 4 produits côte à côte.',
+		empty: 'Rien à comparer pour le moment',
+		emptyHint:
+			'Ajoutez jusqu’à 4 produits pour comparer leurs prix, leurs notes et leurs caractéristiques.',
+		browseShop: 'Voir la boutique',
+		clearAll: 'Tout effacer',
+		comparing: 'Comparaison de {count} produits',
+		tableLabel: 'Comparaison des produits',
+		rowProduct: 'Produit',
+		rowPrice: 'Prix',
+		rowRating: 'Note',
+		rowCategory: 'Catégorie',
+		rowStock: 'Disponibilité',
+		rowActions: 'Actions',
+		remove: 'Retirer {name}',
+		trayAriaLabel: 'Barre de comparaison',
+		trayCount: '{count} produits à comparer',
+		trayOne: '1 produit à comparer',
+		trayCompareNow: 'Comparer maintenant',
+		trayClear: 'Effacer la comparaison'
+	},
+	dealsPage: {
+		title: 'Promotions',
+		description: 'Économisez sur une sélection de produits — pour une durée limitée.',
+		endsIn: 'L’offre se termine dans',
+		results: '{count} promotions',
+		resultOne: '1 promotion',
+		empty: 'Aucune promotion pour le moment',
+		emptyHint: 'Revenez bientôt pour découvrir nos prochaines offres.',
+		browseShop: 'Voir la boutique'
+	},
 	product: {
 		inStock: 'En stock',
 		lowStock: 'Plus que {count} en stock',
@@ -187,7 +404,22 @@ export const fr: Dictionary = {
 		saveLabel: 'Économisez {amount}',
 		breadcrumbHome: 'Accueil',
 		breadcrumbShop: 'Boutique',
-		breadcrumbLabel: 'Fil d’Ariane'
+		breadcrumbLabel: 'Fil d’Ariane',
+		reviewsLink: 'Lire les avis',
+		deliveryTitle: 'Livraison et retours',
+		deliveryEstimate: 'Livraison estimée en 24/48h',
+		notifyLabel: 'Me prévenir quand il sera disponible (démo)',
+		notifySuccess:
+			'Merci ! Nous vous préviendrons quand ce produit sera de nouveau en stock. Ceci est une démo : aucune notification ne sera envoyée.',
+		shareLabel: 'Partager ce produit',
+		copyLink: 'Copier le lien',
+		copiedToast: 'Lien copié dans le presse-papiers.',
+		shareViaLabel: 'Partager',
+		pairsTitle: 'Va bien avec',
+		zoomLabel: 'Agrandir l’image du produit',
+		compareAdd: 'Ajouter à la comparaison',
+		compareRemove: 'Retirer de la comparaison',
+		compareFull: 'La comparaison est pleine — vous pouvez comparer jusqu’à 4 produits.'
 	},
 	cart: {
 		title: 'Votre panier',
@@ -219,6 +451,126 @@ export const fr: Dictionary = {
 		checkout: 'Commander (démo)',
 		empty: 'Votre panier est vide.',
 		subtotal: 'Sous-total'
+	},
+	checkout: {
+		title: 'Commander',
+		guestNote:
+			'Commande en tant qu’invité — aucun compte n’est requis. La connexion est facultative et reste sur cet appareil.',
+		demoNote: 'Commande démo : aucun paiement n’est effectué et rien n’est envoyé.',
+		nameLabel: 'Nom complet',
+		namePlaceholder: 'Votre nom',
+		emailLabel: 'Adresse e-mail',
+		emailPlaceholder: 'vous@exemple.com',
+		addressLabel: 'Adresse',
+		addressPlaceholder: 'Rue et numéro',
+		cityLabel: 'Ville',
+		cityPlaceholder: 'Votre ville',
+		postalLabel: 'Code postal',
+		postalPlaceholder: '16000',
+		countryLabel: 'Pays',
+		countryAlgeria: 'Algérie',
+		countryFrance: 'France',
+		countryTunisia: 'Tunisie',
+		countryMorocco: 'Maroc',
+		deliveryLegend: 'Mode de livraison',
+		deliveryStandard: 'Livraison standard',
+		deliveryStandardHint: 'Livré en 24/48h — gratuit',
+		deliveryExpress: 'Livraison express',
+		deliveryExpressHint: 'Livré en 24h — gratuit',
+		paymentLegend: 'Moyen de paiement',
+		paymentCard: 'Carte bancaire (démo)',
+		paymentCardHint: 'Démo uniquement — utilisez des données de test. Rien n’est débité.',
+		paymentCod: 'Paiement à la livraison',
+		paymentCodHint: 'Payez à la réception de votre commande démo.',
+		paymentBnpl: 'Paiement en plusieurs fois (démo)',
+		paymentBnplHint: 'Divisez votre paiement démo en plusieurs fois. Rien n’est débité.',
+		cardNumberLabel: 'Numéro de carte (démo)',
+		cardNumberPlaceholder: '4242 4242 4242 4242',
+		expiryLabel: 'Date d’expiration (démo)',
+		expiryPlaceholder: 'MM/AA',
+		cvcLabel: 'CVC (démo)',
+		cvcPlaceholder: '123',
+		cardDemoNote:
+			'Champs de carte démo : saisissez des données de test. Elles ne sont jamais envoyées ni stockées.',
+		back: 'Retour',
+		continue: 'Continuer',
+		placeOrder: 'Passer la commande (démo)',
+		requiredError: 'Ce champ est obligatoire.',
+		emailError: 'Veuillez saisir une adresse e-mail valide.',
+		cardNumberError: 'Veuillez saisir un numéro de carte démo (au moins 12 chiffres).',
+		expiryError: 'Veuillez saisir une date d’expiration au format MM/AA.',
+		cvcError: 'Veuillez saisir un CVC démo de 3 ou 4 chiffres.',
+		errorSummary: 'Veuillez corriger les erreurs suivantes :',
+		summaryTitle: 'Récapitulatif de la commande',
+		lineQty: '× {qty}'
+	},
+	orderConfirmation: {
+		itemsTitle: 'Vos articles',
+		placedOn: 'Passée le {date}',
+		statusLabel: 'Statut de livraison',
+		trackOrderLink: 'Suivre votre commande',
+		emptyTitle: 'Aucune commande récente trouvée',
+		emptyText:
+			'Aucune commande démo n’a été trouvée sur cet appareil. Passez une commande depuis votre panier pour voir sa confirmation ici.',
+		lineQty: '× {qty}'
+	},
+	trackOrder: {
+		title: 'Suivre votre commande',
+		description:
+			'Saisissez votre code de commande démo pour voir son statut de livraison. Ceci est une démo : les statuts sont illustratifs et calculés sur votre appareil.',
+		orderCodeLabel: 'Code de commande',
+		orderCodePlaceholder: 'TD-XXXXXX',
+		codeHint: 'Votre code de commande commence par TD- et figure sur la page de confirmation.',
+		emailLabel: 'Adresse e-mail (facultatif)',
+		emailPlaceholder: 'vous@exemple.com',
+		submit: 'Suivre la commande',
+		requiredError: 'Veuillez saisir votre code de commande.',
+		emailError: 'Veuillez saisir une adresse e-mail valide.',
+		orderHeading: 'Commande {orderId}',
+		placedOn: 'Passée le {date}',
+		statusLabel: 'Statut de livraison',
+		statusOrdered: 'Commandée',
+		statusShipped: 'Expédiée',
+		statusOutForDelivery: 'En cours de livraison',
+		statusDelivered: 'Livrée',
+		timelineLabel: 'Chronologie de livraison',
+		stepCompleted: 'Terminé',
+		stepCurrent: 'Étape actuelle',
+		stepUpcoming: 'À venir',
+		itemsTitle: 'Articles de la commande',
+		lineQty: '× {qty}',
+		demoNote:
+			'Suivi démo : cette chronologie est illustrative. Aucune commande n’a été trouvée pour ce code sur cet appareil, un statut d’exemple est donc affiché.',
+		trackAnother: 'Suivre une autre commande'
+	},
+	account: {
+		title: 'Votre compte',
+		description:
+			'Compte démo : connectez-vous avec un nom et un e-mail uniquement. Aucun mot de passe n’est jamais demandé, et rien ne quitte votre appareil.',
+		demoNote: 'Compte démo : votre profil est stocké uniquement dans ce navigateur.',
+		signInTitle: 'Se connecter (démo)',
+		nameLabel: 'Nom complet',
+		namePlaceholder: 'Votre nom',
+		emailLabel: 'Adresse e-mail',
+		emailPlaceholder: 'vous@exemple.com',
+		signInButton: 'Se connecter (démo)',
+		requiredError: 'Ce champ est obligatoire.',
+		emailError: 'Veuillez saisir une adresse e-mail valide.',
+		errorSummary: 'Veuillez corriger les erreurs suivantes :',
+		greeting: 'Bonjour, {name}',
+		signedInAs: 'Connecté en tant que {email}',
+		signOut: 'Se déconnecter',
+		ordersTitle: 'Vos commandes démo',
+		ordersEmpty: 'Aucune commande démo pour le moment.',
+		ordersEmptyHint: 'Les commandes que vous passez dans cette démo apparaîtront ici.',
+		placedOn: 'Passée le {date}',
+		trackLink: 'Suivre la commande',
+		shortcutsTitle: 'Raccourcis',
+		cartShortcut: 'Votre panier',
+		wishlistShortcut: 'Vos favoris',
+		wishlistCount: '{count} articles enregistrés',
+		wishlistEmpty: 'Aucun article enregistré pour le moment.',
+		browseShop: 'Voir les produits'
 	},
 	contact: {
 		title: 'Contactez-nous',
@@ -290,6 +642,23 @@ export const fr: Dictionary = {
 		ctaText: 'Parcourez tout le catalogue et trouvez votre prochain appareil dès aujourd’hui.',
 		ctaButton: 'Voir la boutique'
 	},
+	testimonialsPage: {
+		title: 'Ce que disent nos clients',
+		description:
+			'Des clients ordinaires parlent des produits achetés, de la livraison reçue et du support obtenu.',
+		cta: 'Voir la boutique'
+	},
+	blogPage: {
+		title: 'Le blog TechDova',
+		description:
+			'Guides d’achat et conseils en langage clair pour vous aider à choisir la bonne technologie — sans jargon ni pression.',
+		readMore: 'Lire la suite',
+		readingTime: '{minutes} min de lecture',
+		backToBlog: 'Retour au blog',
+		prevPost: 'Article précédent',
+		nextPost: 'Article suivant',
+		breadcrumbBlog: 'Blog'
+	},
 	terms: {
 		title: 'Conditions générales',
 		description: 'Conditions générales démo de la boutique TechDova.',
@@ -335,6 +704,200 @@ export const fr: Dictionary = {
 				body: 'Pour toute question sur la confidentialité de cette démo, utilisez la page de contact. N’oubliez pas : rien de ce que vous saisissez ne quitte votre appareil.'
 			}
 		]
+	},
+	faq: {
+		title: 'Questions fréquentes',
+		description: 'Réponses démo aux questions fréquentes sur les achats chez TechDova.',
+		intro: 'Trouvez des réponses rapides ci-dessous. Tout ce qui figure sur cette page décrit la boutique démo : aucune commande, aucun paiement ni aucune livraison réelle n’a lieu.',
+		items: [
+			{
+				question: 'Combien coûte la livraison, et quelle est sa rapidité ?',
+				answer:
+					'La livraison est gratuite pour toutes les commandes démo, avec une arrivée estimée en 24/48h. Ce sont des estimations démo : aucune marchandise n’est réellement expédiée.'
+			},
+			{
+				question: 'Comment retourner un produit ?',
+				answer:
+					'Vous disposez de 30 jours à compter de la date de livraison démo pour retourner un produit. Lancez un retour depuis la page de contact et conservez l’article inutilisé dans son emballage d’origine. Dans cette démo, les retours sont purement illustratifs : rien n’est collecté et aucun remboursement n’est traité.'
+			},
+			{
+				question: 'Quels moyens de paiement acceptez-vous ?',
+				answer:
+					'La commande démo propose les paiements par carte, le paiement à la livraison et les versements de type BNPL. Aucun paiement réel n’est traité et aucune donnée bancaire ne quitte votre appareil.'
+			},
+			{
+				question: 'Les produits sont-ils couverts par une garantie ?',
+				answer:
+					'Chaque produit du catalogue démo est couvert par une garantie constructeur de 2 ans. Comme il s’agit d’une démonstration, aucune réclamation de garantie ne peut réellement être déposée.'
+			},
+			{
+				question: 'Comment suivre ma commande ?',
+				answer:
+					'Utilisez la page de suivi de commande avec votre numéro de commande démo. L’historique des commandes est stocké uniquement dans votre navigateur : le suivi fonctionne donc sur l’appareil où la commande a été passée.'
+			},
+			{
+				question: 'Faut-il un compte pour commander ?',
+				answer:
+					'Non. Vous pouvez parcourir la boutique et commander sans compte. Les fonctions de compte démo stockent leurs données uniquement dans votre navigateur (localStorage) et rien n’est envoyé à un serveur.'
+			},
+			{
+				question: 'Puis-je modifier ou annuler ma commande ?',
+				answer:
+					'Dans cette démo, les commandes sont confirmées localement sur votre appareil et aucune commande réelle n’existe à modifier. Pour toute question sur une commande démo, utilisez la page de contact.'
+			},
+			{
+				question: 'Où livrez-vous ?',
+				answer:
+					'Les régions de livraison démo incluent Alger, Oran, Constantine, Sétif, Annaba et Blida. Consultez la page d’informations de livraison pour la liste démo complète et les estimations.'
+			},
+			{
+				question: 'Est-il sûr de saisir mes données bancaires ?',
+				answer:
+					'Ceci est une démo : aucun paiement réel n’est traité et tout ce que vous saisissez reste sur votre appareil. Ne saisissez jamais de vraies données bancaires sur un site démo.'
+			}
+		],
+		contactPrompt: 'Vous avez encore une question ?',
+		contactLink: 'Contactez-nous'
+	},
+	shipping: {
+		title: 'Informations de livraison',
+		description: 'Informations de livraison démo pour la boutique TechDova.',
+		updated: 'Dernière mise à jour : 15 novembre 2026',
+		sections: [
+			{
+				heading: '1. Livraison standard gratuite',
+				body: 'La livraison standard est gratuite pour toutes les commandes démo, avec une arrivée estimée en 24/48h. Il n’y a ni frais de livraison ni montant minimum de commande. Ces estimations sont illustratives : aucune marchandise n’est réellement expédiée.'
+			},
+			{
+				heading: '2. Régions de livraison',
+				body: 'Le réseau de livraison démo couvre les régions suivantes. Les délais de livraison sont des estimations présentées à titre d’illustration uniquement.'
+			},
+			{
+				heading: '3. Suivre votre commande',
+				body: 'Chaque commande démo reçoit un numéro de suivi que vous pouvez suivre sur la page de suivi de commande. Les mises à jour de suivi sont générées localement dans votre navigateur et ne reflètent pas un envoi réel.'
+			},
+			{
+				heading: '4. Emballage',
+				body: 'Les commandes démo sont décrites comme soigneusement emballées dans un emballage protecteur et recyclable. Comme il s’agit d’une démonstration, aucun colis n’est préparé ni envoyé.'
+			}
+		],
+		regions: ['Alger', 'Oran', 'Constantine', 'Sétif', 'Annaba', 'Blida'],
+		trackOrderLink: 'Suivre votre commande'
+	},
+	returns: {
+		title: 'Retours et échanges',
+		description: 'Politique de retours démo pour la boutique TechDova.',
+		updated: 'Dernière mise à jour : 15 novembre 2026',
+		sections: [
+			{
+				heading: '1. Délai de 30 jours',
+				body: 'Vous disposez de 30 jours à compter de la date de livraison démo pour retourner ou échanger un produit. Les articles doivent être inutilisés, dans leur emballage d’origine et avec tous les accessoires inclus.'
+			},
+			{
+				heading: '2. Retour gratuit',
+				body: 'Les frais de retour sont gratuits dans cette démo. Aucune étiquette de retour n’est réellement émise et aucun colis n’est collecté : le processus ci-dessous est purement illustratif.'
+			},
+			{
+				heading: '3. Remboursements',
+				body: 'Les remboursements démo approuvés sont décrits comme émis vers le moyen de paiement d’origine sous 5–7 jours ouvrés. Aucun paiement réel n’est traité, donc aucun remboursement réel n’a lieu. Les échanges suivent le même délai de 30 jours.'
+			}
+		],
+		stepsHeading: 'Comment lancer un retour (démo)',
+		steps: [
+			'Allez sur la page de contact et choisissez le sujet « question sur une commande ».',
+			'Indiquez votre numéro de commande démo et le produit que vous souhaitez retourner.',
+			'Conservez le produit inutilisé et dans son emballage d’origine.',
+			'Dans une vraie boutique, vous recevriez ensuite une étiquette de retour — dans cette démo, il ne se passe rien de plus.'
+		],
+		contactLink: 'Contactez-nous pour lancer un retour'
+	},
+	payment: {
+		title: 'Moyens de paiement',
+		description: 'Moyens de paiement démo pour la boutique TechDova.',
+		updated: 'Dernière mise à jour : 15 novembre 2026',
+		sections: [
+			{
+				heading: '1. Cartes (démo)',
+				body: 'Les paiements par carte démo sont simulés localement : vous pouvez saisir n’importe quelles données de test à la commande et aucun débit n’est jamais effectué. Ne saisissez jamais de vraies données bancaires sur ce site démo.'
+			},
+			{
+				heading: '2. Paiement à la livraison',
+				body: 'Le paiement à la livraison est proposé comme option démo : dans une vraie boutique, vous paieriez le livreur à la réception de votre commande. Aucune livraison n’a lieu dans cette démo.'
+			},
+			{
+				heading: '3. Paiement en plusieurs fois (démo)',
+				body: 'Les versements de type BNPL sont présentés comme une option démo qui diviserait un achat en paiements mensuels. Aucun contrat de crédit n’est proposé et aucun plan de versements n’est créé.'
+			},
+			{
+				heading: '4. Sécurité',
+				body: 'Aucun paiement réel n’est traité sur ce site et aucune donnée bancaire ne quitte votre appareil : tout ce que vous saisissez reste dans votre navigateur. Le parcours de commande est une démonstration locale, sans backend ni prestataire de paiement.'
+			}
+		],
+		demoNote: 'Démo uniquement : aucun paiement réel n’est traité et aucune donnée bancaire ne quitte votre appareil.'
+	},
+	accessibility: {
+		title: 'Déclaration d’accessibilité',
+		description: 'Déclaration d’accessibilité de la boutique démo TechDova.',
+		updated: 'Dernière mise à jour : 15 novembre 2026',
+		sections: [
+			{
+				heading: '1. Notre objectif',
+				body: 'TechDova vise la conformité WCAG 2.2 niveau AA. La boutique utilise des pages pré-rendues avec un HTML sémantique, une prise en charge du clavier et des alternatives textuelles pour les images.'
+			},
+			{
+				heading: '2. Limites',
+				body: 'Il s’agit d’un site de démonstration : certains contenus ont donc des limites honnêtes — les illustrations des produits sont des images générées avec un texte alternatif descriptif, et certaines démos interactives (comme le carrousel) sont simplifiées. N’hésitez pas à nous signaler tout obstacle que vous rencontreriez.'
+			},
+			{
+				heading: '3. Commentaires',
+				body: 'Si vous constatez un problème d’accessibilité, signalez-le-nous via la page de contact en décrivant la page et le problème. Nous ferons de notre mieux pour corriger les problèmes démo dans une prochaine mise à jour.'
+			}
+		],
+		featuresHeading: 'Fonctionnalités prises en charge',
+		features: [
+			'Navigation complète au clavier avec un indicateur de focus visible',
+			'Prise en charge de la réduction des animations : les animations sont désactivées lorsque votre système le demande',
+			'Annonces pour lecteurs d’écran lors des changements de panier, via une zone live',
+			'Texte alternatif descriptif sur les images des produits et des catégories',
+			'Cibles tactiles d’au moins 44 par 44 pixels',
+			'Contraste du texte conforme à WCAG 2.2 AA sur tout le contenu principal'
+		],
+		contactLink: 'Signaler un problème d’accessibilité'
+	},
+	sitemapPage: {
+		title: 'Plan du site',
+		description: 'Toutes les pages de la boutique démo TechDova, en anglais et en français.',
+		shopHeading: 'Boutique',
+		helpHeading: 'Aide',
+		companyHeading: 'Entreprise',
+		accountHeading: 'Compte',
+		categoriesLabel: 'Catégories',
+		productsLabel: 'Produits',
+		postsLabel: 'Articles de blog',
+		labels: {
+			home: 'Accueil',
+			shop: 'Boutique',
+			deals: 'Promotions',
+			search: 'Recherche',
+			wishlist: 'Favoris',
+			compare: 'Comparateur',
+			cart: 'Panier',
+			checkout: 'Commande',
+			trackOrder: 'Suivi de commande',
+			account: 'Compte',
+			testimonials: 'Témoignages',
+			blog: 'Blog',
+			faq: 'Questions fréquentes',
+			shipping: 'Informations de livraison',
+			returns: 'Retours et échanges',
+			payment: 'Moyens de paiement',
+			about: 'À propos',
+			contact: 'Contact',
+			terms: 'Conditions générales',
+			privacy: 'Politique de confidentialité',
+			accessibility: 'Déclaration d’accessibilité',
+			sitemap: 'Plan du site'
+		}
 	},
 	notFound: {
 		eyebrow: 'Erreur 404',

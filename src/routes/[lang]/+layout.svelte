@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { browser } from '$app/env';
+	import BackToTop from '#lib/components/BackToTop.svelte';
 	import CartDrawer from '#lib/components/CartDrawer.svelte';
+	import CompareTray from '#lib/components/CompareTray.svelte';
 	import Footer from '#lib/components/Footer.svelte';
 	import Header from '#lib/components/Header.svelte';
 	import LiveRegion from '#lib/components/LiveRegion.svelte';
+	import Toast from '#lib/components/Toast.svelte';
 	import { LOCALE_STORAGE_KEY } from '#lib/config';
 	import { getDictionary } from '#lib/i18n/index';
 	import type { LayoutProps } from './$types';
@@ -34,3 +37,6 @@
 <main id="main-content">{@render children()}</main>
 <Footer lang={data.lang} {t} />
 <CartDrawer lang={data.lang} {t} />
+<CompareTray lang={data.lang} {t} />
+<Toast dismissLabel={t.toast.dismiss} />
+<BackToTop label={t.backToTop.label} />

@@ -109,6 +109,32 @@ uncertainties follow verbatim.
   the four reference best sellers. Cart/wishlist are client-only Svelte
   stores persisted to `localStorage`, guarded for prerender.
 
+### Gap-filling round (2026-11-16)
+
+A second research pass (11 more sources, listed under §2) checked the
+site against e-commerce page checklists, product-page optimisation
+guides, homepage-section practice and must-have-feature lists, and the
+gaps it found were closed in the same round:
+
+- **Missing pages added**: checkout, order confirmation, FAQ,
+  testimonials, search results, account, blog (index + posts), shipping,
+  returns and payment policy pages, order tracking, wishlist, compare,
+  deals, category pages, plus sitemap and accessibility pages — taking
+  the sitemap from 19 to 44 paths × 2 locales (88 URLs), with every new
+  URL in the sitemap and the footer.
+- **Product pages**: buy box with delivery/returns copy near the button,
+  stock states, total-cost clarity, breadcrumbs, a rating summary
+  linking to the reviews section, and delivery estimates.
+- **Home**: collections, best sellers/new arrivals, brand story, social
+  proof, email capture, trust signals and countdown promos, per the
+  high-converting homepage sections in the new sources.
+- **Findability and merchandising**: header search autocomplete (up to 5
+  product suggestions + popular terms, keyboard navigable), a free-
+  delivery announcement bar, wishlist, compare, quick view, recently
+  viewed, breadcrumbs, order tracking and structured data throughout.
+- All new strings went into both dictionaries (typed parity, same as
+  before); no new dependencies were added.
+
 ---
 ## 2. Sources (full verbatim URLs, publisher, what each supports; all checked 2026-11-15)
 
@@ -172,6 +198,19 @@ uncertainties follow verbatim.
 - https://www.localization.guide/country/dz — localization.guide (updated 13 Nov 2026) — Algeria/DZD formatting; use ISO code for storage/interchange.
 - https://all-currency-converter.codeurdivoire.com/currencies/dzd — All Currency Converter — DZD symbol `DA` (`د.ج`), ISO 4217 code DZD, Bank of Algeria.
 - https://taxsummaries.pwc.com/glossary/currency-codes — PwC Tax Summaries — Algeria: DZD, dinar (ISO 4217).
+
+**Gap-filling round (checked 2026-11-16)**
+- https://crocoblock.com/blog/important-ecommerce-website-pages/ — Crocoblock — 13-page e-commerce checklist: Home, Product, Contact, Cart, Checkout, Thank You, 404, FAQ, Testimonials, Search Results, Privacy & Terms, Account, Blog.
+- https://www.komalnakrani.com/blog/astro-ecommerce-page-checklist/ — Komal Nakrani — core e-commerce page set including collection pages, order confirmation, and shipping/returns policies.
+- https://www.trywebtec.com/resources/learn/ecommerce/product-page-optimization/ — TryWebTec — product page optimisation: buy box, delivery/returns near the button, reviews, stock, total cost.
+- https://www.getglued.co/insights/product-page-optimization — GetGlued — product page optimisation: buy box, delivery/returns near the button, reviews, stock, total cost.
+- https://www.techcelerant.com/blog/product-page-best-practices — TechCelerant — product page best practices: breadcrumbs, rating summary linking to reviews, delivery estimates.
+- https://embed.ecomposer.io/blogs/shopify-knowledge/shopify-homepage-design-a-guide-to-high-conversions-2026 — EComposer — homepage design for high conversions: hero, collections, best sellers/new arrivals, brand story, social proof, email capture, trust signals, countdown promos.
+- https://www.obsessai.com/blog/shopify-homepage-design — Obsess AI — homepage design: hero, collections, best sellers/new arrivals, brand story, social proof, email capture, trust signals, countdown promos.
+- https://www.suyashparnerkar.in/top-5-high-converting-sections-every-shopify-homepage-needs-in-2026/ — Suyash Parnerkar — high-converting homepage sections: hero, collections, best sellers/new arrivals, brand story, social proof, email capture, trust signals, countdown promos.
+- https://www.mediasearchgroup.com/blog/must-have-features-ecommerce-websites/ — Media Search Group — must-have e-commerce features: wishlist, compare, quick view, recently viewed, breadcrumbs, search autocomplete, order tracking, structured data.
+- https://www.aprodence.com/how-to-design-great-ux-for-an-e-commerce-app-the-complete-2026-guide/ — Aprodence — e-commerce UX guide: wishlist, compare, quick view, recently viewed, breadcrumbs, search autocomplete, order tracking, structured data.
+- https://www.starluxe.tech/tools/ecommerce-cro-checklist — StarLuxe — e-commerce CRO checklist: wishlist, compare, quick view, recently viewed, breadcrumbs, search autocomplete, order tracking, structured data.
 
 ## 3. Conflicts, uncertainties, and what the builder must verify
 

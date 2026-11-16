@@ -50,14 +50,20 @@ Quality gates:
 
 ```sh
 npm run check    # svelte-kit sync + svelte-check (0 errors, 0 warnings)
-npm run test     # Vitest unit tests (32)
-npm run test:e2e # Playwright smoke tests (9); uses the cached headless
-                  # shell, no browser downloads. Override the port with
-                  # E2E_PORT (default 4173).
+npm run test     # Vitest unit tests (67 cases, finalized by QA
+                  # on 2026-11-16 after the gap-filling round)
+npm run test:e2e # Playwright tests (59: 10 smoke + 49 gap-round);
+                  # uses the cached headless shell, no browser downloads.
+                  # Override the port with E2E_PORT (default 4173).
 npm run qa       # Playwright visual QA: screenshots + horizontal-overflow
-                  # checks (30) + branded-404 + image-load checks; writes
+                  # checks + branded-404 + image-load checks; writes
                   # qa/shots/*.png and qa/qa-report.json
 ```
+
+Counts above are the final numbers measured by QA on 2026-11-16
+after the gap-filling round: 67 Vitest cases, 59 Playwright tests,
+88 sitemap URLs (44 paths × 2 locales), 177 visual-QA screenshots
+with 191 overflow checks and zero failures.
 
 ## Project structure
 
@@ -71,9 +77,17 @@ src/
     format.ts             Intl price/count/date formatting + interpolation
     paths.ts              Locale-aware path helpers (single source for links)
     cart-math.ts          Pure cart totals/qty math (unit-tested)
+    compare.ts            Pure compare-list helpers (unit-tested)
+    countdown.ts          Pure countdown math (unit-tested)
+    orders.ts             Demo-order helpers, browser-only (unit-tested)
+    recently-viewed.ts    Recently-viewed helpers + storage (unit-tested)
     data/
       products.ts         ONE typed source of truth: 12 products
-      categories.ts       6 categories
+      categories.ts       6 categories (+ categorySlugs)
+      blog.ts             3 demo blog posts
+      deal.ts             Countdown deal end date
+      reviews.ts          Demo product reviews + rating breakdown
+      testimonials.ts     Demo testimonials
     i18n/
       en.ts               English dictionary (source of truth for the type)
       fr.ts               French dictionary (typed as Dictionary)
@@ -81,21 +95,35 @@ src/
     stores/
       cart.svelte.ts      Cart state + localStorage + live-region events
       wishlist.svelte.ts  Wishlist state + localStorage
-    components/           Seo, JsonLd, Header, Footer, HeroCarousel,
-                          ProductCard, Stars, SocialIcon, CartDrawer,
-                          NewsletterForm, LiveRegion
+      compare.svelte.ts   Compare state + localStorage
+      account.svelte.ts   Demo account state + localStorage
+      toast.svelte.ts     Toast notification state
+    components/           Seo, JsonLd, Header, AnnouncementBar, SearchForm,
+                          Footer, HeroCarousel, ProductCard, QuickView,
+                          Stars, RatingBreakdown, ReviewsSection, SocialIcon,
+                          CartDrawer, CheckoutSteps, CountdownTimer,
+                          FaqAccordion, FaqItem, Breadcrumbs, BackToTop,
+                          TestimonialsSection, RecentlyViewed,
+                          NewsletterForm, LiveRegion, Toast
   routes/
     +layout.ts            prerender = true for all pages
     +layout.svelte        Imports app.css
     +page.svelte          Locale-neutral landing (redirect to /en or stored locale)
     +error.svelte         Branded 404 (locale detected from the URL)
-    [lang]/               All locale-prefixed pages: home, shop, product/[slug],
-                          about, contact, cart, terms, privacy
-    sitemap.xml/          Prerendered sitemap (same route table as hreflang)
+    [lang]/               All locale-prefixed pages: home, shop, search,
+                          category/[slug], product/[slug], deals, cart,
+                          checkout, order-confirmation, track-order,
+                          wishlist, compare, account, faq, shipping,
+                          returns, payment, testimonials, blog, blog/[slug],
+                          about, contact, terms, privacy, sitemap,
+                          accessibility
+    sitemap.xml/          Prerendered sitemap: 44 paths × 2 locales = 88 URLs
     robots.txt/           Prerendered robots.txt
 static/
   images/                 All generated artwork (local only, no external URLs)
   favicon.svg             Hand-drawn bag mark
+  _headers                Cloudflare Pages cache/security headers
+  llms.txt                Plain-text site description for AI agents
 qa/
   serve.mjs               Pure-Node static server for QA/e2e (clean URLs + 404)
   visual.mjs              Screenshot + overflow + image-load QA script
@@ -161,9 +189,22 @@ How it works:
 - **Cart**: add/remove/quantity, subtotal/discount/total, drawer + cart
   page, persisted in `localStorage`, header badge, polite live-region
   announcements. Checkout shows a demo success state and clears the cart.
-- **Wishlist**: hearts persist in `localStorage`.
+- **Wishlist / compare**: hearts and compare lists persist in
+  `localStorage`; dedicated wishlist and compare pages in both locales.
 - **Shop**: search, category filter, sort, max-price filter, live result
-  count, empty state. Header search navigates here with the query applied.
+  count, empty state.
+- **Search**: header search with autocomplete (up to 5 product
+  suggestions with prices + popular terms, keyboard navigable) submits
+  to the dedicated search results page. Category pages list one
+  category's products; the deals page collects discounted products with
+  a countdown.
+- **Announcement bar**: free-delivery message + link to the shipping
+  page, above the header on every page. The footer has Shop / Help /
+  Company link columns plus follow-us links and the newsletter form.
+- **More pages**: multi-step demo checkout with order confirmation,
+  order tracking, demo account, FAQ, shipping / returns / payment
+  policies, testimonials, blog, sitemap and accessibility pages — all
+  local-only, all in EN + FR.
 - **Contact / newsletter**: validated locally with inline errors and
   success states; nothing is sent.
 - **Hero carousel**: arrows, dots, keyboard, auto-advance (6s) with pause
@@ -216,6 +257,9 @@ localized alt text and explicit `width`/`height`.
 
 2026 best practices (SvelteKit i18n + adapter-static/prerender, Tailwind
 v4 CSS-first, e-commerce accessibility/SEO/performance) were researched
-2026-11-15 and applied throughout. Full source list with verbatim URLs,
+2026-11-15 and applied throughout. A gap-filling round on 2026-11-16
+added 11 more sources (e-commerce page checklists, product-page and
+homepage practice, must-have features) and closed the gaps they exposed.
+Full source list with verbatim URLs,
 publisher, what each source supports, open uncertainties and the builder
 verification log: [`docs/sources.md`](docs/sources.md).

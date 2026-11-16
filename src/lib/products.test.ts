@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { categories, getCategory, isCategorySlug } from '#lib/data/categories';
 import {
 	filterProducts,
+	getDiscountedProducts,
 	getFeaturedProducts,
+	getNewProducts,
+	getPairsWellWith,
 	getProduct,
 	getRelatedProducts,
 	products,
@@ -98,6 +101,78 @@ describe('products', () => {
 		expect(related.map((p) => p.slug)).not.toContain('iphone-15-pro');
 		expect(related[0].category).toBe('smartphones');
 	});
+
+	it('marks exactly four products as new', () => {
+		expect(getNewProducts().map((p) => p.slug).sort()).toEqual([
+			'apple-watch-9',
+			'galaxy-s24',
+			'nintendo-switch',
+			'sony-wh1000xm5'
+		]);
+	});
+
+	it('returns discounted products sorted by discount percentage desc', () => {
+		const discounted = getDiscountedProducts();
+		expect(discounted.length).toBeGreaterThan(0);
+		for (const product of discounted) {
+			expect(product.badge).toBeDefined();
+			expect(product.oldPrice).toBeGreaterThan(product.price);
+		}
+		const percents = discounted.map((p) => ((p.oldPrice! - p.price) / p.oldPrice!) * 100);
+		expect(percents).toEqual([...percents].sort((a, b) => b - a));
+		expect(discounted[0].slug).toBe('magsafe-charger');
+	});
+
+	it('returns every discounted product exactly once, smallest discount last', () => {
+		const discounted = getDiscountedProducts();
+		// Every catalogue product currently carries a badge + oldPrice.
+		expect(discounted).toHaveLength(products.length);
+		expect(discounted.map((p) => p.slug).sort()).toEqual(products.map((p) => p.slug).sort());
+		expect(discounted[discounted.length - 1].slug).toBe('macbook-air-m2');
+	});
+
+	it('returns pairs-well-with products from complementary categories first', () => {
+		const phone = getProduct('iphone-15-pro')!;
+		const paired = getPairsWellWith(phone, 3);
+		expect(paired).toHaveLength(3);
+		expect(paired.map((p) => p.slug)).not.toContain('iphone-15-pro');
+		expect(['accessories', 'audio']).toContain(paired[0].category);
+		expect(['accessories', 'audio']).toContain(paired[1].category);
+
+		const hub = getProduct('usb-c-hub')!;
+		const hubPaired = getPairsWellWith(hub, 3);
+		expect(hubPaired.map((p) => p.slug)).not.toContain('usb-c-hub');
+		expect(hubPaired[0].category).toBe('computers');
+
+		const gaming = getProduct('nintendo-switch')!;
+		expect(getPairsWellWith(gaming, 3)[0].category).toBe('audio');
+	});
+
+	it('never returns the product itself, has no duplicates and keeps complements first, for every product', () => {
+		const complements: Record<string, string[]> = {
+			smartphones: ['accessories', 'audio'],
+			computers: ['accessories'],
+			audio: ['smartphones'],
+			smartwatches: ['smartphones'],
+			gaming: ['audio'],
+			accessories: ['computers']
+		};
+		for (const product of products) {
+			const paired = getPairsWellWith(product, 5);
+			expect(paired).toHaveLength(5);
+			expect(paired.map((p) => p.slug)).not.toContain(product.slug);
+			expect(new Set(paired.map((p) => p.slug)).size).toBe(5);
+			const wanted = complements[product.category] ?? [];
+			const firstNonComplement = paired.findIndex((p) => !wanted.includes(p.category));
+			if (firstNonComplement >= 0) {
+				expect(
+					paired.slice(firstNonComplement).every((p) => !wanted.includes(p.category)),
+					`${product.slug}: complements must all precede the rest`
+				).toBe(true);
+			}
+			expect(getPairsWellWith(product, 99)).toHaveLength(products.length - 1);
+		}
+	});
 });
 
 describe('filterProducts / sortProducts', () => {
@@ -123,6 +198,69 @@ describe('filterProducts / sortProducts', () => {
 		]);
 		expect(filterProducts(products, { query: 'montre' }, 'fr').length).toBeGreaterThan(0);
 		expect(filterProducts(products, { query: 'zzz-no-match' }, 'en')).toHaveLength(0);
+	});
+
+	it('requires every word of a multi-word query to match (AND semantics)', () => {
+		expect(filterProducts(products, { query: 'galaxy watch' }, 'en').map((p) => p.slug)).toEqual(
+			['galaxy-watch-6']
+		);
+		// "noise cancelling" matches only Sony; "noise cancellation" only AirPods.
+		expect(filterProducts(products, { query: 'noise cancelling' }, 'en').map((p) => p.slug)).toEqual(
+			['sony-wh1000xm5']
+		);
+		expect(
+			filterProducts(products, { query: 'noise cancellation' }, 'en').map((p) => p.slug)
+		).toEqual(['airpods-pro']);
+	});
+
+	it('matches queries case-insensitively', () => {
+		expect(filterProducts(products, { query: 'WATCH' }, 'en').map((p) => p.slug).sort()).toEqual([
+			'apple-watch-9',
+			'galaxy-watch-6'
+		]);
+		expect(filterProducts(products, { query: 'GaLaXy WaTcH' }, 'en').map((p) => p.slug)).toEqual(
+			['galaxy-watch-6']
+		);
+		expect(filterProducts(products, { query: 'IPHONE' }, 'en').map((p) => p.slug)).toEqual([
+			'iphone-15-pro'
+		]);
+	});
+
+	it('combines a query with a category filter', () => {
+		expect(
+			filterProducts(products, { query: 'galaxy', category: 'smartphones' }, 'en').map(
+				(p) => p.slug
+			)
+		).toEqual(['galaxy-s24']);
+		expect(
+			filterProducts(products, { query: 'galaxy', category: 'smartwatches' }, 'en').map(
+				(p) => p.slug
+			)
+		).toEqual(['galaxy-watch-6']);
+		expect(
+			filterProducts(products, { query: 'watch', category: 'audio' }, 'en')
+		).toHaveLength(0);
+		expect(
+			filterProducts(products, { query: 'watch', category: 'smartwatches' }, 'en').map(
+				(p) => p.slug
+			).sort()
+		).toEqual(['apple-watch-9', 'galaxy-watch-6']);
+	});
+
+	it('trims surrounding whitespace and treats a blank query as no query', () => {
+		expect(filterProducts(products, { query: '  watch  ' }, 'en').map((p) => p.slug).sort()).toEqual(
+			['apple-watch-9', 'galaxy-watch-6']
+		);
+		expect(filterProducts(products, { query: '   ' }, 'en')).toHaveLength(products.length);
+		expect(filterProducts(products, {}, 'en')).toHaveLength(products.length);
+	});
+
+	it('returns nothing when no product contains all query words', () => {
+		expect(filterProducts(products, { query: 'titanium watch' }, 'en')).toHaveLength(0);
+		expect(filterProducts(products, { query: 'watch charger' }, 'en')).toHaveLength(0);
+		expect(
+			filterProducts(products, { query: 'galaxy watch headphones' }, 'en')
+		).toHaveLength(0);
 	});
 
 	it('sorts by price and rating', () => {

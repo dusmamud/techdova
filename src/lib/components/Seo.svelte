@@ -8,7 +8,8 @@
 		description,
 		path,
 		image = '/images/og-image.png',
-		type = 'website'
+		type = 'website',
+		noindex = false
 	}: {
 		lang: Locale;
 		title: string;
@@ -17,6 +18,7 @@
 		path: string;
 		image?: string;
 		type?: 'website' | 'product';
+		noindex?: boolean;
 	} = $props();
 
 	const dict = $derived(getDictionary(lang));
@@ -34,6 +36,9 @@
 <svelte:head>
 	<title>{title}</title>
 	<meta name="description" content={description} />
+	{#if noindex}
+		<meta name="robots" content="noindex" />
+	{/if}
 	<link rel="canonical" href={canonical} />
 	{#each locales as locale (locale)}
 		<link rel="alternate" hreflang={locale} href={absolute(locale)} />

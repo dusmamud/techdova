@@ -1,19 +1,51 @@
 import { SITE_URL } from '#lib/config';
+import { blogPosts } from '#lib/data/blog';
+import { categorySlugs } from '#lib/data/categories';
 import { products } from '#lib/data/products';
 import { defaultLocale, locales } from '#lib/i18n/index';
 
 export const prerender = true;
 
-const LASTMOD = '2026-11-15';
+const LASTMOD = '2026-11-16';
 
-const staticPaths = ['', '/shop', '/about', '/contact', '/cart', '/terms', '/privacy'];
+const staticPaths = [
+	'',
+	'/shop',
+	'/about',
+	'/contact',
+	'/cart',
+	'/terms',
+	'/privacy',
+	'/checkout',
+	// NOTE: /order-confirmation is deliberately excluded — it is noindex
+	// (session-specific) and noindex pages do not belong in a sitemap.
+	'/faq',
+	'/shipping',
+	'/returns',
+	'/payment',
+	'/search',
+	'/wishlist',
+	'/testimonials',
+	'/account',
+	'/track-order',
+	'/compare',
+	'/deals',
+	'/blog',
+	'/sitemap',
+	'/accessibility'
+];
 
 function absoluteUrl(locale: string, path: string): string {
 	return `${SITE_URL}/${locale}${path}`;
 }
 
 export function GET(): Response {
-	const paths = [...staticPaths, ...products.map((p) => `/product/${p.slug}`)];
+	const paths = [
+		...staticPaths,
+		...categorySlugs.map((slug) => `/category/${slug}`),
+		...blogPosts.map((p) => `/blog/${p.slug}`),
+		...products.map((p) => `/product/${p.slug}`)
+	];
 	const entries = paths.flatMap((path) =>
 		locales.map((locale) => {
 			const alternates = locales

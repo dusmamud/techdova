@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CheckCircle2, Minus, Plus, ShoppingCart, Trash2 } from '@lucide/svelte';
+	import { Minus, Plus, ShoppingCart, Trash2 } from '@lucide/svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { formatPrice, interpolate } from '#lib/format';
 	import { getDictionary, localize } from '#lib/i18n/index';
@@ -12,14 +12,6 @@
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
 	const intlLocale = $derived(t.meta.intlLocale);
-
-	let order = $state<{ id: string; total: string } | null>(null);
-
-	function checkout(): void {
-		const id = `TD-${Date.now().toString(36).toUpperCase()}`;
-		order = { id, total: formatPrice(cart.totals.total, intlLocale) };
-		cart.clear();
-	}
 </script>
 
 <Seo {lang} title={t.meta.cartTitle} description={t.meta.cartDescription} path="/cart" />
@@ -27,33 +19,7 @@
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">{t.cart.title}</h1>
 
-	{#if order}
-		<div class="mt-8 rounded-3xl bg-brand-50 p-6 text-center sm:p-10" role="status">
-			<CheckCircle2 class="mx-auto h-12 w-12 text-brand-700" aria-hidden="true" />
-			<h2 class="mt-3 text-2xl font-bold text-neutral-900">{t.cart.checkoutSuccessTitle}</h2>
-			<p class="mx-auto mt-2 max-w-md leading-relaxed text-neutral-600">
-				{interpolate(t.cart.checkoutSuccessText, { orderId: order.id, total: order.total })}
-			</p>
-			<p class="mx-auto mt-2 max-w-md text-sm text-neutral-500">{t.cart.checkoutDemoNote}</p>
-			<div class="mt-6 flex flex-col justify-center gap-2 sm:flex-row">
-				<a
-					href={localizedPath(lang, '/shop')}
-					class="inline-flex min-h-11 items-center justify-center rounded-full bg-brand-700 px-6 text-sm font-semibold text-white hover:bg-brand-800"
-				>
-					{t.cart.continueShopping}
-				</a>
-				<button
-					type="button"
-					onclick={() => {
-						order = null;
-					}}
-					class="inline-flex min-h-11 items-center justify-center rounded-full px-6 text-sm font-semibold text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
-				>
-					{t.cart.checkoutAgain}
-				</button>
-			</div>
-		</div>
-	{:else if cart.detailed.length === 0}
+	{#if cart.detailed.length === 0}
 		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center">
 			<ShoppingCart class="h-12 w-12 text-brand-700" aria-hidden="true" />
 			<h2 class="text-xl font-bold text-neutral-900">{t.cart.empty}</h2>
@@ -172,13 +138,12 @@
 						<dd class="font-bold text-neutral-900">{formatPrice(cart.totals.total, intlLocale)}</dd>
 					</div>
 				</dl>
-				<button
-					type="button"
-					onclick={checkout}
+				<a
+					href={localizedPath(lang, '/checkout')}
 					class="mt-5 flex min-h-12 w-full items-center justify-center rounded-full bg-brand-700 px-6 text-sm font-semibold text-white hover:bg-brand-800"
 				>
 					{t.cart.checkout}
-				</button>
+				</a>
 				<p class="mt-3 text-center text-xs text-neutral-500">{t.cart.checkoutDemoNote}</p>
 			</aside>
 		</div>

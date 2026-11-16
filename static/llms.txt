@@ -1,0 +1,64 @@
+# TechDova
+
+TechDova is a demo tech e-commerce storefront ("Your tech universe" /
+"Votre univers technologique"). It is a fully static demonstration site:
+there is no backend, no database, no checkout processing and no real
+commerce. Nothing on this site can be bought, paid for or delivered.
+
+## Demo-data disclaimer
+
+All products, prices, discounts, ratings, review counts, stock levels,
+testimonials, blog posts and delivery copy are fictional demo content
+created for illustration. The cart, checkout, contact form, newsletter,
+account, wishlist and order-tracking flows run entirely in the visitor's
+browser (localStorage) and send nothing anywhere. Contact details shown
+on the site are placeholders.
+
+## Brand and locales
+
+- Brand: TechDova
+- Site: https://techdova.pages.dev/
+- Locales: English (en) and French (fr). Every page exists in both
+  locales under a required locale prefix, e.g. /en/shop and /fr/shop.
+  English is the default locale.
+
+## Key pages
+
+- Home: https://techdova.pages.dev/en and https://techdova.pages.dev/fr
+- Shop (all products, search, filters, sorting): https://techdova.pages.dev/en/shop
+- Deals: https://techdova.pages.dev/en/deals
+- Search results: https://techdova.pages.dev/en/search
+- Category pages: https://techdova.pages.dev/en/category/smartphones (also computers, audio, smartwatches, gaming, accessories)
+- Product pages: https://techdova.pages.dev/en/product/iphone-15-pro (12 products)
+- Cart: https://techdova.pages.dev/en/cart
+- Checkout (demo): https://techdova.pages.dev/en/checkout
+- Order confirmation (demo): https://techdova.pages.dev/en/order-confirmation
+- Track your order (demo): https://techdova.pages.dev/en/track-order
+- Wishlist: https://techdova.pages.dev/en/wishlist
+- Compare: https://techdova.pages.dev/en/compare
+- Account (demo): https://techdova.pages.dev/en/account
+- FAQ: https://techdova.pages.dev/en/faq
+- Shipping and delivery: https://techdova.pages.dev/en/shipping
+- Returns: https://techdova.pages.dev/en/returns
+- Payment methods: https://techdova.pages.dev/en/payment
+- Testimonials: https://techdova.pages.dev/en/testimonials
+- Blog: https://techdova.pages.dev/en/blog
+- About: https://techdova.pages.dev/en/about
+- Contact: https://techdova.pages.dev/en/contact
+- Sitemap page: https://techdova.pages.dev/en/sitemap
+- Accessibility statement: https://techdova.pages.dev/en/accessibility
+- Terms and conditions: https://techdova.pages.dev/en/terms
+- Privacy policy: https://techdova.pages.dev/en/privacy
+
+French equivalents use the /fr prefix, e.g. https://techdova.pages.dev/fr/shop.
+
+## Catalogue facts
+
+- 12 products across 6 categories: smartphones, computers, audio, smartwatches, gaming, accessories.
+- Prices are stored as plain numbers in Algerian dinars (DZD) and displayed with a "DA" suffix (e.g. "999.00 DA" in English, "999,00 DA" in French).
+- Delivery is free on all orders in this demo, within 24/48h. Returns are accepted within 30 days (demo policy).
+
+## Machine-readable files
+
+- Sitemap: https://techdova.pages.dev/sitemap.xml (44 paths x 2 locales, with hreflang alternates)
+- Robots: https://techdova.pages.dev/robots.txt

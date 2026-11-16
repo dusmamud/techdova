@@ -8,17 +8,35 @@
 
 	let { lang, t }: { lang: Locale; t: Dictionary } = $props();
 
-	const usefulLinks = $derived([
+	const shopLinks = $derived([
 		{ label: t.nav.home, href: localizedPath(lang, '/') },
 		{ label: t.nav.shop, href: localizedPath(lang, '/shop') },
+		{ label: t.footer.deals, href: localizedPath(lang, '/deals') },
+		{ label: t.footer.wishlist, href: localizedPath(lang, '/wishlist') },
+		{ label: t.footer.compare, href: localizedPath(lang, '/compare') }
+	]);
+
+	const helpLinks = $derived([
+		{ label: t.footer.shipping, href: localizedPath(lang, '/shipping') },
+		{ label: t.footer.returns, href: localizedPath(lang, '/returns') },
+		{ label: t.footer.payment, href: localizedPath(lang, '/payment') },
+		{ label: t.footer.faq, href: localizedPath(lang, '/faq') },
+		{ label: t.footer.trackOrder, href: localizedPath(lang, '/track-order') }
+	]);
+
+	const companyLinks = $derived([
 		{ label: t.nav.about, href: localizedPath(lang, '/about') },
+		{ label: t.footer.testimonials, href: localizedPath(lang, '/testimonials') },
+		{ label: t.footer.blog, href: localizedPath(lang, '/blog') },
+		{ label: t.footer.sitemap, href: localizedPath(lang, '/sitemap') },
+		{ label: t.footer.accessibility, href: localizedPath(lang, '/accessibility') },
 		{ label: t.nav.contact, href: localizedPath(lang, '/contact') }
 	]);
 </script>
 
 <footer class="bg-brand-950 text-white">
 	<div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-		<div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.5fr]">
+		<div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1.4fr]">
 			<div>
 				<a
 					href={localizedPath(lang, '/')}
@@ -33,26 +51,7 @@
 					</span>
 				</a>
 				<p class="mt-3 text-sm text-white/70">{t.footer.tagline}</p>
-			</div>
-
-			<nav aria-label={t.footer.usefulLinks}>
-				<h2 class="text-base font-semibold">{t.footer.usefulLinks}</h2>
-				<ul class="mt-3 space-y-1">
-					{#each usefulLinks as link (link.href)}
-						<li>
-							<a
-								href={link.href}
-								class="inline-flex min-h-11 items-center text-sm text-white/75 hover:text-white"
-							>
-								{link.label}
-							</a>
-						</li>
-					{/each}
-				</ul>
-			</nav>
-
-			<div>
-				<h2 class="text-base font-semibold">{t.footer.followUs}</h2>
+				<h2 class="mt-6 text-base font-semibold">{t.footer.followUs}</h2>
 				<ul class="mt-3 flex gap-2">
 					{#each SOCIAL_LINKS as social (social.network)}
 						<li>
@@ -69,6 +68,54 @@
 					{/each}
 				</ul>
 			</div>
+
+			<nav aria-label={t.footer.shopTitle}>
+				<h2 class="text-base font-semibold">{t.footer.shopTitle}</h2>
+				<ul class="mt-3 space-y-1">
+					{#each shopLinks as link (link.href)}
+						<li>
+							<a
+								href={link.href}
+								class="inline-flex min-h-11 items-center text-sm text-white/75 hover:text-white"
+							>
+								{link.label}
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</nav>
+
+			<nav aria-label={t.footer.helpTitle}>
+				<h2 class="text-base font-semibold">{t.footer.helpTitle}</h2>
+				<ul class="mt-3 space-y-1">
+					{#each helpLinks as link (link.href)}
+						<li>
+							<a
+								href={link.href}
+								class="inline-flex min-h-11 items-center text-sm text-white/75 hover:text-white"
+							>
+								{link.label}
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</nav>
+
+			<nav aria-label={t.footer.companyTitle}>
+				<h2 class="text-base font-semibold">{t.footer.companyTitle}</h2>
+				<ul class="mt-3 space-y-1">
+					{#each companyLinks as link (link.href)}
+						<li>
+							<a
+								href={link.href}
+								class="inline-flex min-h-11 items-center text-sm text-white/75 hover:text-white"
+							>
+								{link.label}
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</nav>
 
 			<div>
 				<h2 class="text-base font-semibold">{t.footer.newsletterTitle}</h2>

@@ -4,7 +4,6 @@
 	import {
 		ChevronDown,
 		Menu,
-		Search,
 		ShoppingBag,
 		ShoppingCart,
 		User,
@@ -20,15 +19,16 @@
 		type Dictionary,
 		type Locale
 	} from '#lib/i18n/index';
-	import { localizedPath, shopPath, switchLocalePath } from '#lib/paths';
+	import { localizedPath, switchLocalePath } from '#lib/paths';
 	import { cart } from '#lib/stores/cart.svelte';
+	import AnnouncementBar from './AnnouncementBar.svelte';
+	import SearchForm from './SearchForm.svelte';
 
 	let { lang, t }: { lang: Locale; t: Dictionary } = $props();
 
 	let headerEl: HTMLElement | undefined = $state();
 	let menuOpen = $state(false);
 	let categoriesOpen = $state(false);
-	let accountOpen = $state(false);
 
 	const currentPath = $derived(page.url.pathname);
 	// searchParams is unavailable during prerendering: read it only in the browser.
@@ -37,6 +37,7 @@
 	const navLinks = $derived([
 		{ label: t.nav.home, href: localizedPath(lang, '/') },
 		{ label: t.nav.shop, href: localizedPath(lang, '/shop') },
+		{ label: t.nav.deals, href: localizedPath(lang, '/deals') },
 		{ label: t.nav.about, href: localizedPath(lang, '/about') },
 		{ label: t.nav.contact, href: localizedPath(lang, '/contact') }
 	]);
@@ -44,7 +45,6 @@
 	function closeAll(): void {
 		menuOpen = false;
 		categoriesOpen = false;
-		accountOpen = false;
 	}
 
 	function handleWindowClick(event: MouseEvent): void {
@@ -70,6 +70,7 @@
 <svelte:window onclick={handleWindowClick} onkeydown={handleKeydown} />
 
 <header bind:this={headerEl} class="sticky top-0 z-40 border-b border-neutral-200 bg-white/95 backdrop-blur">
+	<AnnouncementBar {lang} {t} />
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="flex h-16 items-center gap-2 lg:h-[72px] lg:gap-4">
 			<a
@@ -102,7 +103,6 @@
 						aria-expanded={categoriesOpen}
 						onclick={() => {
 							categoriesOpen = !categoriesOpen;
-							accountOpen = false;
 						}}
 						class="flex min-h-11 items-center gap-1 rounded-full px-3 text-sm font-medium text-neutral-700 hover:bg-brand-50 hover:text-brand-800"
 					>
@@ -118,7 +118,7 @@
 						>
 							{#each categories as category (category.slug)}
 								<a
-									href={shopPath(lang, category.slug)}
+									href={localizedPath(lang, `/category/${category.slug}`)}
 									onclick={closeAll}
 									class="flex min-h-11 items-center rounded-xl px-3 text-sm font-medium text-neutral-700 hover:bg-brand-50 hover:text-brand-800"
 								>
@@ -147,26 +147,14 @@
 				{/each}
 			</nav>
 
-			<form
-				method="get"
-				action={localizedPath(lang, '/shop')}
-				role="search"
-				class="relative ml-auto hidden min-w-0 flex-1 max-w-md md:block"
-			>
-				<label class="sr-only" for="header-search">{t.nav.searchLabel}</label>
-				<Search
-					class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500"
-					aria-hidden="true"
-				/>
-				<input
-					id="header-search"
-					name="q"
-					type="search"
-					value={searchValue}
-					placeholder={t.nav.searchPlaceholder}
-					class="h-11 w-full rounded-full bg-neutral-100 pl-10 pr-4 text-sm text-neutral-900 placeholder:text-neutral-500 focus:bg-white"
-				/>
-			</form>
+			<SearchForm
+				{lang}
+				{t}
+				id="header-search"
+				value={searchValue}
+				wrapperClass="relative ml-auto hidden min-w-0 flex-1 max-w-md md:block"
+				inputClass="h-11 w-full rounded-full bg-neutral-100 pl-10 pr-4 text-sm text-neutral-900 placeholder:text-neutral-500 focus:bg-white"
+			/>
 
 			<div class="ml-auto flex items-center gap-1 md:ml-0">
 				<div
@@ -188,27 +176,13 @@
 					{/each}
 				</div>
 
-				<div class="relative hidden sm:block">
-					<button
-						type="button"
-						aria-expanded={accountOpen}
-						aria-label={t.nav.account}
-						onclick={() => {
-							accountOpen = !accountOpen;
-							categoriesOpen = false;
-						}}
-						class="grid h-11 w-11 place-items-center rounded-full text-neutral-700 hover:bg-neutral-100"
-					>
-						<User class="h-5 w-5" aria-hidden="true" />
-					</button>
-					{#if accountOpen}
-						<p
-							class="absolute right-0 top-full z-50 mt-2 w-56 rounded-2xl bg-white p-4 text-sm text-neutral-600 shadow-xl ring-1 ring-neutral-200"
-						>
-							{t.nav.accountDemo}
-						</p>
-					{/if}
-				</div>
+				<a
+					href={localizedPath(lang, '/account')}
+					aria-label={t.nav.account}
+					class="hidden h-11 w-11 place-items-center rounded-full text-neutral-700 hover:bg-neutral-100 sm:grid"
+				>
+					<User class="h-5 w-5" aria-hidden="true" />
+				</a>
 
 				<a
 					href={localizedPath(lang, '/cart')}
@@ -249,21 +223,14 @@
 	{#if menuOpen}
 		<div id="mobile-menu" class="border-t border-neutral-200 bg-white lg:hidden">
 			<div class="mx-auto max-w-7xl space-y-1 px-4 py-4 sm:px-6">
-				<form method="get" action={localizedPath(lang, '/shop')} role="search" class="relative pb-2 md:hidden">
-					<label class="sr-only" for="mobile-search">{t.nav.searchLabel}</label>
-					<Search
-						class="pointer-events-none absolute left-3 top-[22px] h-4 w-4 -translate-y-1/2 text-neutral-500"
-						aria-hidden="true"
-					/>
-					<input
-						id="mobile-search"
-						name="q"
-						type="search"
-						value={searchValue}
-						placeholder={t.nav.searchPlaceholder}
-						class="h-11 w-full rounded-full bg-neutral-100 pl-10 pr-4 text-sm text-neutral-900 placeholder:text-neutral-500 focus:bg-white"
-					/>
-				</form>
+				<SearchForm
+					{lang}
+					{t}
+					id="mobile-search"
+					value={searchValue}
+					wrapperClass="relative pb-2 md:hidden"
+					inputClass="h-11 w-full rounded-full bg-neutral-100 pl-10 pr-4 text-sm text-neutral-900 placeholder:text-neutral-500 focus:bg-white"
+				/>
 				{#each navLinks as link (link.href)}
 					<a
 						href={link.href}
@@ -274,12 +241,28 @@
 						{link.label}
 					</a>
 				{/each}
+				<a
+					href={localizedPath(lang, '/account')}
+					onclick={closeAll}
+					aria-current={currentPath === localizedPath(lang, '/account') ? 'page' : undefined}
+					class="flex min-h-11 items-center rounded-xl px-3 text-base font-medium text-neutral-800 hover:bg-brand-50 aria-[current=page]:bg-brand-50 aria-[current=page]:text-brand-800"
+				>
+					{t.nav.account}
+				</a>
+				<a
+					href={localizedPath(lang, '/wishlist')}
+					onclick={closeAll}
+					aria-current={currentPath === localizedPath(lang, '/wishlist') ? 'page' : undefined}
+					class="flex min-h-11 items-center rounded-xl px-3 text-base font-medium text-neutral-800 hover:bg-brand-50 aria-[current=page]:bg-brand-50 aria-[current=page]:text-brand-800"
+				>
+					{t.nav.wishlist}
+				</a>
 				<p class="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-neutral-500">
 					{t.nav.categories}
 				</p>
 				{#each categories as category (category.slug)}
 					<a
-						href={shopPath(lang, category.slug)}
+						href={localizedPath(lang, `/category/${category.slug}`)}
 						onclick={closeAll}
 						class="flex min-h-11 items-center rounded-xl px-3 text-sm text-neutral-700 hover:bg-brand-50"
 					>

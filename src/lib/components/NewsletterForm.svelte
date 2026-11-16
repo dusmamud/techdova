@@ -2,7 +2,11 @@
 	import { Send } from '@lucide/svelte';
 	import type { Dictionary } from '#lib/i18n/index';
 
-	let { t }: { t: Dictionary } = $props();
+	let { t, idPrefix = 'newsletter' }: { t: Dictionary; idPrefix?: string } = $props();
+
+	const emailId = $derived(`${idPrefix}-email`);
+	const errorId = $derived(`${idPrefix}-error`);
+	const successId = $derived(`${idPrefix}-success`);
 
 	let email = $state('');
 	let error = $state('');
@@ -23,16 +27,16 @@
 </script>
 
 <form onsubmit={subscribe} novalidate class="w-full">
-	<label class="sr-only" for="newsletter-email">{t.footer.emailLabel}</label>
+	<label class="sr-only" for={emailId}>{t.footer.emailLabel}</label>
 	<div class="relative">
 		<input
-			id="newsletter-email"
+			id={emailId}
 			name="email"
 			type="email"
 			bind:value={email}
 			placeholder={t.footer.emailPlaceholder}
 			aria-invalid={error ? 'true' : undefined}
-			aria-describedby={error ? 'newsletter-error' : success ? 'newsletter-success' : undefined}
+			aria-describedby={error ? errorId : success ? successId : undefined}
 			autocomplete="email"
 			class="h-12 w-full rounded-full bg-white pl-4 pr-14 text-sm text-neutral-900 placeholder:text-neutral-500"
 		/>
@@ -45,10 +49,10 @@
 		</button>
 	</div>
 	{#if error}
-		<p id="newsletter-error" role="alert" class="mt-2 text-sm text-red-300">{error}</p>
+		<p id={errorId} role="alert" class="mt-2 text-sm text-red-300">{error}</p>
 	{/if}
 	{#if success}
-		<p id="newsletter-success" role="status" class="mt-2 text-sm text-brand-200">
+		<p id={successId} role="status" class="mt-2 text-sm text-brand-200">
 			{t.footer.subscribeSuccess}
 		</p>
 	{/if}

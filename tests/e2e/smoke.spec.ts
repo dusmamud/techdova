@@ -64,12 +64,23 @@ test('contact form validates and shows a local success state', async ({ page }) 
 
 test('newsletter validates email locally', async ({ page }) => {
 	await page.goto('/en');
+	const footer = page.locator('footer');
 	await page.locator('#newsletter-email').fill('not-an-email');
-	await page.getByRole('button', { name: 'Subscribe' }).click();
+	await footer.getByRole('button', { name: 'Subscribe' }).click();
 	await expect(page.locator('#newsletter-error')).toBeVisible();
 	await page.locator('#newsletter-email').fill('aya@example.com');
-	await page.getByRole('button', { name: 'Subscribe' }).click();
+	await footer.getByRole('button', { name: 'Subscribe' }).click();
 	await expect(page.locator('#newsletter-success')).toBeVisible();
+});
+
+test('home newsletter band validates email locally', async ({ page }) => {
+	await page.goto('/en');
+	await page.locator('#newsletter-home-email').fill('not-an-email');
+	await page.locator('main').getByRole('button', { name: 'Subscribe' }).click();
+	await expect(page.locator('#newsletter-home-error')).toBeVisible();
+	await page.locator('#newsletter-home-email').fill('aya@example.com');
+	await page.locator('main').getByRole('button', { name: 'Subscribe' }).click();
+	await expect(page.locator('#newsletter-home-success')).toBeVisible();
 });
 
 test('cart live region announces the added product', async ({ page }) => {

@@ -1,22 +1,27 @@
 <script lang="ts">
-	import { Check, Heart, ShoppingCart } from '@lucide/svelte';
+	import { Check, Eye, Heart, Scale, ShoppingCart } from '@lucide/svelte';
 	import type { Product } from '#lib/data/products';
 	import { formatCount, formatDecimal, formatPrice, interpolate } from '#lib/format';
 	import { localize, type Dictionary, type Locale } from '#lib/i18n/index';
 	import { productPath } from '#lib/paths';
 	import { cart } from '#lib/stores/cart.svelte';
+	import { compare } from '#lib/stores/compare.svelte';
+	import { toasts } from '#lib/stores/toast.svelte';
 	import { wishlist } from '#lib/stores/wishlist.svelte';
+	import QuickView from './QuickView.svelte';
 	import Stars from './Stars.svelte';
 
 	let { product, lang, t }: { product: Product; lang: Locale; t: Dictionary } = $props();
 
 	let added = $state(false);
 	let timer: ReturnType<typeof setTimeout> | undefined;
+	let quickViewOpen = $state(false);
 
 	const name = $derived(localize(product.name, lang));
 	const intlLocale = $derived(t.meta.intlLocale);
 	const outOfStock = $derived(product.stock <= 0);
 	const wished = $derived(wishlist.has(product.slug));
+	const compared = $derived(compare.has(product.slug));
 
 	const ratingLabel = $derived(
 		`${interpolate(t.productCard.ratingLabel, { rating: formatDecimal(product.rating, intlLocale) })} — ${interpolate(t.productCard.reviewsLabel, { count: formatCount(product.reviewCount, intlLocale) })}`
@@ -30,6 +35,11 @@
 		timer = setTimeout(() => {
 			added = false;
 		}, 1800);
+	}
+
+	function toggleCompare(): void {
+		const result = compare.toggle(product.slug);
+		if (result === 'full') toasts.push(t.product.compareFull);
 	}
 </script>
 
@@ -70,6 +80,28 @@
 				aria-hidden="true"
 			/>
 		</button>
+		<button
+			type="button"
+			aria-pressed={compared}
+			aria-label="{compared ? t.product.compareRemove : t.product.compareAdd} ({name})"
+			onclick={toggleCompare}
+			class="absolute right-3 top-16 grid h-11 w-11 place-items-center rounded-full bg-white shadow {compared
+				? 'text-brand-700 ring-2 ring-brand-700'
+				: 'text-neutral-600 hover:text-brand-700'}"
+		>
+			<Scale class="h-5 w-5" aria-hidden="true" />
+		</button>
+		<button
+			type="button"
+			onclick={() => {
+				quickViewOpen = true;
+			}}
+			aria-label="{t.quickView.label} ({name})"
+			class="pointer-events-none absolute inset-x-3 bottom-3 flex min-h-11 items-center justify-center gap-2 rounded-full bg-white/95 px-4 text-sm font-semibold text-neutral-900 opacity-0 shadow transition-opacity duration-200 hover:bg-white group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100"
+		>
+			<Eye class="h-4 w-4" aria-hidden="true" />
+			{t.quickView.label}
+		</button>
 	</div>
 
 	<div class="flex flex-1 flex-col gap-2 p-4">
@@ -109,4 +141,13 @@
 			{/if}
 		</button>
 	</div>
+	<QuickView
+		{product}
+		{lang}
+		{t}
+		open={quickViewOpen}
+		onClose={() => {
+			quickViewOpen = false;
+		}}
+	/>
 </article>

@@ -177,7 +177,7 @@
 							{t.cartDrawer.viewCart}
 						</a>
 						<a
-							href={localizedPath(lang, '/cart')}
+							href={localizedPath(lang, '/checkout')}
 							onclick={() => cart.closeDrawer()}
 							class="inline-flex min-h-11 items-center justify-center rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800"
 						>
