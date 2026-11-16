@@ -28,7 +28,7 @@ describe('categories', () => {
 			expectLocalized(category.name, `category ${category.slug} name`);
 			expectLocalized(category.description, `category ${category.slug} description`);
 			expectLocalized(category.imageAlt, `category ${category.slug} imageAlt`);
-			expect(category.image).toMatch(/^\/images\/category-[a-z-]+\.png$/);
+			expect(category.image).toMatch(/^\/images\/category-[a-z-]+$/);
 			expect(getCategory(category.slug)).toBe(category);
 		}
 	});
@@ -74,7 +74,7 @@ describe('products', () => {
 			expect(product.reviewCount).toBeGreaterThanOrEqual(0);
 			expect(Number.isInteger(product.stock)).toBe(true);
 			expect(product.stock).toBeGreaterThanOrEqual(0);
-			expect(product.image).toMatch(/^\/images\/product-[a-z0-9-]+\.png$/);
+			expect(product.image).toMatch(/^\/images\/product-[a-z0-9-]+$/);
 			expectLocalized(product.name, `${product.slug} name`);
 			expectLocalized(product.shortDescription, `${product.slug} shortDescription`);
 			expectLocalized(product.description, `${product.slug} description`);

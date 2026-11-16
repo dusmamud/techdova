@@ -7,6 +7,7 @@
 	import { productPath } from '#lib/paths';
 	import { cart } from '#lib/stores/cart.svelte';
 	import { toasts } from '#lib/stores/toast.svelte';
+	import Picture from './Picture.svelte';
 	import Stars from './Stars.svelte';
 
 	let {
@@ -93,11 +94,11 @@
 			<div class="grid gap-6 p-5 sm:grid-cols-2 sm:p-6">
 				<div class="overflow-hidden rounded-2xl bg-brand-50">
 					<div class="aspect-[4/5]">
-						<img
-							src={product.image}
+						<Picture
+							base={product.image}
 							alt={localize(product.imageAlt, lang)}
-							width="1408"
-							height="1760"
+							width={1408}
+							height={1760}
 							loading="lazy"
 							decoding="async"
 							class="h-full w-full object-cover"

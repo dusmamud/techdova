@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import JsonLd from '#lib/components/JsonLd.svelte';
+	import Picture from '#lib/components/Picture.svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { SITE_URL } from '#lib/config';
@@ -56,7 +57,7 @@
 	title={interpolate(t.meta.categoryTitle, { category: name })}
 	description={interpolate(t.meta.categoryDescription, { category: name })}
 	path="/category/{category.slug}"
-	image={category.image}
+	image={`${category.image}.jpg`}
 />
 <JsonLd json={breadcrumbJsonLd} />
 
@@ -71,13 +72,13 @@
 	/>
 
 	<div class="mt-2 flex flex-col gap-6 sm:flex-row sm:items-center">
-		<img
-			src={category.image}
+		<Picture
+			base={category.image}
 			alt={localize(category.imageAlt, lang)}
-			width="1600"
-			height="1600"
+			width={1600}
+			height={1600}
 			decoding="async"
-			fetchpriority="high"
+			fetchPriority="high"
 			class="h-40 w-40 shrink-0 rounded-3xl bg-brand-50 object-cover sm:h-48 sm:w-48"
 		/>
 		<div class="min-w-0">

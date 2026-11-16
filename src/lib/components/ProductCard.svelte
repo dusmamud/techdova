@@ -8,6 +8,7 @@
 	import { compare } from '#lib/stores/compare.svelte';
 	import { toasts } from '#lib/stores/toast.svelte';
 	import { wishlist } from '#lib/stores/wishlist.svelte';
+	import Picture from './Picture.svelte';
 	import QuickView from './QuickView.svelte';
 	import Stars from './Stars.svelte';
 
@@ -49,11 +50,11 @@
 	<div class="relative bg-brand-50">
 		<a href={productPath(lang, product.slug)} tabindex="-1" aria-hidden="true" class="block">
 			<div class="aspect-[4/5]">
-				<img
-					src={product.image}
+				<Picture
+					base={product.image}
 					alt={localize(product.imageAlt, lang)}
-					width="1408"
-					height="1760"
+					width={1408}
+					height={1760}
 					loading="lazy"
 					decoding="async"
 					class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"

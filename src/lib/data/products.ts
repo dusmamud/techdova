@@ -50,7 +50,7 @@ export const products: Product[] = [
 		rating: 4.8,
 		reviewCount: 124,
 		stock: 12,
-		image: '/images/product-iphone-15-pro.png',
+		image: '/images/product-iphone-15-pro',
 		imageAlt: {
 			en: 'iPhone 15 Pro smartphone in dark titanium showing the triple camera',
 			fr: 'Smartphone iPhone 15 Pro en titane sombre montrant le triple appareil photo'
@@ -81,7 +81,7 @@ export const products: Product[] = [
 		rating: 4.7,
 		reviewCount: 86,
 		stock: 14,
-		image: '/images/product-galaxy-s24.png',
+		image: '/images/product-galaxy-s24',
 		imageAlt: {
 			en: 'Samsung Galaxy S24 smartphone, front view with green gradient wallpaper',
 			fr: 'Smartphone Samsung Galaxy S24, vue de face avec fond vert dégradé'
@@ -112,7 +112,7 @@ export const products: Product[] = [
 		rating: 4.9,
 		reviewCount: 98,
 		stock: 9,
-		image: '/images/product-macbook-air-m2.png',
+		image: '/images/product-macbook-air-m2',
 		imageAlt: {
 			en: 'Silver MacBook Air M2 laptop open showing a green wave wallpaper',
 			fr: 'Ordinateur portable argenté MacBook Air M2 ouvert affichant un fond vert ondulé'
@@ -143,7 +143,7 @@ export const products: Product[] = [
 		rating: 4.8,
 		reviewCount: 54,
 		stock: 3,
-		image: '/images/product-dell-xps-13.png',
+		image: '/images/product-dell-xps-13',
 		imageAlt: {
 			en: 'Dark grey Dell XPS 13 laptop open, front view',
 			fr: 'Ordinateur portable gris foncé Dell XPS 13 ouvert, vue de face'
@@ -173,7 +173,7 @@ export const products: Product[] = [
 		rating: 4.7,
 		reviewCount: 76,
 		stock: 20,
-		image: '/images/product-airpods-pro.png',
+		image: '/images/product-airpods-pro',
 		imageAlt: {
 			en: 'White AirPods Pro earbuds beside their open charging case',
 			fr: 'Écouteurs blancs AirPods Pro à côté de leur boîtier de charge ouvert'
@@ -204,7 +204,7 @@ export const products: Product[] = [
 		rating: 4.9,
 		reviewCount: 112,
 		stock: 11,
-		image: '/images/product-sony-wh1000xm5.png',
+		image: '/images/product-sony-wh1000xm5',
 		imageAlt: {
 			en: 'Black Sony WH-1000XM5 over-ear headphones',
 			fr: 'Casque noir Sony WH-1000XM5'
@@ -235,7 +235,7 @@ export const products: Product[] = [
 		rating: 4.6,
 		reviewCount: 63,
 		stock: 15,
-		image: '/images/product-galaxy-watch-6.png',
+		image: '/images/product-galaxy-watch-6',
 		imageAlt: {
 			en: 'Black Samsung Galaxy Watch 6 with a dark green watch face',
 			fr: 'Montre connectée noire Samsung Galaxy Watch 6 avec cadran vert foncé'
@@ -266,7 +266,7 @@ export const products: Product[] = [
 		rating: 4.8,
 		reviewCount: 91,
 		stock: 8,
-		image: '/images/product-apple-watch-9.png',
+		image: '/images/product-apple-watch-9',
 		imageAlt: {
 			en: 'Smartwatch with a light band and bright gradient watch face',
 			fr: 'Montre connectée avec bracelet clair et cadran dégradé lumineux'
@@ -297,7 +297,7 @@ export const products: Product[] = [
 		rating: 4.8,
 		reviewCount: 203,
 		stock: 25,
-		image: '/images/product-dualsense-controller.png',
+		image: '/images/product-dualsense-controller',
 		imageAlt: {
 			en: 'White and black DualSense game controller',
 			fr: 'Manette de jeu DualSense blanche et noire'
@@ -327,7 +327,7 @@ export const products: Product[] = [
 		rating: 4.9,
 		reviewCount: 167,
 		stock: 7,
-		image: '/images/product-nintendo-switch.png',
+		image: '/images/product-nintendo-switch',
 		imageAlt: {
 			en: 'Handheld Nintendo Switch console with attached controllers',
 			fr: 'Console portable Nintendo Switch avec manettes attachées'
@@ -358,7 +358,7 @@ export const products: Product[] = [
 		rating: 4.5,
 		reviewCount: 78,
 		stock: 30,
-		image: '/images/product-magsafe-charger.png',
+		image: '/images/product-magsafe-charger',
 		imageAlt: {
 			en: 'White round MagSafe magnetic charging puck with coiled cable',
 			fr: 'Chargeur magnétique rond blanc MagSafe avec câble enroulé'
@@ -388,7 +388,7 @@ export const products: Product[] = [
 		rating: 4.6,
 		reviewCount: 45,
 		stock: 0,
-		image: '/images/product-usb-c-hub.png',
+		image: '/images/product-usb-c-hub',
 		imageAlt: {
 			en: 'Dark grey aluminium USB-C hub with ports and short cable',
 			fr: 'Concentrateur USB-C aluminium gris foncé avec ports et câble court'

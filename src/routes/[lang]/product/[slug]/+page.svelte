@@ -18,6 +18,7 @@
 	} from '@lucide/svelte';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import JsonLd from '#lib/components/JsonLd.svelte';
+	import Picture from '#lib/components/Picture.svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import RecentlyViewed from '#lib/components/RecentlyViewed.svelte';
 	import ReviewsSection from '#lib/components/ReviewsSection.svelte';
@@ -191,7 +192,7 @@
 		'@context': 'https://schema.org',
 		'@type': 'Product',
 		name,
-		image: [`${SITE_URL}${product.image}`],
+		image: [`${SITE_URL}${product.image}.jpg`],
 		description: localize(product.description, lang),
 		sku: product.slug,
 		offers: {
@@ -241,7 +242,7 @@
 	title="{name} | {SITE_NAME}"
 	description={localize(product.shortDescription, lang)}
 	path="/product/{product.slug}"
-	image={product.image}
+	image={`${product.image}.jpg`}
 	type="product"
 />
 <JsonLd json={productJsonLd} />
@@ -264,13 +265,13 @@
 			<figure aria-label={t.product.galleryLabel} class="relative overflow-hidden rounded-3xl bg-brand-50">
 				<button type="button" onclick={openZoom} aria-label={t.product.zoomLabel} class="block w-full cursor-zoom-in">
 					<div class="aspect-[4/5]">
-						<img
-							src={galleryImages[selectedImage]}
+						<Picture
+							base={galleryImages[selectedImage]}
 							alt={localize(product.imageAlt, lang)}
-							width="1408"
-							height="1760"
+							width={1408}
+							height={1760}
 							decoding="async"
-							fetchpriority="high"
+							fetchPriority="high"
 							class="h-full w-full object-cover"
 						/>
 					</div>
@@ -300,11 +301,11 @@
 						aria-label="{t.product.galleryLabel} {i + 1}"
 						class="h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-brand-50 ring-2 aria-[current=true]:ring-brand-700 aria-[current=false]:ring-transparent"
 					>
-						<img
-							src={image}
+						<Picture
+							base={image}
 							alt={localize(product.imageAlt, lang)}
-							width="1408"
-							height="1760"
+							width={1408}
+							height={1760}
 							loading="lazy"
 							decoding="async"
 							class="h-full w-full object-cover"
@@ -616,11 +617,11 @@
 			>
 				<X class="h-5 w-5" aria-hidden="true" />
 			</button>
-			<img
-				src={galleryImages[selectedImage]}
+			<Picture
+				base={galleryImages[selectedImage]}
 				alt={localize(product.imageAlt, lang)}
-				width="1408"
-				height="1760"
+				width={1408}
+				height={1760}
 				decoding="async"
 				class="max-h-[90vh] w-full object-contain"
 			/>

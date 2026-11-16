@@ -2,6 +2,7 @@
 	import { ArrowLeft, ArrowRight } from '@lucide/svelte';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import JsonLd from '#lib/components/JsonLd.svelte';
+	import Picture from '#lib/components/Picture.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { SITE_NAME, SITE_URL } from '#lib/config';
 	import { blogPosts } from '#lib/data/blog';
@@ -27,7 +28,7 @@
 		'@type': 'BlogPosting',
 		headline: title,
 		description: excerpt,
-		image: `${SITE_URL}${post.image}`,
+		image: `${SITE_URL}${post.image}.jpg`,
 		datePublished: post.dateISO,
 		author: {
 			'@type': 'Organization',
@@ -42,7 +43,7 @@
 	title="{title} | {SITE_NAME}"
 	description={excerpt}
 	path="/blog/{post.slug}"
-	image={post.image}
+	image={`${post.image}.jpg`}
 />
 <JsonLd json={blogJsonLd} />
 
@@ -74,11 +75,11 @@
 		</p>
 		<figure class="mt-6 overflow-hidden rounded-3xl bg-brand-50">
 			<div class="aspect-[16/9]">
-				<img
-					src={post.image}
+				<Picture
+					base={post.image}
 					alt={localize(post.imageAlt, lang)}
 					decoding="async"
-					fetchpriority="high"
+					fetchPriority="high"
 					class="h-full w-full object-cover"
 				/>
 			</div>

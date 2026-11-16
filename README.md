@@ -232,14 +232,24 @@ devices, no text from the reference design's original brand anywhere. Product sh
 category thumbs 1600×1600, hero main 2048×1152 (16:9). Every `<img>` has
 localized alt text and explicit `width`/`height`.
 
+Format waterfall: each of the 22 content images exists as AVIF + WebP +
+JPG (generated from the PNG masters by `qa/convert-images.py`; the PNG
+masters are preserved in git history) and is served via the native
+`<picture>` element in `Picture.svelte` — AVIF first, WebP second, JPG
+fallback, no JavaScript, one file downloaded. Totals: 14.3 MB PNG →
+298 KB AVIF, 861 KB WebP, 3.4 MB JPG. `og-image.png` stays PNG on
+purpose: it is only the `og:image`, and social crawlers handle
+AVIF/WebP poorly. Verify serving with `node qa/avif-qa.mjs` (or
+`BASE_URL=https://techdova.pages.dev node qa/avif-qa.mjs` for live).
+
 ## Known limitations
 
 - Product galleries hold a single image per product (the gallery UI
   supports multiple; only one shot was generated per product).
 - `build/404.html` is the adapter-static fallback shell; the branded
   error page renders client-side. Standard adapter-static behaviour.
-- Images are single-size PNGs (~15 MB total). There is no `srcset`/`sizes`
-  responsive-variant or AVIF/WebP pipeline yet.
+- Images are single-size (no `srcset`/`sizes` responsive variants); the
+  AVIF/WebP/JPG waterfall is in place, see Images above.
 - Tailwind utilities are physical (`left-`/`right-`, `pl-`/`pr-`); both
   shipped locales are LTR. A future RTL locale should convert these to
   logical utilities (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`).

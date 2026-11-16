@@ -4,6 +4,7 @@
 	import HeroCarousel from '#lib/components/HeroCarousel.svelte';
 	import JsonLd from '#lib/components/JsonLd.svelte';
 	import NewsletterForm from '#lib/components/NewsletterForm.svelte';
+	import Picture from '#lib/components/Picture.svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import RecentlyViewed from '#lib/components/RecentlyViewed.svelte';
 	import Seo from '#lib/components/Seo.svelte';
@@ -91,11 +92,11 @@
 			{#each categories as category (category.slug)}
 				<a href={localizedPath(lang, `/category/${category.slug}`)} class="group block text-center">
 					<span class="block aspect-square overflow-hidden rounded-3xl bg-brand-50">
-						<img
-							src={category.image}
+						<Picture
+							base={category.image}
 							alt={localize(category.imageAlt, lang)}
-							width="1600"
-							height="1600"
+							width={1600}
+							height={1600}
 							loading="lazy"
 							decoding="async"
 							class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -214,11 +215,11 @@
 				>
 					<span class="block w-28 shrink-0 overflow-hidden rounded-2xl bg-brand-50 sm:w-36">
 						<span class="block aspect-[4/5]">
-							<img
-								src={deal.image}
+							<Picture
+								base={deal.image}
 								alt={localize(deal.imageAlt, lang)}
-								width="1408"
-								height="1760"
+								width={1408}
+								height={1760}
 								loading="lazy"
 								decoding="async"
 								class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
@@ -282,11 +283,11 @@
 				</a>
 			</div>
 			<div class="relative min-h-[220px] overflow-hidden rounded-3xl sm:min-h-[280px]">
-				<img
-					src="/images/promo-devices.png"
+				<Picture
+					base="/images/promo-devices"
 					alt={t.promo.imageAlt}
-					width="2048"
-					height="1152"
+					width={2048}
+					height={1152}
 					loading="lazy"
 					decoding="async"
 					class="absolute inset-0 h-full w-full object-cover"
@@ -300,11 +301,11 @@
 	<section aria-labelledby="brand-story-heading">
 		<div class="grid items-center gap-6 lg:grid-cols-2 lg:gap-10">
 			<div class="overflow-hidden rounded-3xl">
-				<img
-					src="/images/hero-main.png"
+				<Picture
+					base="/images/hero-main"
 					alt={t.brandStory.imageAlt}
-					width="2048"
-					height="1152"
+					width={2048}
+					height={1152}
 					loading="lazy"
 					decoding="async"
 					class="aspect-[16/9] w-full object-cover"

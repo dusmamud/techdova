@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowRight } from '@lucide/svelte';
+	import Picture from '#lib/components/Picture.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { blogPosts } from '#lib/data/blog';
 	import { formatDate, interpolate } from '#lib/format';
@@ -31,8 +32,8 @@
 					class="block aspect-[16/9] overflow-hidden bg-brand-50"
 					aria-label={title}
 				>
-					<img
-						src={post.image}
+					<Picture
+						base={post.image}
 						alt={localize(post.imageAlt, lang)}
 						loading="lazy"
 						decoding="async"

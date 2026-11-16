@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowRight, BadgeCheck, Headphones, Tag, Truck } from '@lucide/svelte';
+	import Picture from '#lib/components/Picture.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { getDictionary } from '#lib/i18n/index';
 	import { localizedPath } from '#lib/paths';
@@ -28,11 +29,11 @@
 			<p class="mt-3 leading-relaxed text-neutral-600">{t.about.storyText2}</p>
 		</div>
 		<div class="relative min-h-[260px] overflow-hidden rounded-[2rem] sm:min-h-[320px]">
-			<img
-				src="/images/promo-devices.png"
+			<Picture
+				base="/images/promo-devices"
 				alt={t.promo.imageAlt}
-				width="2048"
-				height="1152"
+				width={2048}
+				height={1152}
 				loading="lazy"
 				decoding="async"
 				class="absolute inset-0 h-full w-full object-cover"

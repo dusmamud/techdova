@@ -27,7 +27,7 @@ export const categories: Category[] = [
 			en: 'The latest phones with pro cameras and all-day battery.',
 			fr: 'Les derniers téléphones avec appareils photo pro et batterie toute la journée.'
 		},
-		image: '/images/category-smartphones.png',
+		image: '/images/category-smartphones',
 		imageAlt: {
 			en: 'Modern smartphone with a blue-green gradient wallpaper',
 			fr: 'Smartphone moderne avec fond bleu-vert dégradé'
@@ -40,7 +40,7 @@ export const categories: Category[] = [
 			en: 'Laptops and ultrabooks for work, study and creativity.',
 			fr: 'Ordinateurs portables et ultraportables pour le travail, les études et la création.'
 		},
-		image: '/images/category-computers.png',
+		image: '/images/category-computers',
 		imageAlt: {
 			en: 'Slim silver laptop with a green wave wallpaper',
 			fr: 'Ordinateur portable argenté avec fond vert ondulé'
@@ -53,7 +53,7 @@ export const categories: Category[] = [
 			en: 'Headphones and earbuds with rich, immersive sound.',
 			fr: 'Casques et écouteurs au son riche et immersif.'
 		},
-		image: '/images/category-audio.png',
+		image: '/images/category-audio',
 		imageAlt: { en: 'Black over-ear headphones', fr: 'Casque noir' }
 	},
 	{
@@ -63,7 +63,7 @@ export const categories: Category[] = [
 			en: 'Health, fitness and notifications on your wrist.',
 			fr: 'Santé, forme et notifications à votre poignet.'
 		},
-		image: '/images/category-smartwatches.png',
+		image: '/images/category-smartwatches',
 		imageAlt: {
 			en: 'Black smartwatch with a green watch face',
 			fr: 'Montre connectée noire avec cadran vert'
@@ -76,7 +76,7 @@ export const categories: Category[] = [
 			en: 'Controllers, consoles and accessories for players.',
 			fr: 'Manettes, consoles et accessoires pour les joueurs.'
 		},
-		image: '/images/category-gaming.png',
+		image: '/images/category-gaming',
 		imageAlt: { en: 'Matte black game controller', fr: 'Manette de jeu noire mate' }
 	},
 	{
@@ -86,7 +86,7 @@ export const categories: Category[] = [
 			en: 'Chargers, hubs and everyday essentials.',
 			fr: 'Chargeurs, concentrateurs et essentiels du quotidien.'
 		},
-		image: '/images/category-accessories.png',
+		image: '/images/category-accessories',
 		imageAlt: {
 			en: 'USB-C hub with charger and cable',
 			fr: 'Concentrateur USB-C avec chargeur et câble'

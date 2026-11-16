@@ -6,6 +6,7 @@
 	import { localize, type Dictionary, type Locale } from '#lib/i18n/index';
 	import { localizedPath, productPath } from '#lib/paths';
 	import { cart } from '#lib/stores/cart.svelte';
+	import Picture from './Picture.svelte';
 
 	let { lang, t }: { lang: Locale; t: Dictionary } = $props();
 
@@ -91,11 +92,11 @@
 								aria-hidden="true"
 								class="shrink-0"
 							>
-								<img
-									src={line.product.image}
+								<Picture
+									base={line.product.image}
 									alt={localize(line.product.imageAlt, lang)}
-									width="1408"
-									height="1760"
+									width={1408}
+									height={1760}
 									loading="lazy"
 									decoding="async"
 									class="h-20 w-20 shrink-0 rounded-2xl bg-brand-50 object-cover"

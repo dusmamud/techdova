@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ArrowRight } from '@lucide/svelte';
 	import CountdownTimer from '#lib/components/CountdownTimer.svelte';
+	import Picture from '#lib/components/Picture.svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { DEAL_END_ISO } from '#lib/data/deal';
@@ -82,11 +83,11 @@
 				</a>
 			</div>
 			<div class="relative min-h-[220px] overflow-hidden rounded-3xl sm:min-h-[280px]">
-				<img
-					src="/images/promo-devices.png"
+				<Picture
+					base="/images/promo-devices"
 					alt={t.promo.imageAlt}
-					width="2048"
-					height="1152"
+					width={2048}
+					height={1152}
 					loading="lazy"
 					decoding="async"
 					class="absolute inset-0 h-full w-full object-cover"

@@ -48,7 +48,7 @@ export const blogPosts: BlogPost[] = [
 		],
 		dateISO: '2026-11-10',
 		readingMinutes: 5,
-		image: '/images/hero-main.png',
+		image: '/images/hero-main',
 		imageAlt: {
 			en: 'Smartphone, laptop, smartwatch and earbuds arranged on a white podium',
 			fr: 'Smartphone, ordinateur portable, montre connectée et écouteurs sur un podium blanc'
@@ -93,7 +93,7 @@ export const blogPosts: BlogPost[] = [
 		],
 		dateISO: '2026-11-05',
 		readingMinutes: 6,
-		image: '/images/promo-devices.png',
+		image: '/images/promo-devices',
 		imageAlt: {
 			en: 'Laptop, tablet and headphones with a small plant on a pale green background',
 			fr: 'Ordinateur portable, tablette et casque avec une petite plante sur fond vert pâle'
@@ -134,7 +134,7 @@ export const blogPosts: BlogPost[] = [
 		],
 		dateISO: '2026-10-28',
 		readingMinutes: 4,
-		image: '/images/category-audio.png',
+		image: '/images/category-audio',
 		imageAlt: {
 			en: 'Black over-ear headphones',
 			fr: 'Casque noir'

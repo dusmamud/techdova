@@ -4,13 +4,14 @@
 	import { interpolate } from '#lib/format';
 	import type { Dictionary, Locale } from '#lib/i18n/index';
 	import { localizedPath, shopPath } from '#lib/paths';
+	import Picture from './Picture.svelte';
 
 	let { lang, t }: { lang: Locale; t: Dictionary } = $props();
 
 	const slideImages = [
-		{ src: '/images/hero-main.png', width: 2048, height: 1152 },
-		{ src: '/images/hero-audio.png', width: 1920, height: 1280 },
-		{ src: '/images/hero-gaming.png', width: 1920, height: 1280 }
+		{ src: '/images/hero-main', width: 2048, height: 1152 },
+		{ src: '/images/hero-audio', width: 1920, height: 1280 },
+		{ src: '/images/hero-gaming', width: 1920, height: 1280 }
 	];
 	const slideTargets = $derived([
 		localizedPath(lang, '/shop'),
@@ -121,13 +122,13 @@
 						</a>
 					</div>
 					<div class="relative min-h-[220px] overflow-hidden rounded-3xl sm:min-h-[280px] lg:min-h-[380px]">
-						<img
-							src={image.src}
+						<Picture
+							base={image.src}
 							alt={slide.imageAlt}
 							width={image.width}
 							height={image.height}
 							loading={i === 0 ? 'eager' : 'lazy'}
-							fetchpriority={i === 0 ? 'high' : undefined}
+							fetchPriority={i === 0 ? 'high' : undefined}
 							decoding="async"
 							class="absolute inset-0 h-full w-full object-cover"
 						/>

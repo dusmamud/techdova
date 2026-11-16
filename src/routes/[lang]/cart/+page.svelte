@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Minus, Plus, ShoppingCart, Trash2 } from '@lucide/svelte';
+	import Picture from '#lib/components/Picture.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { formatPrice, interpolate } from '#lib/format';
 	import { getDictionary, localize } from '#lib/i18n/index';
@@ -47,11 +48,11 @@
 								aria-hidden="true"
 								class="shrink-0"
 							>
-								<img
-									src={line.product.image}
+								<Picture
+									base={line.product.image}
 									alt={localize(line.product.imageAlt, lang)}
-									width="1408"
-									height="1760"
+									width={1408}
+									height={1760}
 									loading="lazy"
 									decoding="async"
 									class="h-24 w-24 shrink-0 rounded-2xl bg-brand-50 object-cover"

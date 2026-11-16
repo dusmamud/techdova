@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowLeftRight, ShoppingCart, X } from '@lucide/svelte';
+	import Picture from '#lib/components/Picture.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import Stars from '#lib/components/Stars.svelte';
 	import { getCategory } from '#lib/data/categories';
@@ -111,11 +112,11 @@
 									class="block overflow-hidden rounded-2xl bg-brand-50"
 								>
 									<div class="aspect-[4/5]">
-										<img
-											src={product.image}
+										<Picture
+											base={product.image}
 											alt={localize(product.imageAlt, lang)}
-											width="1408"
-											height="1760"
+											width={1408}
+											height={1760}
 											loading="lazy"
 											decoding="async"
 											class="h-full w-full object-cover"
