@@ -9,6 +9,10 @@ export default defineConfig({
 	timeout: 30000,
 	retries: 0,
 	workers: 1,
+	// In CI the GitHub reporter turns each failure into a check-run
+	// annotation (readable via the API), so a red E2E step names its
+	// failing tests without needing the run log.
+	reporter: process.env.CI ? 'github' : 'list',
 	use: {
 		baseURL: `http://127.0.0.1:${port}`,
 		trace: 'retain-on-failure'
