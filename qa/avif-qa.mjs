@@ -3,6 +3,10 @@
 // source) with no failed image requests. Run after `npm run build`.
 // Usage: node qa/avif-qa.mjs            (serves build/ locally on a scratch port)
 //        BASE_URL=https://techdova.pages.dev node qa/avif-qa.mjs   (checks a live origin)
+// Live mode needs the browser to reach the origin: it honours HTTPS_PROXY,
+// but on this VM the egress proxy rejects Chromium's CONNECT tunnel, so
+// live verification here uses curl (MIME types, HTML sources, 404s) plus
+// this script's local run, which exercises identical markup.
 // No browser downloads: uses the Playwright browser already present in
 // ~/.cache/ms-playwright. Exits 1 on any non-AVIF image request or failure.
 import { spawn } from 'node:child_process';
@@ -51,7 +55,10 @@ try {
 		await waitForServer(`${BASE}/en`);
 	}
 
-	const browser = await chromium.launch();
+	const proxyServer = process.env.HTTPS_PROXY ?? process.env.https_proxy;
+	const browser = await chromium.launch(
+		proxyServer ? { proxy: { server: proxyServer } } : {}
+	);
 	const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 	const imageRequests = [];
 	const failed = [];
