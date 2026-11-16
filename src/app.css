@@ -1,6 +1,11 @@
 @import '@fontsource-variable/inter';
 @import 'tailwindcss';
 
+/* Motion tokens (polish round, 2026-11-16). Durations: feedback 100–200ms,
+   entering/exiting 200–300ms, scroll reveals 400ms. Nothing over 500ms.
+   Use `ease-enter` (ease-out curve) for entering, `ease-exit` (standard
+   curve) for exiting. The duration, ease and animate properties below
+   generate the duration, ease and animate utilities. */
 @theme {
 	--font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 
@@ -17,6 +22,18 @@
 	--color-brand-950: #062a1f;
 
 	--color-ink: #101828;
+
+	--duration-100: 100ms;
+	--duration-200: 200ms;
+	--duration-300: 300ms;
+	--duration-400: 400ms;
+	--ease-enter: cubic-bezier(0, 0, 0.2, 1);
+	--ease-exit: cubic-bezier(0.2, 0, 0, 1);
+	--animate-fade-up: fade-up var(--duration-400) var(--ease-enter) both;
+	--animate-pop: pop var(--duration-300) var(--ease-enter) both;
+	--animate-fade-in: fade-in var(--duration-300) var(--ease-enter) both;
+	--animate-toast-in: toast-in var(--duration-200) var(--ease-enter) both;
+	--animate-drawer-in: drawer-in var(--duration-300) var(--ease-enter) both;
 }
 
 @layer base {
@@ -54,5 +71,144 @@
 			animation-iteration-count: 1 !important;
 			transition-duration: 0.01ms !important;
 		}
+	}
+}
+
+/* ---------------------------------------------------------------------------
+ * Motion budget (polish round, 2026-11-16)
+ *
+ * Every animation needs a job: feedback, orientation, or reveal — decoration
+ * for its own sake is out. Rules for everything in this section and every
+ * component that animates:
+ * - Duration ≤ 500ms, from the --duration-* tokens above (100/200/300/400ms).
+ * - Transform + opacity ONLY. Never animate width/height/top/left (layout
+ *   thrash, jank on low-end phones). Slide/fade/scale, nothing else.
+ * - Entering uses --ease-enter (ease-out); exiting uses --ease-exit (standard).
+ * - Scroll reveals fire ONCE (see the `reveal` action in src/lib/actions/).
+ * - Reduced motion is mandatory: the block at the end of this section shows
+ *   all content instantly with no transform and no transition, even if JS
+ *   added reveal classes before the media query was honoured.
+ * This section is deliberately unlayered CSS (not @layer utilities) so the
+ * reduced-motion overrides below beat Tailwind utilities.
+ * ------------------------------------------------------------------------- */
+
+/* Keyframes: transform + opacity only. Paired with the --animate-* tokens. */
+@keyframes fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes pop {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.25);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes toast-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes drawer-in {
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+/* Scroll reveal. The `.reveal` (pre-hidden) class is added ONLY by the
+   `reveal` action in JS after mount — prerendered HTML never contains it,
+   so content is fully visible with JS disabled or failed. The action adds
+   `.reveal-visible` when the node enters the viewport (once). Stagger delay
+   is applied by the action as an inline `transition-delay`, cleared after
+   the reveal. Do not put either class in markup by hand. */
+.reveal {
+	opacity: 0;
+	transform: translateY(12px);
+	transition:
+		opacity var(--duration-400) var(--ease-enter),
+		transform var(--duration-400) var(--ease-enter);
+}
+
+.reveal.reveal-visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+/* Card hover lift: subtle rise + shadow, fine pointers only (no sticky hover
+   on touch) and only when the user has not requested reduced motion. Apply
+   to cards that do not already define their own hover shadow/transform. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+	.card-lift {
+		transition:
+			transform var(--duration-200) var(--ease-enter),
+			box-shadow var(--duration-200) var(--ease-enter);
+	}
+
+	.card-lift:hover {
+		transform: translateY(-2px);
+		box-shadow:
+			0 4px 6px -1px rgb(0 0 0 / 0.1),
+			0 2px 4px -2px rgb(0 0 0 / 0.1);
+	}
+}
+
+/* Reduced motion: everything in this section is disabled and content is
+   fully visible — including nodes the reveal action already hid. The global
+   0.01ms duration rule in @layer base covers transitions/animations
+   elsewhere; these rules additionally remove the hidden/offset states. */
+@media (prefers-reduced-motion: reduce) {
+	.reveal,
+	.reveal-visible {
+		opacity: 1 !important;
+		transform: none !important;
+		transition: none !important;
+		animation: none !important;
+	}
+
+	.card-lift,
+	.card-lift:hover {
+		/* The lift itself only exists under no-preference (see above), so
+		   there is no hover shadow to undo here; never touch box-shadow or
+		   a card's own resting shadow would be stripped too. */
+		transform: none !important;
+		transition: none !important;
+	}
+
+	.animate-fade-up,
+	.animate-pop,
+	.animate-fade-in,
+	.animate-toast-in,
+	.animate-drawer-in {
+		animation: none !important;
 	}
 }

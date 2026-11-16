@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { ArrowRight, BadgeCheck, Headphones, Tag, Truck } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
+	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import Picture from '#lib/components/Picture.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { getDictionary } from '#lib/i18n/index';
@@ -16,7 +18,14 @@
 <Seo {lang} title={t.meta.aboutTitle} description={t.meta.aboutDescription} path="/about" />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-	<section aria-labelledby="about-heading" class="grid items-center gap-8 lg:grid-cols-2">
+	<Breadcrumbs
+		label={t.product.breadcrumbLabel}
+		items={[
+			{ label: t.nav.home, href: localizedPath(lang, '/') },
+			{ label: t.about.title }
+		]}
+	/>
+	<section aria-labelledby="about-heading" class="grid items-center gap-8 lg:grid-cols-2" use:reveal>
 		<div>
 			<p class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-700">
 				<span class="h-px w-6 bg-brand-700" aria-hidden="true"></span>
@@ -41,7 +50,7 @@
 		</div>
 	</section>
 
-	<section aria-labelledby="values-heading" class="mt-14">
+	<section aria-labelledby="values-heading" class="mt-14" use:reveal>
 		<p class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-700">
 			<span class="h-px w-6 bg-brand-700" aria-hidden="true"></span>
 			{t.about.valuesEyebrow}
@@ -52,7 +61,10 @@
 		<div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
 			{#each t.about.values as value, i (i)}
 				{@const ValueIcon = valueIcons[i]}
-				<div class="rounded-3xl bg-brand-50 p-5">
+				<div
+					class="card-lift rounded-3xl bg-brand-50 p-5"
+					use:reveal={{ delay: Math.min(i * 60, 300) }}
+				>
 					<ValueIcon class="h-7 w-7 text-brand-700" aria-hidden="true" />
 					<h3 class="mt-3 font-semibold text-neutral-900">{value.title}</h3>
 					<p class="mt-1 text-sm leading-relaxed text-neutral-600">{value.text}</p>
@@ -61,7 +73,7 @@
 		</div>
 	</section>
 
-	<section aria-label={t.about.stats.map((s) => s.label).join(', ')} class="mt-14">
+	<section aria-label={t.about.stats.map((s) => s.label).join(', ')} class="mt-14" use:reveal>
 		<dl class="grid grid-cols-2 gap-6 rounded-3xl bg-brand-950 px-6 py-8 text-center text-white lg:grid-cols-4">
 			{#each t.about.stats as stat (stat.label)}
 				<div class="flex flex-col">
@@ -72,7 +84,7 @@
 		</dl>
 	</section>
 
-	<section aria-labelledby="cta-heading" class="mt-14 overflow-hidden rounded-[2rem] bg-brand-800 px-6 py-10 text-center sm:px-10">
+	<section aria-labelledby="cta-heading" class="mt-14 overflow-hidden rounded-[2rem] bg-brand-800 px-6 py-10 text-center sm:px-10" use:reveal>
 		<h2 id="cta-heading" class="text-2xl font-bold tracking-tight text-white sm:text-3xl">
 			{t.about.ctaTitle}
 		</h2>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowRight, BadgeCheck, ChevronLeft, ChevronRight, Headphones, ShieldCheck, Truck } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
 	import CountdownTimer from '#lib/components/CountdownTimer.svelte';
 	import HeroCarousel from '#lib/components/HeroCarousel.svelte';
 	import JsonLd from '#lib/components/JsonLd.svelte';
@@ -37,7 +38,9 @@
 	const trustIcons = [BadgeCheck, Truck, ShieldCheck, Headphones];
 
 	function scrollBestSellers(direction: 1 | -1): void {
-		scroller?.scrollBy({ left: direction * 320, behavior: 'smooth' });
+		// Scroll exactly one viewport of cards so snap alignment stays clean
+		// (two whole cards at sm/md; nothing to scroll once all four fit).
+		if (scroller) scroller.scrollBy({ left: direction * scroller.clientWidth, behavior: 'smooth' });
 	}
 
 	const structuredData = $derived({
@@ -68,16 +71,16 @@
 <Seo {lang} title={t.meta.homeTitle} description={t.meta.homeDescription} path="/" />
 <JsonLd json={structuredData} />
 
-<div class="mx-auto max-w-7xl space-y-12 px-4 py-6 sm:px-6 lg:space-y-16 lg:px-8 lg:py-8">
+<div class="mx-auto max-w-7xl space-y-10 px-4 py-6 sm:space-y-12 sm:px-6 lg:space-y-16 lg:px-8 lg:py-8">
 	<HeroCarousel {lang} {t} />
 
-	<section aria-labelledby="categories-heading">
+	<section aria-labelledby="categories-heading" use:reveal>
 		<p class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-700">
 			<span class="h-px w-6 bg-brand-700" aria-hidden="true"></span>
 			{t.categoriesSection.eyebrow}
 		</p>
 		<div class="mt-2 flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
-			<h2 id="categories-heading" class="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+			<h2 id="categories-heading" class="text-[1.375rem] font-bold tracking-tight text-neutral-900 sm:text-2xl lg:text-3xl">
 				{t.categoriesSection.heading}
 			</h2>
 			<a
@@ -88,7 +91,7 @@
 				<ArrowRight class="h-4 w-4" aria-hidden="true" />
 			</a>
 		</div>
-		<div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+		<div class="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
 			{#each categories as category (category.slug)}
 				<a href={localizedPath(lang, `/category/${category.slug}`)} class="group block text-center">
 					<span class="block aspect-square overflow-hidden rounded-3xl bg-brand-50">
@@ -110,13 +113,13 @@
 		</div>
 	</section>
 
-	<section aria-labelledby="best-sellers-heading">
+	<section aria-labelledby="best-sellers-heading" use:reveal>
 		<p class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-700">
 			<span class="h-px w-6 bg-brand-700" aria-hidden="true"></span>
 			{t.bestSellers.eyebrow}
 		</p>
 		<div class="mt-2 flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
-			<h2 id="best-sellers-heading" class="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+			<h2 id="best-sellers-heading" class="text-[1.375rem] font-bold tracking-tight text-neutral-900 sm:text-2xl lg:text-3xl">
 				{t.bestSellers.heading}
 			</h2>
 			<div class="flex shrink-0 items-center gap-2">
@@ -131,7 +134,7 @@
 					type="button"
 					onclick={() => scrollBestSellers(-1)}
 					aria-label={t.bestSellers.previous}
-					class="grid h-11 w-11 place-items-center rounded-full text-neutral-700 ring-1 ring-neutral-300 hover:bg-brand-50"
+					class="hidden h-11 w-11 place-items-center rounded-full text-neutral-700 ring-1 ring-neutral-300 hover:bg-brand-50 sm:grid lg:hidden"
 				>
 					<ChevronLeft class="h-5 w-5" aria-hidden="true" />
 				</button>
@@ -139,7 +142,7 @@
 					type="button"
 					onclick={() => scrollBestSellers(1)}
 					aria-label={t.bestSellers.next}
-					class="grid h-11 w-11 place-items-center rounded-full text-neutral-700 ring-1 ring-neutral-300 hover:bg-brand-50"
+					class="hidden h-11 w-11 place-items-center rounded-full text-neutral-700 ring-1 ring-neutral-300 hover:bg-brand-50 sm:grid lg:hidden"
 				>
 					<ChevronRight class="h-5 w-5" aria-hidden="true" />
 				</button>
@@ -147,23 +150,26 @@
 		</div>
 		<div
 			bind:this={scroller}
-			class="contain-paint mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+			class="contain-paint mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:flex sm:snap-x sm:snap-mandatory sm:gap-5 sm:overflow-x-auto sm:pb-2 sm:[-ms-overflow-style:none] sm:[scrollbar-width:none] sm:[&::-webkit-scrollbar]:hidden"
 		>
-			{#each featured as product (product.slug)}
-				<div class="w-[270px] shrink-0 snap-start sm:w-[300px] lg:w-auto lg:shrink lg:basis-[calc((100%-3.75rem)/4)]">
+			{#each featured as product, i (product.slug)}
+				<div
+					class="min-w-0 sm:w-auto sm:shrink-0 sm:basis-[calc((100%-1.25rem)/2)] sm:snap-start lg:basis-[calc((100%-3.75rem)/4)]"
+					use:reveal={{ delay: Math.min(i * 60, 300) }}
+				>
 					<ProductCard {product} {lang} {t} />
 				</div>
 			{/each}
 		</div>
 	</section>
 
-	<section aria-labelledby="new-arrivals-heading">
+	<section aria-labelledby="new-arrivals-heading" use:reveal>
 		<p class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-700">
 			<span class="h-px w-6 bg-brand-700" aria-hidden="true"></span>
 			{t.newArrivals.eyebrow}
 		</p>
 		<div class="mt-2 flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
-			<h2 id="new-arrivals-heading" class="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+			<h2 id="new-arrivals-heading" class="text-[1.375rem] font-bold tracking-tight text-neutral-900 sm:text-2xl lg:text-3xl">
 				{t.newArrivals.heading}
 			</h2>
 			<a
@@ -174,7 +180,7 @@
 				<ArrowRight class="h-4 w-4" aria-hidden="true" />
 			</a>
 		</div>
-		<div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:gap-5 lg:grid-cols-4">
 			{#each newProducts as product (product.slug)}
 				<ProductCard {product} {lang} {t} />
 			{/each}
@@ -185,15 +191,16 @@
 		<section
 			aria-labelledby="deal-heading"
 			class="overflow-hidden rounded-[2rem] bg-brand-50 ring-1 ring-brand-100"
+			use:reveal
 		>
-			<div class="grid items-center gap-6 p-6 sm:p-8 lg:grid-cols-2 lg:gap-10 lg:p-10">
+			<div class="grid items-center gap-5 p-5 sm:gap-6 sm:p-8 lg:grid-cols-2 lg:gap-10 lg:p-10">
 				<div>
 					<p class="text-xs font-bold uppercase tracking-widest text-brand-700">
 						{t.dealOfDay.eyebrow}
 					</p>
 					<h2
 						id="deal-heading"
-						class="mt-3 text-3xl font-bold leading-tight tracking-tight text-neutral-900 sm:text-4xl"
+						class="mt-3 text-[1.625rem] font-bold leading-tight tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl"
 					>
 						{t.dealOfDay.heading}
 					</h2>
@@ -211,9 +218,9 @@
 				</div>
 				<a
 					href={productPath(lang, deal.slug)}
-					class="group flex items-center gap-5 rounded-3xl bg-white p-4 ring-1 ring-neutral-200 transition-shadow hover:shadow-lg sm:p-5"
+					class="group flex items-center gap-3 rounded-3xl bg-white p-3 ring-1 ring-neutral-200 transition-shadow hover:shadow-lg sm:gap-5 sm:p-5"
 				>
-					<span class="block w-28 shrink-0 overflow-hidden rounded-2xl bg-brand-50 sm:w-36">
+					<span class="block w-20 shrink-0 overflow-hidden rounded-2xl bg-brand-50 sm:w-28 lg:w-36">
 						<span class="block aspect-[4/5]">
 							<Picture
 								base={deal.image}
@@ -234,7 +241,7 @@
 								{deal.badge}
 							</span>
 						{/if}
-						<span class="mt-2 block truncate text-lg font-bold text-neutral-900 group-hover:text-brand-800">
+						<span class="mt-2 block truncate text-base font-bold text-neutral-900 group-hover:text-brand-800 sm:text-lg">
 							{localize(deal.name, lang)}
 						</span>
 						<span class="mt-1 flex items-center gap-1.5">
@@ -262,16 +269,17 @@
 	<section
 		aria-labelledby="promo-heading"
 		class="overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand-100 via-brand-50 to-white ring-1 ring-brand-100"
+		use:reveal
 	>
-		<div class="grid items-center gap-6 p-6 sm:p-8 lg:grid-cols-2 lg:gap-10 lg:p-10">
+		<div class="grid items-center gap-5 p-5 sm:gap-6 sm:p-8 lg:grid-cols-2 lg:gap-10 lg:p-10">
 			<div>
 				<p class="text-xs font-bold uppercase tracking-widest text-brand-700">{t.promo.eyebrow}</p>
 				<h2
 					id="promo-heading"
-					class="mt-3 text-3xl font-bold leading-tight tracking-tight text-neutral-900 sm:text-4xl"
+					class="mt-3 text-[1.625rem] font-bold leading-tight tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl"
 				>
 					{t.promo.titleA}
-					<span class="block text-xl font-semibold text-neutral-700 sm:text-2xl">{t.promo.titleB}</span>
+					<span class="block text-lg font-semibold text-neutral-700 sm:text-xl lg:text-2xl">{t.promo.titleB}</span>
 				</h2>
 				<p class="mt-3 max-w-md leading-relaxed text-neutral-600">{t.promo.subtitle}</p>
 				<a
@@ -298,8 +306,8 @@
 
 	<TestimonialsSection {lang} {t} />
 
-	<section aria-labelledby="brand-story-heading">
-		<div class="grid items-center gap-6 lg:grid-cols-2 lg:gap-10">
+	<section aria-labelledby="brand-story-heading" use:reveal>
+		<div class="grid items-center gap-5 sm:gap-6 lg:grid-cols-2 lg:gap-10">
 			<div class="overflow-hidden rounded-3xl">
 				<Picture
 					base="/images/hero-main"
@@ -318,7 +326,7 @@
 				</p>
 				<h2
 					id="brand-story-heading"
-					class="mt-2 text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl"
+					class="mt-2 text-[1.375rem] font-bold tracking-tight text-neutral-900 sm:text-2xl lg:text-3xl"
 				>
 					{t.brandStory.heading}
 				</h2>
@@ -338,13 +346,14 @@
 
 	<section
 		aria-labelledby="newsletter-band-heading"
-		class="overflow-hidden rounded-[2rem] bg-brand-800 px-6 py-10 sm:px-8 lg:px-10"
+		class="overflow-hidden rounded-[2rem] bg-brand-800 px-5 py-8 sm:px-8 sm:py-10 lg:px-10"
+		use:reveal
 	>
-		<div class="grid items-center gap-6 lg:grid-cols-2 lg:gap-10">
+		<div class="grid items-center gap-5 sm:gap-6 lg:grid-cols-2 lg:gap-10">
 			<div>
 				<h2
 					id="newsletter-band-heading"
-					class="text-2xl font-bold tracking-tight text-white sm:text-3xl"
+					class="text-[1.375rem] font-bold tracking-tight text-white sm:text-2xl lg:text-3xl"
 				>
 					{t.newsletterBand.title}
 				</h2>
@@ -355,12 +364,12 @@
 	</section>
 
 	<!-- Trust row: presentational grouping, not a landmark. -->
-	<div>
-		<div class="grid gap-6 rounded-3xl bg-brand-50 px-6 py-6 sm:grid-cols-2 lg:grid-cols-4">
+	<div use:reveal>
+		<div class="grid grid-cols-2 gap-4 rounded-3xl bg-brand-50 px-5 py-5 sm:gap-6 sm:px-6 sm:py-6 lg:grid-cols-4">
 			{#each t.trust.items as item, i (i)}
 				{@const TrustIcon = trustIcons[i]}
-				<div class="flex items-start gap-3">
-					<TrustIcon class="mt-0.5 h-6 w-6 shrink-0 text-brand-700" aria-hidden="true" />
+				<div class="flex items-start gap-2.5 sm:gap-3">
+					<TrustIcon class="mt-0.5 h-5 w-5 shrink-0 text-brand-700 sm:h-6 sm:w-6" aria-hidden="true" />
 					<div>
 						<p class="text-sm font-semibold text-neutral-900">{item.title}</p>
 						<p class="text-xs text-neutral-600">{item.subtitle}</p>

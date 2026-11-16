@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { tick } from 'svelte';
 	import { CheckCircle2, Clock, Mail, Phone } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
+	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { CONTACT_EMAIL, CONTACT_PHONE } from '#lib/config';
 	import { interpolate } from '#lib/format';
 	import { getDictionary } from '#lib/i18n/index';
+	import { localizedPath } from '#lib/paths';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -120,14 +123,21 @@
 <Seo {lang} title={t.meta.contactTitle} description={t.meta.contactDescription} path="/contact" />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">{t.contact.title}</h1>
+	<Breadcrumbs
+		label={t.product.breadcrumbLabel}
+		items={[
+			{ label: t.nav.home, href: localizedPath(lang, '/') },
+			{ label: t.contact.title }
+		]}
+	/>
+	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>{t.contact.title}</h1>
 	<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.contact.description}</p>
 
 	<div class="mt-8 grid gap-8 lg:grid-cols-[1fr_1.5fr]">
-		<section aria-labelledby="contact-info-heading">
+		<section aria-labelledby="contact-info-heading" use:reveal>
 			<h2 id="contact-info-heading" class="text-lg font-bold text-neutral-900">{t.contact.infoTitle}</h2>
 			<ul class="mt-4 space-y-3">
-				<li class="flex items-start gap-3 rounded-3xl bg-brand-50 p-4">
+				<li class="card-lift flex items-start gap-3 rounded-3xl bg-brand-50 p-4">
 					<Mail class="mt-0.5 h-5 w-5 shrink-0 text-brand-700" aria-hidden="true" />
 					<div>
 						<p class="text-sm font-semibold text-neutral-900">{t.contact.emailTitle}</p>
@@ -136,7 +146,7 @@
 						</a>
 					</div>
 				</li>
-				<li class="flex items-start gap-3 rounded-3xl bg-brand-50 p-4">
+				<li class="card-lift flex items-start gap-3 rounded-3xl bg-brand-50 p-4">
 					<Phone class="mt-0.5 h-5 w-5 shrink-0 text-brand-700" aria-hidden="true" />
 					<div>
 						<p class="text-sm font-semibold text-neutral-900">{t.contact.phoneTitle}</p>
@@ -145,7 +155,7 @@
 						</a>
 					</div>
 				</li>
-				<li class="flex items-start gap-3 rounded-3xl bg-brand-50 p-4">
+				<li class="card-lift flex items-start gap-3 rounded-3xl bg-brand-50 p-4">
 					<Clock class="mt-0.5 h-5 w-5 shrink-0 text-brand-700" aria-hidden="true" />
 					<div>
 						<p class="text-sm font-semibold text-neutral-900">{t.contact.hoursTitle}</p>
@@ -156,7 +166,7 @@
 		</section>
 
 		{#if submittedName}
-			<div class="rounded-3xl bg-brand-50 p-6 text-center sm:p-8" role="status">
+			<div class="rounded-3xl bg-brand-50 p-6 text-center sm:p-8" role="status" use:reveal>
 				<CheckCircle2 class="mx-auto h-10 w-10 text-brand-700" aria-hidden="true" />
 				<h2 class="mt-3 text-xl font-bold text-neutral-900">{t.contact.successTitle}</h2>
 				<p class="mx-auto mt-2 max-w-md text-neutral-600">
@@ -171,7 +181,7 @@
 				</button>
 			</div>
 		{:else}
-			<form onsubmit={submit} novalidate class="space-y-4">
+			<form onsubmit={submit} novalidate class="space-y-4" use:reveal>
 				{#if showSummary && errorEntries.length > 0}
 					<div
 						bind:this={summaryEl}

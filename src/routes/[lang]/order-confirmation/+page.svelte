@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { CheckCircle2, PackageSearch, ShoppingCart } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
 	import Seo from '#lib/components/Seo.svelte';
 	import { getProduct } from '#lib/data/products';
 	import { formatDate, formatPrice, interpolate } from '#lib/format';
@@ -53,7 +54,7 @@
 
 <div class="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	{#if checked && order}
-		<div class="rounded-3xl bg-brand-50 p-6 text-center sm:p-10" role="status">
+		<div class="rounded-3xl bg-brand-50 p-6 text-center sm:p-10" role="status" use:reveal>
 			<CheckCircle2 class="mx-auto h-12 w-12 text-brand-700" aria-hidden="true" />
 			<h1 class="mt-3 text-2xl font-bold text-neutral-900 sm:text-3xl">
 				{t.cart.checkoutSuccessTitle}
@@ -78,7 +79,7 @@
 			<p class="mx-auto mt-2 max-w-md text-sm text-neutral-500">{t.cart.checkoutDemoNote}</p>
 		</div>
 
-		<section aria-labelledby="confirmation-items-heading" class="mt-8 rounded-3xl bg-white p-6 ring-1 ring-neutral-200">
+		<section aria-labelledby="confirmation-items-heading" class="mt-8 rounded-3xl bg-white p-6 ring-1 ring-neutral-200" use:reveal>
 			<h2 id="confirmation-items-heading" class="text-lg font-bold text-neutral-900">
 				{t.orderConfirmation.itemsTitle}
 			</h2>
@@ -101,9 +102,9 @@
 			</p>
 		</section>
 
-		<div class="mt-8 flex flex-col justify-center gap-2 sm:flex-row">
+		<div class="mt-8 flex flex-col justify-center gap-2 sm:flex-row" use:reveal>
 			<a
-				href={localizedPath(lang, '/track-order')}
+				href="{localizedPath(lang, '/track-order')}?code={encodeURIComponent(order.id)}"
 				class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-brand-700 px-6 text-sm font-semibold text-white hover:bg-brand-800"
 			>
 				<PackageSearch class="h-4 w-4" aria-hidden="true" />
@@ -117,7 +118,7 @@
 			</a>
 		</div>
 	{:else if checked}
-		<div class="flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center">
+		<div class="flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center" use:reveal>
 			<ShoppingCart class="h-12 w-12 text-brand-700" aria-hidden="true" />
 			<h1 class="text-2xl font-bold text-neutral-900">{t.orderConfirmation.emptyTitle}</h1>
 			<p class="max-w-md text-neutral-600">{t.orderConfirmation.emptyText}</p>

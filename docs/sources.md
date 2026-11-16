@@ -212,6 +212,32 @@ gaps it found were closed in the same round:
 - https://www.aprodence.com/how-to-design-great-ux-for-an-e-commerce-app-the-complete-2026-guide/ — Aprodence — e-commerce UX guide: wishlist, compare, quick view, recently viewed, breadcrumbs, search autocomplete, order tracking, structured data.
 - https://www.starluxe.tech/tools/ecommerce-cro-checklist — StarLuxe — e-commerce CRO checklist: wishlist, compare, quick view, recently viewed, breadcrumbs, search autocomplete, order tracking, structured data.
 
+### Polish round (2026-11-16)
+
+Sources for the client-quality polish round (foundation worker): mobile
+listing density, the motion budget, and the new-page checklist. Grouped as
+supplied by the coordinator; each line says what it supports.
+
+**Mobile UX**
+- https://webdeveasy.com/mobile-ecommerce-design/ — 2-col grid sweet spot, primary actions low + sticky, 44px targets, forms 1-col.
+- https://govisibi.ai/insights/mobile-product-grid-density/ — 1-col forces endless scrolling; 2-col shows ~2x products.
+- https://www.brewmyapp.io/blog/woocommerce-mobile-app-design-best-practices — 2-col default, name max 2 lines, add-to-cart from grid.
+- https://github.com/medusajs/medusa-agent-skills/blob/HEAD/plugins/ecommerce-storefront/skills/storefront-best-practices/reference/layouts/product-listing.md — mobile 2-col, drawer filters, sticky filter/sort bar with active count.
+- https://rovela.ai/blog/clothing-collection-page-design — 2-col mobile, 3-4 desktop, sticky filter bar, 12-24px gutters.
+- https://prateeksha.com/blog/crafting-the-perfect-search-a-guide-to-results-page-ui-ux-design — bottom-sheet filters, active chips, sticky summary.
+
+**Motion**
+- https://www.monotonomo.com/journal/motion-budget-fast-sites-2026/ — every animation needs a job; ≤500ms; scroll reveals fire once; reduced-motion mandatory.
+- https://github.com/nemolabsdev/conversion-craft/blob/HEAD/curriculum/research/motion-performance.md — transform+opacity only, M3 duration scale 50-500ms.
+- https://www.marcfriedmanportfolio.com/blog/microinteractions-motion-3d-2026/ — feedback 100-300ms, pause control for >5s autoplay, test on real phone widths.
+- https://test77.luminarybrands.co.uk/blog/website-design-trends/ — purposeful micro-interactions, progressive disclosure.
+
+**Pages**
+- https://www.komalnakrani.com/blog/astro-ecommerce-page-checklist/ — core 13 + growth: gift cards, store locator, account addresses/payments.
+- https://crocoblock.com/blog/important-ecommerce-website-pages/ — 13-page checklist.
+- https://rdigital.co/blog/26-must-have-pages-every-eshop-shall-have/ — store addresses, help.
+- https://dokan.co/blog/4672/ecommerce-website-pages-list/ — store locator.
+
 ## 3. Conflicts, uncertainties, and what the builder must verify
 
 1. **Paraglide "missing key" claims conflict — resolved as above.** One blog says TypeScript catches a key forgotten in the second locale file; a project doc says the compiler silently falls back to the base locale. The consistent reading: call-site typos and keys missing from the *base* locale fail; translations missing from a *non-base* locale do not. Hence the custom-dictionary recommendation and, if Paraglide is used, the mandatory `@inlang/cli check` gate.

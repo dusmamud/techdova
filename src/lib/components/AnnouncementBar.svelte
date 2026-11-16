@@ -8,13 +8,14 @@
 
 <div class="bg-brand-800 text-white">
 	<p
-		class="mx-auto flex min-h-11 max-w-7xl flex-wrap items-center justify-center gap-x-2 px-4 text-center text-sm sm:px-6 lg:px-8"
+		class="mx-auto flex min-h-11 max-w-7xl items-center justify-center gap-2 px-4 text-sm sm:px-6 lg:px-8"
 	>
-		<Truck class="h-4 w-4 shrink-0" aria-hidden="true" />
-		<span>{t.announcementBar.text}</span>
+		<Truck class="hidden h-4 w-4 shrink-0 sm:block" aria-hidden="true" />
+		<span class="min-w-0 truncate sm:hidden">{t.announcementBar.short}</span>
+		<span class="hidden min-w-0 truncate sm:inline">{t.announcementBar.text}</span>
 		<a
 			href={localizedPath(lang, '/shipping')}
-			class="inline-flex min-h-11 items-center font-semibold underline underline-offset-2 hover:text-brand-100"
+			class="inline-flex min-h-11 shrink-0 items-center font-semibold underline underline-offset-2 hover:text-brand-100"
 		>
 			{t.announcementBar.linkLabel}
 		</a>

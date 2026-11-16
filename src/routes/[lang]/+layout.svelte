@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/env';
+	import { page } from '$app/state';
+	import { fade } from 'svelte/transition';
 	import BackToTop from '#lib/components/BackToTop.svelte';
 	import CartDrawer from '#lib/components/CartDrawer.svelte';
 	import CompareTray from '#lib/components/CompareTray.svelte';
@@ -14,6 +16,16 @@
 	let { data, children }: LayoutProps = $props();
 
 	const t = $derived(getDictionary(data.lang));
+
+	// Page-enter fade: enter-only, 200ms (motion token duration-200). The
+	// reduced-motion check runs at init (browser-only) so the value is
+	// correct before the first render — no branch flip, no content remount.
+	// Duration 0 under reduced motion means no fade at all; content always
+	// renders immediately and the fade is purely decorative.
+	const reduceMotion = browser
+		? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+		: false;
+	const pathname = $derived(page.url.pathname);
 
 	// Persist the locale from the URL so the root page can honour it later.
 	$effect(() => {
@@ -34,7 +46,11 @@
 </a>
 <Header lang={data.lang} {t} />
 <LiveRegion lang={data.lang} {t} />
-<main id="main-content">{@render children()}</main>
+<main id="main-content">
+	{#key pathname}
+		<div in:fade={{ duration: reduceMotion ? 0 : 200 }}>{@render children()}</div>
+	{/key}
+</main>
 <Footer lang={data.lang} {t} />
 <CartDrawer lang={data.lang} {t} />
 <CompareTray lang={data.lang} {t} />

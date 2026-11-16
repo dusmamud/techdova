@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/env';
+	import { reveal } from '#lib/actions/reveal';
 	import { getProduct, type Product } from '#lib/data/products';
 	import type { Dictionary, Locale } from '#lib/i18n/index';
 	import { loadRecentlyViewed } from '#lib/recently-viewed';
@@ -28,14 +29,14 @@
 </script>
 
 {#if mounted && viewed.length > 0}
-	<section aria-labelledby="recently-viewed-heading">
+	<section aria-labelledby="recently-viewed-heading" use:reveal>
 		<h2
 			id="recently-viewed-heading"
-			class="text-2xl font-bold tracking-tight text-neutral-900"
+			class="text-[1.375rem] font-bold tracking-tight text-neutral-900 sm:text-2xl lg:text-3xl"
 		>
 			{t.recentlyViewed.heading}
 		</h2>
-		<div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:gap-5 lg:grid-cols-4">
 			{#each viewed as product (product.slug)}
 				<ProductCard {product} {lang} {t} />
 			{/each}

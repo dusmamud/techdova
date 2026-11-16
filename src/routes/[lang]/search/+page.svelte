@@ -1,9 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Search, SearchX } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
+	import FilterBar, {
+		type FilterChip,
+		type SortOption
+	} from '#lib/components/FilterBar.svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import Seo from '#lib/components/Seo.svelte';
-	import { filterProducts, products } from '#lib/data/products';
+	import { filterProducts, products, sortProducts, type SortKey } from '#lib/data/products';
 	import { interpolate } from '#lib/format';
 	import { getDictionary } from '#lib/i18n/index';
 	import { localizedPath } from '#lib/paths';
@@ -24,7 +29,31 @@
 	});
 
 	const trimmed = $derived(query.trim());
-	const results = $derived(filterProducts(products, { query: trimmed }, lang));
+	let sort = $state<SortKey>('featured');
+	const results = $derived(
+		sortProducts(filterProducts(products, { query: trimmed }, lang), sort)
+	);
+
+	const sortOptions = $derived<SortOption[]>([
+		{ value: 'featured', label: t.shop.sortFeatured },
+		{ value: 'price-asc', label: t.shop.sortPriceAsc },
+		{ value: 'price-desc', label: t.shop.sortPriceDesc },
+		{ value: 'rating', label: t.shop.sortRating }
+	]);
+
+	const chips = $derived<FilterChip[]>(
+		trimmed !== '' ? [{ id: 'q', label: trimmed }] : []
+	);
+
+	function onSortChange(value: string): void {
+		sort = ['featured', 'price-asc', 'price-desc', 'rating'].includes(value)
+			? (value as SortKey)
+			: 'featured';
+	}
+
+	function clearQuery(): void {
+		query = '';
+	}
 
 	const resultsText = $derived(
 		results.length === 1
@@ -40,8 +69,12 @@
 <Seo {lang} title={t.meta.searchTitle} description={t.meta.searchDescription} path="/search" />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">{t.searchPage.title}</h1>
-	<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.searchPage.hint}</p>
+	<div use:reveal>
+		<h1 class="text-[1.75rem] font-bold tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl">
+			{t.searchPage.title}
+		</h1>
+		<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.searchPage.hint}</p>
+	</div>
 
 	<div class="relative mt-6 max-w-xl">
 		<label class="sr-only" for="search-page-input">{t.searchPage.searchLabel}</label>
@@ -82,16 +115,24 @@
 				{interpolate(t.searchPage.noResults, { query: trimmed })}
 			</h2>
 			<p class="max-w-sm text-neutral-600">{t.searchPage.noResultsHint}</p>
+			<ul class="max-w-sm list-disc space-y-1 pl-5 text-left text-sm text-neutral-600">
+				{#each t.searchPage.noResultsTips as tip (tip)}
+					<li>{tip}</li>
+				{/each}
+			</ul>
 			<p class="mt-2 text-sm font-semibold text-neutral-900">{t.searchPage.suggestionsLabel}</p>
 			<div class="flex flex-wrap justify-center gap-2">
 				{#each t.searchPage.popularSearches as term (term)}
-					<button
-						type="button"
-						onclick={() => searchTerm(term)}
+					<!-- Full reload: the ?q= reader runs in onMount, so a
+						client-side navigation to this same route would leave
+						the previous query in place. -->
+					<a
+						href="{localizedPath(lang, '/search')}?q={encodeURIComponent(term)}"
+						data-sveltekit-reload
 						class="inline-flex min-h-11 items-center rounded-full bg-white px-4 text-sm font-medium text-neutral-800 ring-1 ring-neutral-300 hover:bg-brand-50"
 					>
 						{term}
-					</button>
+					</a>
 				{/each}
 			</div>
 			<a
@@ -102,10 +143,22 @@
 			</a>
 		</div>
 	{:else}
-		<p role="status" aria-live="polite" class="mt-6 text-sm font-medium text-neutral-600">
-			{resultsText}
-		</p>
-		<div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+		<FilterBar
+			{t}
+			id="search-filter-bar"
+			resultCount={results.length}
+			resultText={resultsText}
+			sortValue={sort}
+			{sortOptions}
+			onSortChange={onSortChange}
+			{chips}
+			onRemoveChip={clearQuery}
+			onClearAll={clearQuery}
+		/>
+		<div
+			class="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
+			use:reveal
+		>
 			{#each results as product (product.slug)}
 				<ProductCard {product} {lang} {t} />
 			{/each}

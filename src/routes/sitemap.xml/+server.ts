@@ -32,7 +32,12 @@ const staticPaths = [
 	'/deals',
 	'/blog',
 	'/sitemap',
-	'/accessibility'
+	'/accessibility',
+	'/stores',
+	'/gift-cards',
+	'/help',
+	'/new-arrivals',
+	'/best-sellers'
 ];
 
 function absoluteUrl(locale: string, path: string): string {

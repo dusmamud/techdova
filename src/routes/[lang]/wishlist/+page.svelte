@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Heart, ShoppingCart, Trash2 } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { getProduct } from '#lib/data/products';
@@ -45,10 +46,12 @@
 />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
-		{t.wishlistPage.title}
-	</h1>
-	<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.wishlistPage.description}</p>
+	<div use:reveal>
+		<h1 class="text-[1.75rem] font-bold tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl">
+			{t.wishlistPage.title}
+		</h1>
+		<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.wishlistPage.description}</p>
+	</div>
 
 	{#if wished.length === 0}
 		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center">
@@ -64,10 +67,13 @@
 		</div>
 	{:else}
 		<p class="mt-4 text-sm font-medium text-neutral-600" role="status">{countText}</p>
-		<div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-			{#each wished as product (product.slug)}
+		<div class="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+			{#each wished as product, i (product.slug)}
 				{@const name = localize(product.name, lang)}
-				<div class="flex flex-col gap-2">
+				<div
+					class="flex min-w-0 flex-col gap-2"
+					use:reveal={{ delay: Math.min(i * 60, 300) }}
+				>
 					<ProductCard {product} {lang} {t} />
 					<div class="flex gap-2">
 						<button
@@ -75,9 +81,9 @@
 							disabled={product.stock <= 0}
 							onclick={() => moveToCart(product.slug)}
 							aria-label={interpolate(t.wishlistPage.moveToCartLabel, { name })}
-							class="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800 disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-500"
+							class="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full bg-brand-700 px-2 text-center text-xs font-semibold leading-tight text-white hover:bg-brand-800 disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-500 sm:gap-2 sm:px-4 sm:text-sm"
 						>
-							<ShoppingCart class="h-4 w-4" aria-hidden="true" />
+							<ShoppingCart class="h-4 w-4 shrink-0" aria-hidden="true" />
 							{t.wishlistPage.moveToCart}
 						</button>
 						<button

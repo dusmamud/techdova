@@ -55,7 +55,10 @@ try {
 		await waitForServer(`${BASE}/en`);
 	}
 
-	const proxyServer = process.env.HTTPS_PROXY ?? process.env.https_proxy;
+	// The egress proxy is only for the live origin: routing localhost
+	// through it makes Chromium's requests fail (the proxy rejects the
+	// tunnel), so local runs launch with no proxy at all.
+	const proxyServer = LIVE ? (process.env.HTTPS_PROXY ?? process.env.https_proxy) : undefined;
 	const browser = await chromium.launch(
 		proxyServer ? { proxy: { server: proxyServer } } : {}
 	);

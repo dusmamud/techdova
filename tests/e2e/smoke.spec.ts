@@ -39,6 +39,9 @@ test('shop category filter and search work', async ({ page }) => {
 	await expect(page.locator('main')).not.toContainText('iPhone 15 Pro');
 	await page.getByRole('link', { name: 'All categories' }).click();
 	await page.locator('#shop-search').fill('watch');
+	// Count the cards, not just the count line: '12 products' contains the
+	// substring '2 products', so a text-only assertion would pass vacuously.
+	await expect(page.locator('main article')).toHaveCount(2);
 	await expect(page.locator('main')).toContainText('2 products');
 	await expect(page.locator('main')).toContainText('Galaxy Watch 6');
 });

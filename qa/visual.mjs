@@ -4,8 +4,9 @@
 // image or failed branded-404 check. No browser downloads: uses the
 // Playwright browser already present in ~/.cache/ms-playwright.
 //
-// Coverage: EVERY route in BOTH locales (44 paths x 2 locales = 88 pages,
-// the same inventory as sitemap.xml) is screenshotted at 1440x900 and
+// Coverage: EVERY route in BOTH locales (49 paths x 2 locales = 98 pages:
+// the 48 sitemap paths plus /order-confirmation, which the sitemap excludes
+// as noindex) is screenshotted at 1440x900 and
 // 390x844 and checked for horizontal overflow at those widths. The
 // home/shop/product pages additionally keep the original 5-width overflow
 // sweep (320/375/768/1024/1440).
@@ -43,7 +44,12 @@ const STATIC_PATHS = [
 	'/deals',
 	'/blog',
 	'/sitemap',
-	'/accessibility'
+	'/accessibility',
+	'/stores',
+	'/gift-cards',
+	'/help',
+	'/new-arrivals',
+	'/best-sellers'
 ];
 const CATEGORY_SLUGS = ['smartphones', 'computers', 'audio', 'smartwatches', 'gaming', 'accessories'];
 const BLOG_SLUGS = [

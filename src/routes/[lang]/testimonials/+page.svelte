@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { ArrowRight } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
+	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import Stars from '#lib/components/Stars.svelte';
 	import { testimonials } from '#lib/data/testimonials';
@@ -42,7 +44,14 @@
 />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+	<Breadcrumbs
+		label={t.product.breadcrumbLabel}
+		items={[
+			{ label: t.nav.home, href: localizedPath(lang, '/') },
+			{ label: t.testimonialsPage.title }
+		]}
+	/>
+	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>
 		{t.testimonialsPage.title}
 	</h1>
 	<p class="mt-3 max-w-2xl leading-relaxed text-neutral-600">
@@ -60,9 +69,12 @@
 	</p>
 
 	<div class="mt-8 grid gap-5 sm:grid-cols-2">
-		{#each testimonials as testimonial (localize(testimonial.name, 'en'))}
+		{#each testimonials as testimonial, i (localize(testimonial.name, 'en'))}
 			{@const name = localize(testimonial.name, lang)}
-			<figure class="flex flex-col gap-4 rounded-3xl bg-white p-6 ring-1 ring-neutral-200">
+			<figure
+				class="card-lift flex flex-col gap-4 rounded-3xl bg-white p-6 ring-1 ring-neutral-200"
+				use:reveal={{ delay: Math.min(i * 60, 300) }}
+			>
 				<Stars
 					rating={testimonial.rating}
 					label={interpolate(t.productCard.ratingLabel, {
@@ -90,7 +102,7 @@
 		{/each}
 	</div>
 
-	<div class="mt-10 text-center">
+	<div class="mt-10 text-center" use:reveal>
 		<a
 			href={localizedPath(lang, '/shop')}
 			class="inline-flex min-h-12 items-center gap-2 rounded-full bg-brand-700 px-6 text-sm font-semibold text-white hover:bg-brand-800"

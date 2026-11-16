@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { Check, PackageSearch } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
 	import Seo from '#lib/components/Seo.svelte';
 	import { getProduct } from '#lib/data/products';
 	import { formatDate, formatPrice, interpolate } from '#lib/format';
@@ -49,15 +50,8 @@
 		return product ? localize(product.name, lang) : slug;
 	}
 
-	async function submit(event: SubmitEvent): Promise<void> {
-		event.preventDefault();
+	async function lookup(): Promise<void> {
 		const normalized = code.replaceAll(/\s/g, '').toUpperCase();
-		codeError = normalized ? undefined : t.trackOrder.requiredError;
-		emailError =
-			email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
-				? t.trackOrder.emailError
-				: undefined;
-		if (codeError || emailError) return;
 		const order = findDemoOrder(normalized) ?? null;
 		result = {
 			code: normalized,
@@ -67,6 +61,31 @@
 		await tick();
 		resultHeading?.focus();
 	}
+
+	async function submit(event: SubmitEvent): Promise<void> {
+		event.preventDefault();
+		const normalized = code.replaceAll(/\s/g, '').toUpperCase();
+		codeError = normalized ? undefined : t.trackOrder.requiredError;
+		emailError =
+			email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+				? t.trackOrder.emailError
+				: undefined;
+		if (codeError || emailError) return;
+		await lookup();
+	}
+
+	// Deep link (?code=...): the query string is unavailable during
+	// prerendering, so read it only on the client, after mount. A code in
+	// the URL prefills the input and runs the lookup immediately; an empty
+	// or missing code leaves the manual form untouched, and an unknown code
+	// shows the existing not-found state via lookup().
+	onMount(() => {
+		const linked = new URLSearchParams(window.location.search).get('code');
+		if (linked?.trim()) {
+			code = linked;
+			void lookup();
+		}
+	});
 
 	function trackAnother(): void {
 		result = null;
@@ -84,11 +103,11 @@
 <Seo {lang} title={t.meta.trackOrderTitle} description={t.meta.trackOrderDescription} path="/track-order" />
 
 <div class="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">{t.trackOrder.title}</h1>
+	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>{t.trackOrder.title}</h1>
 	<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.trackOrder.description}</p>
 
 	{#if !result}
-		<form onsubmit={submit} novalidate class="mt-8 space-y-4 rounded-3xl bg-white p-6 ring-1 ring-neutral-200">
+		<form onsubmit={submit} novalidate class="mt-8 space-y-4 rounded-3xl bg-white p-6 ring-1 ring-neutral-200" use:reveal>
 			<div>
 				<label for="track-code" class="mb-1 block text-sm font-medium text-neutral-700">
 					{t.trackOrder.orderCodeLabel}
@@ -145,7 +164,7 @@
 			</button>
 		</form>
 	{:else}
-		<div class="mt-8 rounded-3xl bg-white p-6 ring-1 ring-neutral-200">
+		<div class="mt-8 rounded-3xl bg-white p-6 ring-1 ring-neutral-200" use:reveal>
 			<h2 bind:this={resultHeading} tabindex="-1" class="text-xl font-bold text-neutral-900 focus:outline-none">
 				{interpolate(t.trackOrder.orderHeading, { orderId: result.code })}
 			</h2>

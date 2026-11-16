@@ -50,20 +50,22 @@ Quality gates:
 
 ```sh
 npm run check    # svelte-kit sync + svelte-check (0 errors, 0 warnings)
-npm run test     # Vitest unit tests (67 cases, finalized by QA
-                  # on 2026-11-16 after the gap-filling round)
-npm run test:e2e # Playwright tests (59: 10 smoke + 49 gap-round);
-                  # uses the cached headless shell, no browser downloads.
-                  # Override the port with E2E_PORT (default 4173).
+npm run test     # Vitest unit tests (67 cases, unchanged in the polish
+                  # round; last green run 2026-11-16)
+npm run test:e2e # Playwright tests (75: 10 smoke + 49 gap-round + 16
+                  # polish-round); uses the cached headless shell, no
+                  # browser downloads. Override the port with E2E_PORT
+                  # (default 4173).
 npm run qa       # Playwright visual QA: screenshots + horizontal-overflow
                   # checks + branded-404 + image-load checks; writes
                   # qa/shots/*.png and qa/qa-report.json
 ```
 
 Counts above are the final numbers measured by QA on 2026-11-16
-after the gap-filling round: 67 Vitest cases, 59 Playwright tests,
-88 sitemap URLs (44 paths × 2 locales), 177 visual-QA screenshots
-with 191 overflow checks and zero failures.
+after the polish round: 67 Vitest cases, 75 Playwright tests
+(10 smoke + 49 gap-round + 16 polish-round),
+96 sitemap URLs (48 paths × 2 locales), 197 visual-QA screenshots
+with 211 overflow checks and zero failures.
 
 ## Project structure
 
@@ -88,6 +90,10 @@ src/
       deal.ts             Countdown deal end date
       reviews.ts          Demo product reviews + rating breakdown
       testimonials.ts     Demo testimonials
+      stores.ts           3 demo stores (Algiers, Oran, Constantine)
+    actions/
+      reveal.ts           use:reveal scroll-reveal action (JS-only hidden
+                          state; no-op under reduced motion)
     i18n/
       en.ts               English dictionary (source of truth for the type)
       fr.ts               French dictionary (typed as Dictionary)
@@ -97,6 +103,7 @@ src/
       wishlist.svelte.ts  Wishlist state + localStorage
       compare.svelte.ts   Compare state + localStorage
       account.svelte.ts   Demo account state + localStorage
+      addresses.svelte.ts Saved-addresses state + localStorage (account CRUD)
       toast.svelte.ts     Toast notification state
     components/           Seo, JsonLd, Header, AnnouncementBar, SearchForm,
                           Footer, HeroCarousel, ProductCard, QuickView,
@@ -104,7 +111,8 @@ src/
                           CartDrawer, CheckoutSteps, CountdownTimer,
                           FaqAccordion, FaqItem, Breadcrumbs, BackToTop,
                           TestimonialsSection, RecentlyViewed,
-                          NewsletterForm, LiveRegion, Toast
+                          NewsletterForm, LiveRegion, Toast, FilterBar,
+                          FilterDrawer
   routes/
     +layout.ts            prerender = true for all pages
     +layout.svelte        Imports app.css
@@ -116,8 +124,9 @@ src/
                           wishlist, compare, account, faq, shipping,
                           returns, payment, testimonials, blog, blog/[slug],
                           about, contact, terms, privacy, sitemap,
-                          accessibility
-    sitemap.xml/          Prerendered sitemap: 44 paths × 2 locales = 88 URLs
+                          accessibility, stores, gift-cards, help,
+                          new-arrivals, best-sellers
+    sitemap.xml/          Prerendered sitemap: 48 paths × 2 locales = 96 URLs
     robots.txt/           Prerendered robots.txt
 static/
   images/                 All generated artwork (local only, no external URLs)
@@ -128,7 +137,7 @@ qa/
   serve.mjs               Pure-Node static server for QA/e2e (clean URLs + 404)
   visual.mjs              Screenshot + overflow + image-load QA script
   shots/                  QA screenshots (desktop + mobile, EN + FR)
-tests/e2e/                Playwright smoke tests
+tests/e2e/                Playwright tests (smoke + gap + polish specs)
 docs/sources.md           2026 best-practice research: sources + how applied
 ```
 
@@ -202,9 +211,10 @@ How it works:
   page, above the header on every page. The footer has Shop / Help /
   Company link columns plus follow-us links and the newsletter form.
 - **More pages**: multi-step demo checkout with order confirmation,
-  order tracking, demo account, FAQ, shipping / returns / payment
-  policies, testimonials, blog, sitemap and accessibility pages — all
-  local-only, all in EN + FR.
+  order tracking, demo account (with saved addresses), FAQ, shipping /
+  returns / payment policies, testimonials, blog, sitemap,
+  accessibility, stores, gift cards, help centre, new arrivals and
+  best sellers — all local-only, all in EN + FR.
 - **Contact / newsletter**: validated locally with inline errors and
   success states; nothing is sent.
 - **Hero carousel**: arrows, dots, keyboard, auto-advance (6s) with pause

@@ -12,11 +12,15 @@
 		{ label: t.nav.home, href: localizedPath(lang, '/') },
 		{ label: t.nav.shop, href: localizedPath(lang, '/shop') },
 		{ label: t.footer.deals, href: localizedPath(lang, '/deals') },
+		{ label: t.footer.newArrivals, href: localizedPath(lang, '/new-arrivals') },
+		{ label: t.footer.bestSellers, href: localizedPath(lang, '/best-sellers') },
+		{ label: t.footer.giftCards, href: localizedPath(lang, '/gift-cards') },
 		{ label: t.footer.wishlist, href: localizedPath(lang, '/wishlist') },
 		{ label: t.footer.compare, href: localizedPath(lang, '/compare') }
 	]);
 
 	const helpLinks = $derived([
+		{ label: t.footer.help, href: localizedPath(lang, '/help') },
 		{ label: t.footer.shipping, href: localizedPath(lang, '/shipping') },
 		{ label: t.footer.returns, href: localizedPath(lang, '/returns') },
 		{ label: t.footer.payment, href: localizedPath(lang, '/payment') },
@@ -26,6 +30,7 @@
 
 	const companyLinks = $derived([
 		{ label: t.nav.about, href: localizedPath(lang, '/about') },
+		{ label: t.footer.stores, href: localizedPath(lang, '/stores') },
 		{ label: t.footer.testimonials, href: localizedPath(lang, '/testimonials') },
 		{ label: t.footer.blog, href: localizedPath(lang, '/blog') },
 		{ label: t.footer.sitemap, href: localizedPath(lang, '/sitemap') },
@@ -35,9 +40,9 @@
 </script>
 
 <footer class="bg-brand-950 text-white">
-	<div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-		<div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1.4fr]">
-			<div>
+	<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
+		<div class="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1.4fr]">
+			<div class="col-span-2 lg:col-span-1">
 				<a
 					href={localizedPath(lang, '/')}
 					class="flex min-h-11 items-center gap-2 rounded-full"
@@ -117,7 +122,7 @@
 				</ul>
 			</nav>
 
-			<div>
+			<div class="col-span-2 lg:col-span-1">
 				<h2 class="text-base font-semibold">{t.footer.newsletterTitle}</h2>
 				<p class="mt-3 text-sm text-white/70">{t.footer.newsletterText}</p>
 				<div class="mt-4">
@@ -127,10 +132,10 @@
 		</div>
 
 		<div
-			class="mt-12 flex flex-col gap-2 border-t border-white/10 pt-5 text-sm text-white/60 sm:flex-row sm:items-center sm:justify-between"
+			class="mt-10 flex flex-col gap-2 border-t border-white/10 pt-5 text-sm text-white/60 sm:flex-row sm:items-center sm:justify-between lg:mt-12"
 		>
 			<p>© {SITE_YEAR} {SITE_NAME}. {t.footer.rights}</p>
-			<div class="flex gap-5">
+			<div class="flex flex-wrap gap-x-5 gap-y-1">
 				<a
 					href={localizedPath(lang, '/terms')}
 					class="inline-flex min-h-11 items-center hover:text-white"

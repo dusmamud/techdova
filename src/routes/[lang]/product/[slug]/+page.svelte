@@ -16,6 +16,7 @@
 		X,
 		ZoomIn
 	} from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Picture from '#lib/components/Picture.svelte';
@@ -56,6 +57,12 @@
 
 	let qty = $state(1);
 	let added = $state(false);
+	// Pop counters (same pattern as ProductCard): incremented only by this
+	// page's own toggle clicks, so the keyed icons pop on interaction —
+	// never on initial render. `animate-pop` is disabled under reduced
+	// motion by app.css.
+	let heartPopKey = $state(0);
+	let comparePopKey = $state(0);
 	let timer: ReturnType<typeof setTimeout> | undefined;
 	let selectedImage = $state(0);
 	let notifyRequested = $state(false);
@@ -161,7 +168,13 @@
 		await copyLink();
 	}
 
+	function toggleWishlist(): void {
+		heartPopKey++;
+		wishlist.toggle(product.slug);
+	}
+
 	function toggleCompare(): void {
+		comparePopKey++;
 		const result = compare.toggle(product.slug);
 		if (result === 'full') toasts.push(t.product.compareFull);
 	}
@@ -260,8 +273,8 @@
 		]}
 	/>
 
-	<div class="mt-4 grid gap-8 lg:grid-cols-2 lg:gap-12">
-		<div>
+	<div class="mt-4 grid gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-12">
+		<div class="mx-auto w-full max-w-md lg:mx-0 lg:max-w-none">
 			<figure aria-label={t.product.galleryLabel} class="relative overflow-hidden rounded-3xl bg-brand-50">
 				<button type="button" onclick={openZoom} aria-label={t.product.zoomLabel} class="block w-full cursor-zoom-in">
 					<div class="aspect-[4/5]">
@@ -290,29 +303,31 @@
 					</span>
 				{/if}
 			</figure>
-			<div class="mt-3 flex gap-3">
-				{#each galleryImages as image, i (i)}
-					<button
-						type="button"
-						onclick={() => {
-							selectedImage = i;
-						}}
-						aria-current={selectedImage === i ? 'true' : undefined}
-						aria-label="{t.product.galleryLabel} {i + 1}"
-						class="h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-brand-50 ring-2 aria-[current=true]:ring-brand-700 aria-[current=false]:ring-transparent"
-					>
-						<Picture
-							base={image}
-							alt={localize(product.imageAlt, lang)}
-							width={1408}
-							height={1760}
-							loading="lazy"
-							decoding="async"
-							class="h-full w-full object-cover"
-						/>
-					</button>
-				{/each}
-			</div>
+			{#if galleryImages.length > 1}
+				<div class="mt-3 flex gap-3">
+					{#each galleryImages as image, i (i)}
+						<button
+							type="button"
+							onclick={() => {
+								selectedImage = i;
+							}}
+							aria-current={selectedImage === i ? 'true' : undefined}
+							aria-label="{t.product.galleryLabel} {i + 1}"
+							class="h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-brand-50 ring-2 aria-[current=true]:ring-brand-700 aria-[current=false]:ring-transparent"
+						>
+							<Picture
+								base={image}
+								alt={localize(product.imageAlt, lang)}
+								width={1408}
+								height={1760}
+								loading="lazy"
+								decoding="async"
+								class="h-full w-full object-cover"
+							/>
+						</button>
+					{/each}
+				</div>
+			{/if}
 		</div>
 
 		<div>
@@ -322,7 +337,7 @@
 			>
 				{categoryName}
 			</a>
-			<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">{name}</h1>
+			<h1 class="text-[1.75rem] font-bold tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl">{name}</h1>
 			<p class="mt-3">
 				<a href="#reviews" class="inline-flex min-h-11 flex-wrap items-center gap-2 hover:text-brand-800">
 					<Stars rating={product.rating} label={ratingLabel} />
@@ -406,14 +421,18 @@
 				<button
 					type="button"
 					aria-pressed={wished}
-					onclick={() => wishlist.toggle(product.slug)}
+					onclick={toggleWishlist}
 					class="inline-flex min-h-12 items-center gap-2 rounded-full px-4 text-sm font-semibold text-neutral-700 ring-1 ring-neutral-300 hover:bg-neutral-50"
 				>
-					<Heart
-						class="h-4 w-4 {wished ? 'text-rose-600' : ''}"
-						fill={wished ? 'currentColor' : 'none'}
-						aria-hidden="true"
-					/>
+					{#key heartPopKey}
+						<Heart
+							class="h-4 w-4 {wished ? 'text-rose-600' : ''} {heartPopKey > 0
+								? 'animate-pop'
+								: ''}"
+							fill={wished ? 'currentColor' : 'none'}
+							aria-hidden="true"
+						/>
+					{/key}
 					{wished ? t.productCard.removeFromWishlist : t.productCard.addToWishlist}
 				</button>
 				<button
@@ -424,7 +443,14 @@
 						? 'ring-brand-700'
 						: ''}"
 				>
-					<Scale class="h-4 w-4 {compared ? 'text-brand-700' : ''}" aria-hidden="true" />
+					{#key comparePopKey}
+						<Scale
+							class="h-4 w-4 {compared ? 'text-brand-700' : ''} {comparePopKey > 0
+								? 'animate-pop'
+								: ''}"
+							aria-hidden="true"
+						/>
+					{/key}
 					{compared ? t.product.compareRemove : t.product.compareAdd}
 				</button>
 			</div>
@@ -511,15 +537,15 @@
 		</div>
 	</div>
 
-	<div class="mt-12 grid gap-8 lg:grid-cols-2">
-		<section aria-labelledby="description-heading">
+	<div class="mt-10 grid gap-6 sm:mt-12 sm:gap-8 lg:grid-cols-2">
+		<section aria-labelledby="description-heading" use:reveal>
 			<h2 id="description-heading" class="text-xl font-bold text-neutral-900">{t.product.description}</h2>
 			<p class="mt-3 leading-relaxed text-neutral-600">{localize(product.description, lang)}</p>
 			<p class="mt-3 leading-relaxed text-neutral-600">
 				{localize(product.shortDescription, lang)}
 			</p>
 		</section>
-		<section aria-labelledby="specs-heading">
+		<section aria-labelledby="specs-heading" use:reveal>
 			<h2 id="specs-heading" class="text-xl font-bold text-neutral-900">{t.product.specifications}</h2>
 			<dl class="mt-3 divide-y divide-neutral-200 rounded-3xl bg-neutral-50 px-5">
 				{#each product.specs as spec (localize(spec.label, 'en'))}
@@ -534,29 +560,33 @@
 
 	<ReviewsSection {lang} {t} {product} />
 
-	<section aria-labelledby="pairs-heading" class="mt-12">
-		<h2 id="pairs-heading" class="text-2xl font-bold tracking-tight text-neutral-900">
+	<section aria-labelledby="pairs-heading" class="mt-10 sm:mt-12" use:reveal>
+		<h2 id="pairs-heading" class="text-[1.375rem] font-bold tracking-tight text-neutral-900 sm:text-2xl">
 			{t.product.pairsTitle}
 		</h2>
-		<div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-			{#each pairs as pairedProduct (pairedProduct.slug)}
-				<ProductCard product={pairedProduct} {lang} {t} />
+		<div class="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:gap-5 lg:grid-cols-3">
+			{#each pairs as pairedProduct, i (pairedProduct.slug)}
+				<div class="grid" use:reveal={{ delay: Math.min(i * 60, 300) }}>
+					<ProductCard product={pairedProduct} {lang} {t} />
+				</div>
 			{/each}
 		</div>
 	</section>
 
-	<section aria-labelledby="related-heading" class="mt-12">
-		<h2 id="related-heading" class="text-2xl font-bold tracking-tight text-neutral-900">
+	<section aria-labelledby="related-heading" class="mt-10 sm:mt-12" use:reveal>
+		<h2 id="related-heading" class="text-[1.375rem] font-bold tracking-tight text-neutral-900 sm:text-2xl">
 			{t.product.relatedTitle}
 		</h2>
-		<div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-			{#each related as relatedProduct (relatedProduct.slug)}
-				<ProductCard product={relatedProduct} {lang} {t} />
+		<div class="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:gap-5 lg:grid-cols-4">
+			{#each related as relatedProduct, i (relatedProduct.slug)}
+				<div class="grid" use:reveal={{ delay: Math.min(i * 60, 300) }}>
+					<ProductCard product={relatedProduct} {lang} {t} />
+				</div>
 			{/each}
 		</div>
 	</section>
 
-	<div class="mt-12">
+	<div class="mt-10 sm:mt-12" use:reveal>
 		<RecentlyViewed {lang} {t} excludeSlug={product.slug} />
 	</div>
 

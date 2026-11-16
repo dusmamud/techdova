@@ -25,3 +25,5 @@ export const ORDERS_STORAGE_KEY = 'techdova-orders';
 export const ACCOUNT_STORAGE_KEY = 'techdova-account';
 export const RECENTLY_VIEWED_STORAGE_KEY = 'techdova-recently-viewed';
 export const REVIEW_VOTES_STORAGE_KEY = 'techdova-review-votes';
+export const CHECKOUT_STORAGE_KEY = 'techdova-checkout';
+export const ADDRESSES_STORAGE_KEY = 'techdova-addresses';

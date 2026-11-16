@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { reveal } from '#lib/actions/reveal';
+	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { getDictionary } from '#lib/i18n/index';
 	import { localizedPath } from '#lib/paths';
@@ -18,13 +20,20 @@
 />
 
 <div class="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+	<Breadcrumbs
+		label={t.product.breadcrumbLabel}
+		items={[
+			{ label: t.nav.home, href: localizedPath(lang, '/') },
+			{ label: t.accessibility.title }
+		]}
+	/>
+	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>
 		{t.accessibility.title}
 	</h1>
 	<p class="mt-2 text-sm text-neutral-500">{t.accessibility.updated}</p>
 	<div class="mt-6 space-y-6">
 		{#each t.accessibility.sections as section, i (section.heading)}
-			<section>
+			<section use:reveal={{ delay: Math.min(i * 60, 300) }}>
 				<h2 class="text-lg font-bold text-neutral-900">{section.heading}</h2>
 				<p class="mt-1 leading-relaxed text-neutral-600">{section.body}</p>
 				{#if i === 2}
@@ -37,7 +46,7 @@
 				{/if}
 			</section>
 			{#if i === 0}
-				<section>
+				<section use:reveal={{ delay: 60 }}>
 					<h2 class="text-lg font-bold text-neutral-900">{t.accessibility.featuresHeading}</h2>
 					<ul class="mt-1 list-disc space-y-1 pl-5 leading-relaxed text-neutral-600">
 						{#each t.accessibility.features as feature (feature)}

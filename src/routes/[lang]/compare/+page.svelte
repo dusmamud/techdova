@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowLeftRight, ShoppingCart, X } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
 	import Picture from '#lib/components/Picture.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import Stars from '#lib/components/Stars.svelte';
@@ -65,10 +66,12 @@
 />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
-		{t.comparePage.title}
-	</h1>
-	<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.comparePage.description}</p>
+	<div use:reveal>
+		<h1 class="text-[1.75rem] font-bold tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl">
+			{t.comparePage.title}
+		</h1>
+		<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.comparePage.description}</p>
+	</div>
 
 	{#if compared.length === 0}
 		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center">
@@ -96,7 +99,121 @@
 			</button>
 		</div>
 
-		<div class="mt-6 overflow-x-auto rounded-3xl bg-white ring-1 ring-neutral-200">
+		<!-- Stacked per-product cards below lg: the table would squeeze to
+			illegibility on phones. The full comparison table renders at lg+. -->
+		<div class="mt-6 space-y-4 lg:hidden">
+			{#each compared as product, i (product.slug)}
+				{@const name = localize(product.name, lang)}
+				<article
+					class="rounded-3xl bg-white p-4 ring-1 ring-neutral-200 sm:p-5"
+					use:reveal={{ delay: Math.min(i * 60, 300) }}
+				>
+					<div class="flex gap-4">
+						<a
+							href={productPath(lang, product.slug)}
+							class="block w-20 shrink-0 overflow-hidden rounded-2xl bg-brand-50 sm:w-24"
+						>
+							<div class="aspect-[4/5]">
+								<Picture
+									base={product.image}
+									alt={localize(product.imageAlt, lang)}
+									width={1408}
+									height={1760}
+									loading="lazy"
+									decoding="async"
+									class="h-full w-full object-cover"
+								/>
+							</div>
+						</a>
+						<div class="min-w-0 flex-1">
+							<h2 class="line-clamp-2 font-semibold leading-snug text-neutral-900">
+								<a href={productPath(lang, product.slug)} class="hover:text-brand-800">
+									{name}
+								</a>
+							</h2>
+							<p class="mt-1 flex flex-wrap items-baseline gap-2">
+								<span class="text-base font-bold text-neutral-900">
+									{formatPrice(product.price, intlLocale)}
+								</span>
+								{#if product.oldPrice}
+									<s class="text-sm text-neutral-500">
+										{formatPrice(product.oldPrice, intlLocale)}
+									</s>
+								{/if}
+							</p>
+							<p class="mt-1 flex flex-wrap items-center gap-1.5">
+								<Stars rating={product.rating} label={ratingLabel(product)} />
+								<span class="text-sm text-neutral-500" aria-hidden="true">
+									({formatCount(product.reviewCount, intlLocale)})
+								</span>
+							</p>
+							<p
+								class="mt-1 flex items-center gap-2 text-sm font-semibold {product.stock <= 0
+									? 'text-red-600'
+									: 'text-brand-700'}"
+							>
+								<span
+									class="h-2.5 w-2.5 shrink-0 rounded-full {product.stock <= 0
+										? 'bg-red-500'
+										: product.stock <= 5
+											? 'bg-amber-500'
+											: 'bg-brand-600'}"
+									aria-hidden="true"
+								></span>
+								{stockText(product)}
+							</p>
+						</div>
+					</div>
+					<dl class="mt-4 divide-y divide-neutral-100 border-t border-neutral-100 text-sm">
+						<div class="flex items-baseline justify-between gap-4 py-2.5">
+							<dt class="shrink-0 font-medium text-neutral-500">{t.comparePage.rowCategory}</dt>
+							<dd class="min-w-0 text-right">
+								<a
+									href={shopPath(lang, product.category)}
+									class="font-medium text-brand-700 hover:text-brand-800"
+								>
+									{localize(getCategory(product.category).name, lang)}
+								</a>
+							</dd>
+						</div>
+						{#each specRows as row (row.key)}
+							{@const value = specValue(product, row.key)}
+							<div class="flex items-baseline justify-between gap-4 py-2.5">
+								<dt class="shrink-0 font-medium text-neutral-500">{row.label}</dt>
+								<dd class="min-w-0 text-right font-medium text-neutral-900">
+									{value ?? '—'}
+								</dd>
+							</div>
+						{/each}
+					</dl>
+					<div class="mt-4 flex flex-col gap-2 sm:flex-row">
+						<button
+							type="button"
+							disabled={product.stock <= 0}
+							onclick={() => cart.add(product.slug, 1)}
+							class="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800 disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-500"
+						>
+							{#if product.stock <= 0}
+								{t.productCard.outOfStock}
+							{:else}
+								<ShoppingCart class="h-4 w-4" aria-hidden="true" />
+								{t.productCard.addToCart}
+							{/if}
+						</button>
+						<button
+							type="button"
+							onclick={() => compare.remove(product.slug)}
+							class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-neutral-600 ring-1 ring-neutral-300 hover:bg-red-50 hover:text-red-600"
+						>
+							<X class="h-4 w-4" aria-hidden="true" />
+							{interpolate(t.comparePage.remove, { name })}
+						</button>
+					</div>
+				</article>
+			{/each}
+		</div>
+
+		<div class="mt-6 hidden overflow-x-auto rounded-3xl bg-white ring-1 ring-neutral-200 lg:block">
 			<table class="w-full min-w-[38rem] border-collapse">
 				<caption class="sr-only">{t.comparePage.tableLabel}</caption>
 				<thead>

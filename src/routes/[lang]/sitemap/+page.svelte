@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { reveal } from '#lib/actions/reveal';
+	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { blogPosts } from '#lib/data/blog';
 	import { categories } from '#lib/data/categories';
@@ -18,6 +20,9 @@
 		{ path: '/', label: t.sitemapPage.labels.home },
 		{ path: '/shop', label: t.sitemapPage.labels.shop },
 		{ path: '/deals', label: t.sitemapPage.labels.deals },
+		{ path: '/new-arrivals', label: t.sitemapPage.labels.newArrivals },
+		{ path: '/best-sellers', label: t.sitemapPage.labels.bestSellers },
+		{ path: '/gift-cards', label: t.sitemapPage.labels.giftCards },
 		{ path: '/search', label: t.sitemapPage.labels.search }
 	]);
 
@@ -36,6 +41,7 @@
 	);
 
 	const helpEntries = $derived<Entry[]>([
+		{ path: '/help', label: t.sitemapPage.labels.help },
 		{ path: '/faq', label: t.sitemapPage.labels.faq },
 		{ path: '/shipping', label: t.sitemapPage.labels.shipping },
 		{ path: '/returns', label: t.sitemapPage.labels.returns },
@@ -45,6 +51,7 @@
 
 	const companyEntries = $derived<Entry[]>([
 		{ path: '/about', label: t.sitemapPage.labels.about },
+		{ path: '/stores', label: t.sitemapPage.labels.stores },
 		{ path: '/testimonials', label: t.sitemapPage.labels.testimonials },
 		{ path: '/blog', label: t.sitemapPage.labels.blog }
 	]);
@@ -97,13 +104,20 @@
 <Seo {lang} title={t.meta.sitemapTitle} description={t.meta.sitemapDescription} path="/sitemap" />
 
 <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+	<Breadcrumbs
+		label={t.product.breadcrumbLabel}
+		items={[
+			{ label: t.nav.home, href: localizedPath(lang, '/') },
+			{ label: t.sitemapPage.title }
+		]}
+	/>
+	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>
 		{t.sitemapPage.title}
 	</h1>
 	<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.sitemapPage.description}</p>
 
 	<div class="mt-8 grid gap-10 sm:grid-cols-2">
-		<section>
+		<section use:reveal>
 			<h2 class="text-lg font-bold text-neutral-900">{t.sitemapPage.shopHeading}</h2>
 			{@render entryList(shopEntries)}
 			<h3 class="mt-6 font-semibold text-neutral-900">{t.sitemapPage.categoriesLabel}</h3>
@@ -112,12 +126,12 @@
 			{@render entryList(productEntries)}
 		</section>
 
-		<section>
+		<section use:reveal={{ delay: 60 }}>
 			<h2 class="text-lg font-bold text-neutral-900">{t.sitemapPage.helpHeading}</h2>
 			{@render entryList(helpEntries)}
 		</section>
 
-		<section>
+		<section use:reveal={{ delay: 120 }}>
 			<h2 class="text-lg font-bold text-neutral-900">{t.sitemapPage.companyHeading}</h2>
 			{@render entryList(companyEntries)}
 			<h3 class="mt-6 font-semibold text-neutral-900">{t.sitemapPage.postsLabel}</h3>
@@ -127,7 +141,7 @@
 			</div>
 		</section>
 
-		<section>
+		<section use:reveal={{ delay: 180 }}>
 			<h2 class="text-lg font-bold text-neutral-900">{t.sitemapPage.accountHeading}</h2>
 			{@render entryList(accountEntries)}
 		</section>

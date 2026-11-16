@@ -27,6 +27,11 @@ on the site are placeholders.
 - Home: https://techdova.pages.dev/en and https://techdova.pages.dev/fr
 - Shop (all products, search, filters, sorting): https://techdova.pages.dev/en/shop
 - Deals: https://techdova.pages.dev/en/deals
+- New arrivals: https://techdova.pages.dev/en/new-arrivals
+- Best sellers: https://techdova.pages.dev/en/best-sellers
+- Gift cards (demo): https://techdova.pages.dev/en/gift-cards
+- Our stores (fictional demo stores): https://techdova.pages.dev/en/stores
+- Help centre: https://techdova.pages.dev/en/help
 - Search results: https://techdova.pages.dev/en/search
 - Category pages: https://techdova.pages.dev/en/category/smartphones (also computers, audio, smartwatches, gaming, accessories)
 - Product pages: https://techdova.pages.dev/en/product/iphone-15-pro (12 products)
@@ -60,5 +65,5 @@ French equivalents use the /fr prefix, e.g. https://techdova.pages.dev/fr/shop.
 
 ## Machine-readable files
 
-- Sitemap: https://techdova.pages.dev/sitemap.xml (44 paths x 2 locales, with hreflang alternates)
+- Sitemap: https://techdova.pages.dev/sitemap.xml (48 paths x 2 locales, with hreflang alternates)
 - Robots: https://techdova.pages.dev/robots.txt

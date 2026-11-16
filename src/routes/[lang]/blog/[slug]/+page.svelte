@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowLeft, ArrowRight } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Picture from '#lib/components/Picture.svelte';
@@ -57,7 +58,7 @@
 		]}
 	/>
 
-	<article class="mt-4">
+	<article class="mt-4" use:reveal>
 		<p>
 			<span
 				class="inline-block rounded-full bg-brand-100 px-3 py-1 text-xs font-semibold text-brand-800"
@@ -91,7 +92,7 @@
 		</div>
 	</article>
 
-	<div class="mt-10 grid gap-4 border-t border-neutral-200 pt-6 sm:grid-cols-2">
+	<div class="mt-10 grid gap-4 border-t border-neutral-200 pt-6 sm:grid-cols-2" use:reveal>
 		{#if prevPost}
 			<a
 				href={localizedPath(lang, `/blog/${prevPost.slug}`)}
@@ -128,7 +129,7 @@
 		{/if}
 	</div>
 
-	<p class="mt-6">
+	<p class="mt-6" use:reveal>
 		<a
 			href={localizedPath(lang, '/blog')}
 			class="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand-700 hover:text-brand-800"

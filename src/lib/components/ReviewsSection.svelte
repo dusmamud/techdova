@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/env';
 	import { ThumbsUp } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
 	import { REVIEW_VOTES_STORAGE_KEY } from '#lib/config';
 	import type { Product } from '#lib/data/products';
 	import {
@@ -112,7 +113,7 @@
 	}
 </script>
 
-<section id="reviews" aria-labelledby="reviews-heading" class="mt-12 scroll-mt-24">
+<section id="reviews" aria-labelledby="reviews-heading" class="mt-12 scroll-mt-24" use:reveal>
 	<h2 id="reviews-heading" class="text-2xl font-bold tracking-tight text-neutral-900">
 		{t.reviews.heading}
 	</h2>

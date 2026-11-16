@@ -77,6 +77,21 @@ export const fr: Dictionary = {
 		sitemapTitle: 'Plan du site | TechDova',
 		sitemapDescription:
 			'Plan du site lisible de la boutique démo TechDova, en anglais et en français.',
+		storesTitle: 'Nos boutiques | TechDova',
+		storesDescription:
+			'Trouvez les boutiques démo TechDova à Alger, Oran et Constantine — adresses, horaires et itinéraires fictifs.',
+		giftCardsTitle: 'Cartes cadeaux | TechDova',
+		giftCardsDescription:
+			'Offrez une carte cadeau démo TechDova ou consultez un solde démo. Rien n’est débité et rien n’est envoyé.',
+		helpTitle: 'Centre d’aide | TechDova',
+		helpDescription:
+			'Obtenez de l’aide pour votre commande démo TechDova : livraison, retours, paiement, suivi et réponses aux questions populaires.',
+		newArrivalsTitle: 'Nouveautés | TechDova',
+		newArrivalsDescription:
+			'Les dernières technologies arrivées chez TechDova : nouveaux smartphones, audio, montres connectées et gaming.',
+		bestSellersTitle: 'Meilleures ventes | TechDova',
+		bestSellersDescription:
+			'Les produits démo les plus appréciés chez TechDova, notés par des clients fictifs : téléphones, ordinateurs, audio et plus.',
 		notFoundTitle: 'Page introuvable | TechDova',
 		notFoundDescription: 'La page demandée est introuvable.'
 	},
@@ -107,6 +122,7 @@ export const fr: Dictionary = {
 	},
 	announcementBar: {
 		text: 'Livraison gratuite sur toutes les commandes — livré en 24/48h',
+		short: 'Livraison gratuite sur toutes les commandes',
 		linkLabel: 'Infos livraison'
 	},
 	searchAutocomplete: {
@@ -147,6 +163,8 @@ export const fr: Dictionary = {
 		],
 		previous: 'Diapositive précédente',
 		next: 'Diapositive suivante',
+		pause: 'Mettre en pause le défilement automatique',
+		play: 'Reprendre le défilement automatique',
 		goToSlide: 'Aller à la diapositive {n}',
 		carouselLabel: 'Produits à la une',
 		slideLabel: 'Diapositive {n} sur {total}',
@@ -295,7 +313,12 @@ export const fr: Dictionary = {
 		accessibility: 'Accessibilité',
 		account: 'Compte',
 		wishlist: 'Favoris',
-		compare: 'Comparer'
+		compare: 'Comparer',
+		stores: 'Nos boutiques',
+		giftCards: 'Cartes cadeaux',
+		help: 'Centre d’aide',
+		newArrivals: 'Nouveautés',
+		bestSellers: 'Meilleures ventes'
 	},
 	shop: {
 		title: 'Boutique',
@@ -319,6 +342,18 @@ export const fr: Dictionary = {
 		clearFilters: 'Effacer les filtres',
 		filtersLabel: 'Filtres'
 	},
+	filters: {
+		filters: 'Filtres',
+		apply: 'Appliquer les filtres',
+		showResults: 'Afficher {count} résultats',
+		clearAll: 'Tout effacer',
+		activeFilters: 'Filtres actifs',
+		removeFilter: 'Retirer le filtre : {label}',
+		sortBy: 'Trier par',
+		results: '{count} résultats',
+		resultOne: '1 résultat',
+		activeCount: '{count} actifs'
+	},
 	categoryPage: {
 		breadcrumbLabel: 'Fil d’Ariane',
 		results: '{count} produits',
@@ -336,6 +371,11 @@ export const fr: Dictionary = {
 		resultOne: '1 résultat pour « {query} »',
 		noResults: 'Aucun résultat pour « {query} »',
 		noResultsHint: 'Vérifiez l’orthographe ou essayez un mot plus général.',
+		noResultsTips: [
+			'Vérifiez l’orthographe de votre recherche.',
+			'Essayez moins de mots, ou un terme plus général.',
+			'Parcourez les catégories de la boutique pour découvrir des produits similaires.'
+		],
 		suggestionsLabel: 'Essayez l’une de ces recherches populaires',
 		browseShop: 'Voir la boutique'
 	},
@@ -896,8 +936,197 @@ export const fr: Dictionary = {
 			terms: 'Conditions générales',
 			privacy: 'Politique de confidentialité',
 			accessibility: 'Déclaration d’accessibilité',
-			sitemap: 'Plan du site'
+			sitemap: 'Plan du site',
+			stores: 'Nos boutiques',
+			giftCards: 'Cartes cadeaux',
+			help: 'Centre d’aide',
+			newArrivals: 'Nouveautés',
+			bestSellers: 'Meilleures ventes'
 		}
+	},
+	storesPage: {
+		title: 'Nos boutiques',
+		description: 'Visitez l’une de nos boutiques démo — ou parcourez tout le catalogue en ligne.',
+		demoNote:
+			'Contenu démo : ces boutiques sont fictives. Les adresses, horaires et numéros de téléphone sont des exemples et aucune vraie boutique n’existe à ces adresses.',
+		filterLabel: 'Filtrer par ville',
+		allCities: 'Toutes les villes',
+		hoursLabel: 'Horaires d’ouverture',
+		phoneLabel: 'Téléphone',
+		directions: 'Itinéraire',
+		directionsLabel: 'Itinéraire vers {name} (s’ouvre dans un nouvel onglet)',
+		results: '{count} boutiques',
+		resultOne: '1 boutique',
+		noResults: 'Aucune boutique dans cette ville pour le moment',
+		shopOnline: 'Acheter en ligne'
+	},
+	giftCardsPage: {
+		title: 'Cartes cadeaux',
+		description:
+			'Offrez la technologie en cadeau. Choisissez un montant, ajoutez un message et prévisualisez votre carte cadeau démo.',
+		demoNote:
+			'Démo uniquement : aucune carte cadeau n’est créée, aucun e-mail n’est envoyé et rien n’est débité. L’aperçu ci-dessous reste sur cet appareil.',
+		amountLabel: 'Choisissez un montant',
+		customAmountLabel: 'Ou saisissez un montant personnalisé (DA)',
+		customAmountPlaceholder: 'ex. 2500',
+		recipientNameLabel: 'Nom du destinataire',
+		recipientNamePlaceholder: 'ex. Amira Benali',
+		recipientEmailLabel: 'E-mail du destinataire',
+		recipientEmailPlaceholder: 'ex. amira@example.com',
+		senderNameLabel: 'Votre nom',
+		senderNamePlaceholder: 'ex. Yacine',
+		messageLabel: 'Message personnel (facultatif)',
+		messagePlaceholder: 'Joyeux anniversaire ! Choisis bien ta nouvelle technologie…',
+		requiredError: 'Ce champ est obligatoire.',
+		emailError: 'Veuillez saisir une adresse e-mail valide.',
+		amountError: 'Veuillez choisir un montant entre 500 DA et 50 000 DA.',
+		errorSummary: 'Veuillez corriger les erreurs suivantes :',
+		previewButton: 'Prévisualiser la carte cadeau',
+		previewTitle: 'Aperçu de votre carte cadeau',
+		previewText: 'Voici à quoi ressemblerait la carte cadeau démo. Rien n’a été envoyé.',
+		previewTo: 'Pour {name}',
+		previewFrom: 'De la part de {name}',
+		previewCodeHint: 'Astuce démo : essayez le code {code} dans la vérification du solde ci-dessous.',
+		sendAnother: 'Créer une autre carte cadeau',
+		balanceTitle: 'Consulter le solde d’une carte cadeau',
+		balanceDescription:
+			'Saisissez un code de carte cadeau démo pour voir son solde fictif. Essayez DEMO-1000, DEMO-2500 ou DEMO-5000.',
+		balanceCodeLabel: 'Code de la carte cadeau',
+		balanceCodePlaceholder: 'ex. DEMO-1000',
+		balanceButton: 'Vérifier le solde',
+		balanceCodeError: 'Veuillez saisir un code de carte cadeau.',
+		balanceFound: 'Solde démo pour {code} : {amount}. Ce solde est fictif et ne peut pas être dépensé.',
+		balanceNotFound:
+			'Aucune carte démo trouvée avec le code « {code} ». Essayez DEMO-1000, DEMO-2500 ou DEMO-5000.',
+		howTitle: 'Comment fonctionnent les cartes cadeaux démo',
+		howSteps: [
+			'Choisissez un montant et ajoutez un message personnel, puis prévisualisez la carte cadeau.',
+			'En démo, aucun e-mail n’est envoyé et aucun paiement n’est effectué : l’aperçu reste dans votre navigateur.',
+			'Vérifiez un solde fictif avec un code DEMO-… ci-dessus : il sert uniquement à illustrer le fonctionnement.'
+		]
+	},
+	helpPage: {
+		title: 'Centre d’aide',
+		description:
+			'Trouvez des réponses sur la livraison, les retours, les paiements et les commandes — ou contactez-nous.',
+		demoNote:
+			'Tout ce qui figure ici décrit la boutique démo : aucune commande, aucun paiement ni aucune livraison réelle n’a lieu.',
+		topicsTitle: 'Parcourir les rubriques d’aide',
+		topics: [
+			{
+				title: 'Questions fréquentes',
+				description:
+					'Réponses rapides sur la livraison, les retours, le paiement, la garantie et les commandes.'
+			},
+			{
+				title: 'Livraison',
+				description: 'Livraison démo gratuite en 24/48h, régions couvertes et suivi.'
+			},
+			{
+				title: 'Retours et échanges',
+				description: 'Retours démo sous 30 jours, retour gratuit et délais de remboursement.'
+			},
+			{
+				title: 'Moyens de paiement',
+				description:
+					'Cartes, paiement à la livraison et versements — aucun paiement réel n’est effectué.'
+			},
+			{
+				title: 'Suivi de commande',
+				description: 'Consultez le statut d’une commande démo avec son code de commande.'
+			},
+			{
+				title: 'Contactez-nous',
+				description:
+					'Envoyez un message à l’équipe d’assistance démo sur tout sujet lié à la boutique.'
+			}
+		],
+		topicLink: 'En savoir plus',
+		popularTitle: 'Questions populaires',
+		popularIntro:
+			'Des réponses courtes aux questions les plus posées par les acheteurs. Consultez la page FAQ pour la liste complète.',
+		popular: [
+			{
+				question: 'Combien coûte la livraison ?',
+				answer:
+					'La livraison est gratuite sur toutes les commandes démo, avec une arrivée estimée en 24/48h. Rien n’est réellement expédié.'
+			},
+			{
+				question: 'Combien de temps ai-je pour retourner un produit ?',
+				answer:
+					'Vous avez 30 jours à compter de la date de livraison démo. Les retours sont uniquement illustratifs dans cette démo.'
+			},
+			{
+				question: 'Quels moyens de paiement puis-je utiliser ?',
+				answer:
+					'La commande démo propose les cartes, le paiement à la livraison et les versements. Aucun paiement réel n’est jamais effectué.'
+			},
+			{
+				question: 'Comment suivre ma commande ?',
+				answer:
+					'Utilisez la page de suivi de commande avec votre numéro de commande démo. L’historique des commandes reste uniquement dans votre navigateur.'
+			}
+		],
+		faqLink: 'Voir toutes les questions fréquentes',
+		contactTitle: 'Besoin d’aide supplémentaire ?',
+		contactText:
+			'Notre équipe d’assistance démo se fera un plaisir de répondre à toute question sur la boutique.',
+		contactLink: 'Contactez-nous'
+	},
+	newArrivalsPage: {
+		title: 'Nouveautés',
+		description:
+			'Les dernières technologies arrivées chez TechDova : téléphones, audio, montres connectées et gaming.',
+		empty: 'Aucune nouveauté ne correspond à vos filtres',
+		emptyHint: 'Essayez d’effacer les filtres ou parcourez toute la boutique.',
+		browseShop: 'Parcourir la boutique',
+		categoryLabel: 'Catégorie',
+		allCategories: 'Toutes les catégories',
+		maxPriceLabel: 'Prix maximum',
+		priceAny: 'Tous les prix',
+		maxPriceValue: 'Jusqu’à {price}'
+	},
+	bestSellersPage: {
+		title: 'Meilleures ventes',
+		description:
+			'Nos produits les plus appréciés, notés par les clients — la technologie que les acheteurs reviennent chercher.',
+		empty: 'Aucune meilleure vente ne correspond à vos filtres',
+		emptyHint: 'Essayez d’effacer les filtres ou parcourez toute la boutique.',
+		browseShop: 'Parcourir la boutique',
+		categoryLabel: 'Catégorie',
+		allCategories: 'Toutes les catégories',
+		maxPriceLabel: 'Prix maximum',
+		priceAny: 'Tous les prix',
+		maxPriceValue: 'Jusqu’à {price}'
+	},
+	addresses: {
+		title: 'Adresses enregistrées',
+		description: 'Adresses de livraison enregistrées dans ce navigateur pour la commande démo.',
+		demoNote:
+			'Démo uniquement : les adresses sont stockées uniquement dans ce navigateur et ne sont jamais envoyées. Cette démo ne demande jamais de coordonnées de paiement.',
+		empty: 'Aucune adresse enregistrée pour le moment',
+		emptyHint: 'Ajoutez une adresse pour la réutiliser lors de la commande démo.',
+		addButton: 'Ajouter une adresse',
+		editButton: 'Modifier',
+		editLabel: 'Modifier l’adresse de {name}',
+		deleteButton: 'Supprimer',
+		deleteLabel: 'Supprimer l’adresse de {name}',
+		formTitleAdd: 'Ajouter une adresse',
+		formTitleEdit: 'Modifier l’adresse',
+		nameLabel: 'Nom complet',
+		namePlaceholder: 'ex. Amira Benali',
+		streetLabel: 'Adresse',
+		streetPlaceholder: 'ex. 12 rue Didouche Mourad',
+		cityLabel: 'Ville',
+		cityPlaceholder: 'ex. Alger',
+		postalLabel: 'Code postal',
+		postalPlaceholder: 'ex. 16000',
+		phoneLabel: 'Téléphone (facultatif)',
+		phonePlaceholder: 'ex. +213 21 00 00 00',
+		requiredError: 'Ce champ est obligatoire.',
+		errorSummary: 'Veuillez corriger les erreurs suivantes :',
+		saveButton: 'Enregistrer l’adresse',
+		cancelButton: 'Annuler'
 	},
 	notFound: {
 		eyebrow: 'Erreur 404',

@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-16T06:50:17.161Z",
-  "routes": 44,
+  "generatedAt": "2026-11-16T16:11:59.520Z",
+  "routes": 49,
   "screenshots": [
     "home-en-desktop.png",
     "shop-en-desktop.png",
@@ -25,6 +25,11 @@
     "blog-en-desktop.png",
     "sitemap-en-desktop.png",
     "accessibility-en-desktop.png",
+    "stores-en-desktop.png",
+    "gift-cards-en-desktop.png",
+    "help-en-desktop.png",
+    "new-arrivals-en-desktop.png",
+    "best-sellers-en-desktop.png",
     "category-smartphones-en-desktop.png",
     "category-computers-en-desktop.png",
     "category-audio-en-desktop.png",
@@ -69,6 +74,11 @@
     "blog-en-mobile.png",
     "sitemap-en-mobile.png",
     "accessibility-en-mobile.png",
+    "stores-en-mobile.png",
+    "gift-cards-en-mobile.png",
+    "help-en-mobile.png",
+    "new-arrivals-en-mobile.png",
+    "best-sellers-en-mobile.png",
     "category-smartphones-en-mobile.png",
     "category-computers-en-mobile.png",
     "category-audio-en-mobile.png",
@@ -113,6 +123,11 @@
     "blog-fr-desktop.png",
     "sitemap-fr-desktop.png",
     "accessibility-fr-desktop.png",
+    "stores-fr-desktop.png",
+    "gift-cards-fr-desktop.png",
+    "help-fr-desktop.png",
+    "new-arrivals-fr-desktop.png",
+    "best-sellers-fr-desktop.png",
     "category-smartphones-fr-desktop.png",
     "category-computers-fr-desktop.png",
     "category-audio-fr-desktop.png",
@@ -129,56 +144,7 @@
     "product-airpods-pro-fr-desktop.png",
     "product-sony-wh1000xm5-fr-desktop.png",
     "product-galaxy-watch-6-fr-desktop.png",
-    "product-apple-watch-9-fr-desktop.png",
-    "product-dualsense-controller-fr-desktop.png",
-    "product-nintendo-switch-fr-desktop.png",
-    "product-magsafe-charger-fr-desktop.png",
-    "product-usb-c-hub-fr-desktop.png",
-    "home-fr-mobile.png",
-    "shop-fr-mobile.png",
-    "about-fr-mobile.png",
-    "contact-fr-mobile.png",
-    "cart-fr-mobile.png",
-    "terms-fr-mobile.png",
-    "privacy-fr-mobile.png",
-    "checkout-fr-mobile.png",
-    "order-confirmation-fr-mobile.png",
-    "faq-fr-mobile.png",
-    "shipping-fr-mobile.png",
-    "returns-fr-mobile.png",
-    "payment-fr-mobile.png",
-    "search-fr-mobile.png",
-    "wishlist-fr-mobile.png",
-    "testimonials-fr-mobile.png",
-    "account-fr-mobile.png",
-    "track-order-fr-mobile.png",
-    "compare-fr-mobile.png",
-    "deals-fr-mobile.png",
-    "blog-fr-mobile.png",
-    "sitemap-fr-mobile.png",
-    "accessibility-fr-mobile.png",
-    "category-smartphones-fr-mobile.png",
-    "category-computers-fr-mobile.png",
-    "category-audio-fr-mobile.png",
-    "category-smartwatches-fr-mobile.png",
-    "category-gaming-fr-mobile.png",
-    "category-accessories-fr-mobile.png",
-    "blog-choosing-noise-cancelling-headphones-fr-mobile.png",
-    "blog-laptop-buying-guide-2026-fr-mobile.png",
-    "blog-smartwatch-health-features-fr-mobile.png",
-    "product-iphone-15-pro-fr-mobile.png",
-    "product-galaxy-s24-fr-mobile.png",
-    "product-macbook-air-m2-fr-mobile.png",
-    "product-dell-xps-13-fr-mobile.png",
-    "product-airpods-pro-fr-mobile.png",
-    "product-sony-wh1000xm5-fr-mobile.png",
-    "product-galaxy-watch-6-fr-mobile.png",
-    "product-apple-watch-9-fr-mobile.png",
-    "product-dualsense-controller-fr-mobile.png",
-    "product-nintendo-switch-fr-mobile.png",
-    "product-magsafe-charger-fr-mobile.png",
-    "product-usb-c-hub-fr-mobile.png",
-    "not-found-en-desktop.png"
+    "product-apple-watch-9-fr-desktop.png"
   ],
   "overflow": [
     {
@@ -344,6 +310,41 @@
     },
     {
       "width": 1440,
+      "page": "stores-en",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "gift-cards-en",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "help-en",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "new-arrivals-en",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "best-sellers-en",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
       "page": "category-smartphones-en",
       "scrollWidth": 1440,
       "innerWidth": 1440,
@@ -652,6 +653,41 @@
     },
     {
       "width": 390,
+      "page": "stores-en",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "page": "gift-cards-en",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "page": "help-en",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "page": "new-arrivals-en",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "page": "best-sellers-en",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "overflow": false
+    },
+    {
+      "width": 390,
       "page": "category-smartphones-en",
       "scrollWidth": 390,
       "innerWidth": 390,
@@ -960,6 +996,41 @@
     },
     {
       "width": 1440,
+      "page": "stores-fr",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "gift-cards-fr",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "help-fr",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "new-arrivals-fr",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "page": "best-sellers-fr",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflow": false
+    },
+    {
+      "width": 1440,
       "page": "category-smartphones-fr",
       "scrollWidth": 1440,
       "innerWidth": 1440,
@@ -1073,456 +1144,12 @@
     {
       "width": 1440,
       "page": "product-apple-watch-9-fr",
-      "scrollWidth": 1440,
-      "innerWidth": 1440,
-      "overflow": false
-    },
-    {
-      "width": 1440,
-      "page": "product-dualsense-controller-fr",
-      "scrollWidth": 1440,
-      "innerWidth": 1440,
-      "overflow": false
-    },
-    {
-      "width": 1440,
-      "page": "product-nintendo-switch-fr",
-      "scrollWidth": 1440,
-      "innerWidth": 1440,
-      "overflow": false
-    },
-    {
-      "width": 1440,
-      "page": "product-magsafe-charger-fr",
-      "scrollWidth": 1440,
-      "innerWidth": 1440,
-      "overflow": false
-    },
-    {
-      "width": 1440,
-      "page": "product-usb-c-hub-fr",
-      "scrollWidth": 1440,
-      "innerWidth": 1440,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "home-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "shop-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "about-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "contact-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "cart-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "terms-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "privacy-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "checkout-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "order-confirmation-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "faq-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "shipping-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "returns-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "payment-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "search-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "wishlist-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "testimonials-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "account-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "track-order-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "compare-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "deals-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "blog-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "sitemap-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "accessibility-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "category-smartphones-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "category-computers-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "category-audio-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "category-smartwatches-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "category-gaming-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "category-accessories-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "blog-choosing-noise-cancelling-headphones-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "blog-laptop-buying-guide-2026-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "blog-smartwatch-health-features-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "product-iphone-15-pro-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "product-galaxy-s24-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "product-macbook-air-m2-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "product-dell-xps-13-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "product-airpods-pro-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "product-sony-wh1000xm5-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "product-galaxy-watch-6-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "product-apple-watch-9-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "product-dualsense-controller-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "product-nintendo-switch-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "product-magsafe-charger-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 390,
-      "page": "product-usb-c-hub-fr",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false
-    },
-    {
-      "width": 320,
-      "page": "home-en",
-      "scrollWidth": 320,
-      "innerWidth": 320,
-      "overflow": false
-    },
-    {
-      "width": 320,
-      "page": "shop-en",
-      "scrollWidth": 320,
-      "innerWidth": 320,
-      "overflow": false
-    },
-    {
-      "width": 320,
-      "page": "product-en",
-      "scrollWidth": 320,
-      "innerWidth": 320,
-      "overflow": false
-    },
-    {
-      "width": 375,
-      "page": "home-en",
-      "scrollWidth": 375,
-      "innerWidth": 375,
-      "overflow": false
-    },
-    {
-      "width": 375,
-      "page": "shop-en",
-      "scrollWidth": 375,
-      "innerWidth": 375,
-      "overflow": false
-    },
-    {
-      "width": 375,
-      "page": "product-en",
-      "scrollWidth": 375,
-      "innerWidth": 375,
-      "overflow": false
-    },
-    {
-      "width": 768,
-      "page": "home-en",
-      "scrollWidth": 768,
-      "innerWidth": 768,
-      "overflow": false
-    },
-    {
-      "width": 768,
-      "page": "shop-en",
-      "scrollWidth": 768,
-      "innerWidth": 768,
-      "overflow": false
-    },
-    {
-      "width": 768,
-      "page": "product-en",
-      "scrollWidth": 768,
-      "innerWidth": 768,
-      "overflow": false
-    },
-    {
-      "width": 1024,
-      "page": "home-en",
-      "scrollWidth": 1024,
-      "innerWidth": 1024,
-      "overflow": false
-    },
-    {
-      "width": 1024,
-      "page": "shop-en",
-      "scrollWidth": 1024,
-      "innerWidth": 1024,
-      "overflow": false
-    },
-    {
-      "width": 1024,
-      "page": "product-en",
-      "scrollWidth": 1024,
-      "innerWidth": 1024,
-      "overflow": false
-    },
-    {
-      "width": 1440,
-      "page": "home-en",
-      "scrollWidth": 1440,
-      "innerWidth": 1440,
-      "overflow": false
-    },
-    {
-      "width": 1440,
-      "page": "shop-en",
-      "scrollWidth": 1440,
-      "innerWidth": 1440,
-      "overflow": false
-    },
-    {
-      "width": 1440,
-      "page": "product-en",
       "scrollWidth": 1440,
       "innerWidth": 1440,
       "overflow": false
     }
   ],
   "unloadedImages": [],
-  "notFoundCheck": {
-    "status": 404,
-    "branded": true
-  },
+  "notFoundCheck": null,
   "consoleErrors": []
 }

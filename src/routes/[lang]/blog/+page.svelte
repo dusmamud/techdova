@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { ArrowRight } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
+	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import Picture from '#lib/components/Picture.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { blogPosts } from '#lib/data/blog';
@@ -18,15 +20,25 @@
 <Seo {lang} title={t.meta.blogTitle} description={t.meta.blogDescription} path="/blog" />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+	<Breadcrumbs
+		label={t.product.breadcrumbLabel}
+		items={[
+			{ label: t.nav.home, href: localizedPath(lang, '/') },
+			{ label: t.blogPage.breadcrumbBlog }
+		]}
+	/>
+	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>
 		{t.blogPage.title}
 	</h1>
 	<p class="mt-3 max-w-2xl leading-relaxed text-neutral-600">{t.blogPage.description}</p>
 
 	<div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-		{#each blogPosts as post (post.slug)}
+		{#each blogPosts as post, i (post.slug)}
 			{@const title = localize(post.title, lang)}
-			<article class="flex flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-neutral-200">
+			<article
+				class="card-lift flex flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-neutral-200"
+				use:reveal={{ delay: Math.min(i * 60, 300) }}
+			>
 				<a
 					href={localizedPath(lang, `/blog/${post.slug}`)}
 					class="block aspect-[16/9] overflow-hidden bg-brand-50"

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { reveal } from '#lib/actions/reveal';
+	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import FaqAccordion from '#lib/components/FaqAccordion.svelte';
 	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Seo from '#lib/components/Seo.svelte';
@@ -26,12 +28,19 @@
 <JsonLd json={structuredData} />
 
 <div class="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">{t.faq.title}</h1>
+	<Breadcrumbs
+		label={t.product.breadcrumbLabel}
+		items={[
+			{ label: t.nav.home, href: localizedPath(lang, '/') },
+			{ label: t.faq.title }
+		]}
+	/>
+	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>{t.faq.title}</h1>
 	<p class="mt-2 leading-relaxed text-neutral-600">{t.faq.intro}</p>
-	<div class="mt-6">
+	<div class="mt-6" use:reveal>
 		<FaqAccordion items={t.faq.items} />
 	</div>
-	<p class="mt-8 leading-relaxed text-neutral-600">
+	<p class="mt-8 leading-relaxed text-neutral-600" use:reveal>
 		{t.faq.contactPrompt}{' '}
 		<a
 			href={localizedPath(lang, '/contact')}

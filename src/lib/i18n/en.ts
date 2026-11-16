@@ -77,6 +77,21 @@ export const en = {
 		sitemapTitle: 'Sitemap | TechDova',
 		sitemapDescription:
 			'Human-readable sitemap of the TechDova demo storefront, in English and French.',
+		storesTitle: 'Our stores | TechDova',
+		storesDescription:
+			'Find the TechDova demo stores in Algiers, Oran and Constantine — fictional addresses, hours and directions.',
+		giftCardsTitle: 'Gift cards | TechDova',
+		giftCardsDescription:
+			'Send a demo TechDova gift card or check a demo gift-card balance. Nothing is charged and nothing is sent.',
+		helpTitle: 'Help centre | TechDova',
+		helpDescription:
+			'Get help with your demo TechDova order: delivery, returns, payment, tracking and answers to popular questions.',
+		newArrivalsTitle: 'New arrivals | TechDova',
+		newArrivalsDescription:
+			'The latest tech to land at TechDova: new smartphones, audio, smartwatches and gaming gear.',
+		bestSellersTitle: 'Best sellers | TechDova',
+		bestSellersDescription:
+			'TechDova’s most-loved demo products, rated by fictional customers: phones, laptops, audio and more.',
 		notFoundTitle: 'Page not found | TechDova',
 		notFoundDescription: 'The requested page could not be found.'
 	},
@@ -107,6 +122,7 @@ export const en = {
 	},
 	announcementBar: {
 		text: 'Free delivery on all orders — delivered within 24/48h',
+		short: 'Free delivery on all orders',
 		linkLabel: 'Delivery info'
 	},
 	searchAutocomplete: {
@@ -146,6 +162,8 @@ export const en = {
 		],
 		previous: 'Previous slide',
 		next: 'Next slide',
+		pause: 'Pause automatic slide rotation',
+		play: 'Resume automatic slide rotation',
 		goToSlide: 'Go to slide {n}',
 		carouselLabel: 'Featured products',
 		slideLabel: 'Slide {n} of {total}',
@@ -294,7 +312,12 @@ export const en = {
 		accessibility: 'Accessibility',
 		account: 'Account',
 		wishlist: 'Wishlist',
-		compare: 'Compare'
+		compare: 'Compare',
+		stores: 'Our stores',
+		giftCards: 'Gift cards',
+		help: 'Help centre',
+		newArrivals: 'New arrivals',
+		bestSellers: 'Best sellers'
 	},
 	shop: {
 		title: 'Shop',
@@ -318,6 +341,18 @@ export const en = {
 		clearFilters: 'Clear filters',
 		filtersLabel: 'Filters'
 	},
+	filters: {
+		filters: 'Filters',
+		apply: 'Apply filters',
+		showResults: 'Show {count} results',
+		clearAll: 'Clear all',
+		activeFilters: 'Active filters',
+		removeFilter: 'Remove filter: {label}',
+		sortBy: 'Sort by',
+		results: '{count} results',
+		resultOne: '1 result',
+		activeCount: '{count} active'
+	},
 	categoryPage: {
 		breadcrumbLabel: 'Breadcrumb',
 		results: '{count} products',
@@ -335,6 +370,11 @@ export const en = {
 		resultOne: '1 result for "{query}"',
 		noResults: 'No results for "{query}"',
 		noResultsHint: 'Check the spelling or try a more general term.',
+		noResultsTips: [
+			'Check the spelling of your search terms.',
+			'Try fewer words, or a more general term.',
+			'Browse the shop categories to discover similar products.'
+		],
 		suggestionsLabel: 'Try one of these popular searches',
 		browseShop: 'Browse the shop'
 	},
@@ -892,8 +932,193 @@ export const en = {
 			terms: 'Terms and conditions',
 			privacy: 'Privacy policy',
 			accessibility: 'Accessibility statement',
-			sitemap: 'Sitemap'
+			sitemap: 'Sitemap',
+			stores: 'Our stores',
+			giftCards: 'Gift cards',
+			help: 'Help centre',
+			newArrivals: 'New arrivals',
+			bestSellers: 'Best sellers'
 		}
+	},
+	storesPage: {
+		title: 'Our stores',
+		description: 'Visit one of our demo stores — or browse the full catalogue online.',
+		demoNote:
+			'Demo content: these stores are fictional. The addresses, hours and phone numbers are placeholders, and no real shop exists at these locations.',
+		filterLabel: 'Filter by city',
+		allCities: 'All cities',
+		hoursLabel: 'Opening hours',
+		phoneLabel: 'Phone',
+		directions: 'Get directions',
+		directionsLabel: 'Get directions to {name} (opens in a new tab)',
+		results: '{count} stores',
+		resultOne: '1 store',
+		noResults: 'No stores in this city yet',
+		shopOnline: 'Shop online instead'
+	},
+	giftCardsPage: {
+		title: 'Gift cards',
+		description:
+			'Give the gift of tech. Choose an amount, add a message, and preview your demo gift card.',
+		demoNote:
+			'Demo only: no gift card is created, no email is sent and nothing is charged. The preview below stays on this device.',
+		amountLabel: 'Choose an amount',
+		customAmountLabel: 'Or enter a custom amount (DA)',
+		customAmountPlaceholder: 'e.g. 2500',
+		recipientNameLabel: 'Recipient name',
+		recipientNamePlaceholder: 'e.g. Amira Benali',
+		recipientEmailLabel: 'Recipient email',
+		recipientEmailPlaceholder: 'e.g. amira@example.com',
+		senderNameLabel: 'Your name',
+		senderNamePlaceholder: 'e.g. Yacine',
+		messageLabel: 'Personal message (optional)',
+		messagePlaceholder: 'Happy birthday! Enjoy picking your new tech…',
+		requiredError: 'This field is required.',
+		emailError: 'Please enter a valid email address.',
+		amountError: 'Please choose an amount between 500 DA and 50,000 DA.',
+		errorSummary: 'Please fix the following errors:',
+		previewButton: 'Preview gift card',
+		previewTitle: 'Your gift card preview',
+		previewText: 'This is how the demo gift card would look. Nothing has been sent.',
+		previewTo: 'To {name}',
+		previewFrom: 'From {name}',
+		previewCodeHint: 'Demo tip: try the code {code} in the balance check below.',
+		sendAnother: 'Create another gift card',
+		balanceTitle: 'Check a gift-card balance',
+		balanceDescription:
+			'Enter a demo gift-card code to see its fictional balance. Try DEMO-1000, DEMO-2500 or DEMO-5000.',
+		balanceCodeLabel: 'Gift-card code',
+		balanceCodePlaceholder: 'e.g. DEMO-1000',
+		balanceButton: 'Check balance',
+		balanceCodeError: 'Please enter a gift-card code.',
+		balanceFound: 'Demo balance for {code}: {amount}. This balance is fictional and cannot be spent.',
+		balanceNotFound:
+			'We could not find a demo card with the code “{code}”. Try DEMO-1000, DEMO-2500 or DEMO-5000.',
+		howTitle: 'How demo gift cards work',
+		howSteps: [
+			'Choose an amount and add a personal message, then preview the gift card.',
+			'In this demo, no email is sent and no payment is taken: the preview stays in your browser.',
+			'Check a fictional balance with a DEMO-… code above: it only illustrates how the flow works.'
+		]
+	},
+	helpPage: {
+		title: 'Help centre',
+		description:
+			'Find answers about delivery, returns, payments and orders — or get in touch.',
+		demoNote:
+			'Everything here describes the demo storefront: no real orders, payments or deliveries take place.',
+		topicsTitle: 'Browse help topics',
+		topics: [
+			{
+				title: 'Frequently asked questions',
+				description: 'Quick answers about delivery, returns, payment, warranty and orders.'
+			},
+			{
+				title: 'Shipping & delivery',
+				description: 'Free demo delivery within 24/48h, regions covered and tracking.'
+			},
+			{
+				title: 'Returns & exchanges',
+				description: '30-day demo returns, free return shipping and refund timings.'
+			},
+			{
+				title: 'Payment methods',
+				description: 'Cards, cash on delivery and instalments — no real payment is processed.'
+			},
+			{
+				title: 'Track your order',
+				description: 'Check the status of a demo order with its order code.'
+			},
+			{
+				title: 'Contact us',
+				description: 'Send the demo support team a message about anything on the storefront.'
+			}
+		],
+		topicLink: 'Learn more',
+		popularTitle: 'Popular questions',
+		popularIntro:
+			'Short answers to the questions shoppers ask most. See the FAQ page for the full list.',
+		popular: [
+			{
+				question: 'How much does delivery cost?',
+				answer:
+					'Delivery is free on all demo orders, arriving within an estimated 24/48h. Nothing is actually shipped.'
+			},
+			{
+				question: 'How long do I have to return a product?',
+				answer:
+					'You have 30 days from the demo delivery date. Returns are illustrative only in this demo.'
+			},
+			{
+				question: 'Which payment methods can I use?',
+				answer:
+					'The demo checkout lists cards, cash on delivery and instalments. No real payment is ever processed.'
+			},
+			{
+				question: 'How do I track my order?',
+				answer:
+					'Use the track-order page with your demo order number. Order history lives only in your browser.'
+			}
+		],
+		faqLink: 'See all frequently asked questions',
+		contactTitle: 'Still need help?',
+		contactText: 'Our demo support team is happy to help with any question about the storefront.',
+		contactLink: 'Contact us'
+	},
+	newArrivalsPage: {
+		title: 'New arrivals',
+		description:
+			'The latest tech to land at TechDova — fresh phones, audio, wearables and gaming gear.',
+		empty: 'No new arrivals match your filters',
+		emptyHint: 'Try clearing the filters or browse the full shop.',
+		browseShop: 'Browse the shop',
+		categoryLabel: 'Category',
+		allCategories: 'All categories',
+		maxPriceLabel: 'Maximum price',
+		priceAny: 'Any price',
+		maxPriceValue: 'Up to {price}'
+	},
+	bestSellersPage: {
+		title: 'Best sellers',
+		description:
+			'Our most-loved products, rated by customers — the tech shoppers keep coming back for.',
+		empty: 'No best sellers match your filters',
+		emptyHint: 'Try clearing the filters or browse the full shop.',
+		browseShop: 'Browse the shop',
+		categoryLabel: 'Category',
+		allCategories: 'All categories',
+		maxPriceLabel: 'Maximum price',
+		priceAny: 'Any price',
+		maxPriceValue: 'Up to {price}'
+	},
+	addresses: {
+		title: 'Saved addresses',
+		description: 'Delivery addresses saved in this browser for the demo checkout.',
+		demoNote:
+			'Demo only: addresses are stored only in this browser and are never sent anywhere. This demo never asks for payment details.',
+		empty: 'No saved addresses yet',
+		emptyHint: 'Add an address to reuse it at demo checkout.',
+		addButton: 'Add address',
+		editButton: 'Edit',
+		editLabel: 'Edit address for {name}',
+		deleteButton: 'Delete',
+		deleteLabel: 'Delete address for {name}',
+		formTitleAdd: 'Add an address',
+		formTitleEdit: 'Edit address',
+		nameLabel: 'Full name',
+		namePlaceholder: 'e.g. Amira Benali',
+		streetLabel: 'Street address',
+		streetPlaceholder: 'e.g. 12 Rue Didouche Mourad',
+		cityLabel: 'City',
+		cityPlaceholder: 'e.g. Algiers',
+		postalLabel: 'Postal code',
+		postalPlaceholder: 'e.g. 16000',
+		phoneLabel: 'Phone (optional)',
+		phonePlaceholder: 'e.g. +213 21 00 00 00',
+		requiredError: 'This field is required.',
+		errorSummary: 'Please fix the following errors:',
+		saveButton: 'Save address',
+		cancelButton: 'Cancel'
 	},
 	notFound: {
 		eyebrow: 'Error 404',

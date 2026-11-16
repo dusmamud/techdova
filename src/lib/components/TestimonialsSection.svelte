@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { reveal } from '#lib/actions/reveal';
 	import { testimonials } from '#lib/data/testimonials';
 	import { formatCount, formatDecimal, interpolate } from '#lib/format';
 	import { localize, type Dictionary, type Locale } from '#lib/i18n/index';
@@ -29,21 +30,24 @@
 	}
 </script>
 
-<section aria-labelledby="testimonials-heading" class="py-10 sm:py-14">
+<section aria-labelledby="testimonials-heading" class="py-8 sm:py-10" use:reveal>
 	<p class="text-sm font-semibold uppercase tracking-wide text-brand-700">
 		{t.testimonialsSection.eyebrow}
 	</p>
 	<h2
 		id="testimonials-heading"
-		class="mt-2 text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl"
+		class="mt-2 text-[1.375rem] font-bold tracking-tight text-neutral-900 sm:text-2xl lg:text-3xl"
 	>
 		{t.testimonialsSection.heading}
 	</h2>
 	<p class="mt-2 text-sm text-neutral-500">{t.testimonialsSection.demoNote}</p>
-	<div class="mt-6 grid gap-5 md:grid-cols-3">
-		{#each shown as testimonial (localize(testimonial.name, 'en'))}
+	<div class="mt-5 grid gap-3 sm:mt-6 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+		{#each shown as testimonial, i (localize(testimonial.name, 'en'))}
 			{@const name = localize(testimonial.name, lang)}
-			<figure class="flex flex-col gap-4 rounded-3xl bg-white p-6 ring-1 ring-neutral-200">
+			<figure
+				class="card-lift flex flex-col gap-4 rounded-3xl bg-white p-5 ring-1 ring-neutral-200 sm:p-6"
+				use:reveal={{ delay: Math.min(i * 60, 300) }}
+			>
 				<Stars
 					rating={testimonial.rating}
 					label={interpolate(t.productCard.ratingLabel, {

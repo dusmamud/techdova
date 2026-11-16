@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
 	import { onMount, tick } from 'svelte';
-	import { ShoppingCart } from '@lucide/svelte';
+	import { ChevronDown, ShoppingCart } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
 	import CheckoutSteps from '#lib/components/CheckoutSteps.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import { CHECKOUT_STORAGE_KEY } from '#lib/config';
 	import { formatPrice, interpolate } from '#lib/format';
 	import { getDictionary, localize } from '#lib/i18n/index';
 	import { generateOrderId, orderTotal, saveDemoOrder } from '#lib/orders';
@@ -34,17 +37,91 @@
 	let showSummary = $state(false);
 	let summaryEl: HTMLDivElement | undefined = $state();
 	let stepHeading: HTMLHeadingElement | undefined = $state();
+	// Presentational only (responsive layout): whether the sticky order
+	// summary is expanded on mobile. Never persisted; unrelated to the
+	// `showSummary` error-summary flag above.
+	let responsiveOrderSummaryOpen = $state(false);
 
 	type ErrorField = 'name' | 'email' | 'address' | 'city' | 'postal' | 'cardNumber' | 'expiry' | 'cvc';
 
 	let errors: Partial<Record<ErrorField, string>> = $state({});
 
+	// Checkout draft persistence (sessionStorage, demo only): contact and
+	// shipping fields survive step changes, refreshes and back-navigation
+	// within the tab. Card fields (cardNumber, expiry, cvc) are NEVER
+	// persisted — they stay in memory only.
+	type CheckoutDraft = {
+		step: 1 | 2 | 3;
+		name: string;
+		email: string;
+		address: string;
+		city: string;
+		postal: string;
+		country: string;
+		delivery: 'standard' | 'express';
+		payment: 'card' | 'cod' | 'bnpl';
+	};
+
+	let draftRestored = $state(false);
+
+	function restoreDraft(): void {
+		if (!browser) return;
+		try {
+			const raw = sessionStorage.getItem(CHECKOUT_STORAGE_KEY);
+			if (!raw) return;
+			const parsed: unknown = JSON.parse(raw);
+			if (typeof parsed !== 'object' || parsed === null) return;
+			const draft = parsed as Partial<CheckoutDraft>;
+			if (draft.step === 1 || draft.step === 2 || draft.step === 3) step = draft.step;
+			if (typeof draft.name === 'string') name = draft.name;
+			if (typeof draft.email === 'string') email = draft.email;
+			if (typeof draft.address === 'string') address = draft.address;
+			if (typeof draft.city === 'string') city = draft.city;
+			if (typeof draft.postal === 'string') postal = draft.postal;
+			if (typeof draft.country === 'string') country = draft.country;
+			if (draft.delivery === 'standard' || draft.delivery === 'express') {
+				delivery = draft.delivery;
+			}
+			if (draft.payment === 'card' || draft.payment === 'cod' || draft.payment === 'bnpl') {
+				payment = draft.payment;
+			}
+		} catch {
+			// Corrupt or unavailable storage: start with a blank form.
+		}
+	}
+
 	// Prefill contact details from the demo account, if the visitor signed in.
+	// The saved draft is restored first, so it wins; the profile only fills
+	// fields the draft left blank.
 	onMount(() => {
+		restoreDraft();
 		const profile = account.profile;
 		if (profile) {
 			if (!name) name = profile.name;
 			if (!email) email = profile.email;
+		}
+		draftRestored = true;
+	});
+
+	// Save the draft on every change, but only after the saved draft has
+	// been restored — otherwise the first run would overwrite it with blanks.
+	$effect(() => {
+		if (!browser || !draftRestored) return;
+		const draft: CheckoutDraft = {
+			step,
+			name,
+			email,
+			address,
+			city,
+			postal,
+			country,
+			delivery,
+			payment
+		};
+		try {
+			sessionStorage.setItem(CHECKOUT_STORAGE_KEY, JSON.stringify(draft));
+		} catch {
+			// Storage unavailable: checkout still works for this page view.
 		}
 	});
 
@@ -209,6 +286,11 @@
 			total: orderTotal(lines)
 		});
 		cart.clear();
+		try {
+			sessionStorage.removeItem(CHECKOUT_STORAGE_KEY);
+		} catch {
+			// Storage unavailable: nothing to clear.
+		}
 		await goto(localizedPath(lang, '/order-confirmation'));
 	}
 
@@ -230,7 +312,11 @@
 <Seo {lang} title={t.meta.checkoutTitle} description={t.meta.checkoutDescription} path="/checkout" />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">{t.checkout.title}</h1>
+	<div use:reveal>
+		<h1 class="text-[1.75rem] font-bold tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl">
+			{t.checkout.title}
+		</h1>
+	</div>
 
 	{#if cart.detailed.length === 0}
 		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center">
@@ -250,11 +336,11 @@
 			<p class="mt-1 text-sm text-neutral-600">{t.checkout.demoNote}</p>
 		</div>
 
-		<div class="mt-8">
+		<div class="mt-6 sm:mt-8">
 			<CheckoutSteps current={step} labels={t.checkoutSteps} />
 		</div>
 
-		<div class="mt-8 grid gap-8 lg:grid-cols-[1fr_380px]">
+		<div class="mt-6 grid gap-6 sm:mt-8 lg:grid-cols-[1fr_380px] lg:gap-8">
 			<form onsubmit={submit} novalidate class="space-y-4">
 				{#if showSummary && errorEntries.length > 0}
 					<div
@@ -562,46 +648,82 @@
 				</div>
 			</form>
 
-			<aside aria-label={t.checkout.summaryTitle} class="h-fit rounded-3xl bg-white p-6 ring-1 ring-neutral-200">
-				<h2 class="text-lg font-bold text-neutral-900">{t.checkout.summaryTitle}</h2>
-				<ul class="mt-4 space-y-3 border-b border-neutral-200 pb-4">
-					{#each cart.detailed as line (line.product.slug)}
-						<li class="flex items-baseline justify-between gap-3 text-sm">
-							<span class="min-w-0 text-neutral-600">
-								<span class="font-medium text-neutral-900">{localize(line.product.name, lang)}</span>
-								{' '}{interpolate(t.checkout.lineQty, { qty: line.qty })}
-							</span>
-							<span class="shrink-0 font-semibold text-neutral-900">
-								{formatPrice(line.product.price * line.qty, intlLocale)}
-							</span>
-						</li>
-					{/each}
-				</ul>
-				<dl class="mt-4 space-y-3 text-sm">
-					<div class="flex items-baseline justify-between">
-						<dt class="text-neutral-600">{t.cart.subtotal}</dt>
-						<dd class="font-semibold text-neutral-900">
-							{formatPrice(cart.totals.subtotal, intlLocale)}
-						</dd>
-					</div>
-					{#if cart.totals.savings > 0}
+			<aside
+				aria-label={t.checkout.summaryTitle}
+				class="order-first h-fit rounded-3xl bg-white ring-1 ring-neutral-200 max-lg:sticky max-lg:top-28 max-lg:z-30 max-lg:max-h-[calc(100dvh-7.5rem)] max-lg:overflow-y-auto lg:order-none lg:sticky lg:top-[7.5rem] lg:self-start"
+			>
+				<button
+					type="button"
+					aria-expanded={responsiveOrderSummaryOpen}
+					aria-controls="checkout-order-summary"
+					onclick={() => {
+						responsiveOrderSummaryOpen = !responsiveOrderSummaryOpen;
+					}}
+					class="flex min-h-12 w-full items-center justify-between gap-3 px-4 py-2 text-left sm:px-5 lg:hidden"
+				>
+					<span class="min-w-0 truncate text-base font-bold text-neutral-900">
+						{t.checkout.summaryTitle}
+					</span>
+					<span class="flex shrink-0 items-center gap-2">
+						<span class="text-base font-bold text-neutral-900">
+							{formatPrice(cart.totals.total, intlLocale)}
+						</span>
+						<ChevronDown
+							class="h-5 w-5 shrink-0 text-neutral-500 transition-transform duration-200 {responsiveOrderSummaryOpen
+								? 'rotate-180'
+								: ''}"
+							aria-hidden="true"
+						/>
+					</span>
+				</button>
+				<div
+					id="checkout-order-summary"
+					class="px-4 pb-4 pt-2 sm:px-5 sm:pb-5 lg:p-6 {responsiveOrderSummaryOpen
+						? ''
+						: 'max-lg:hidden'}"
+				>
+					<h2 class="hidden text-lg font-bold text-neutral-900 lg:block">
+						{t.checkout.summaryTitle}
+					</h2>
+					<ul class="space-y-3 border-b border-neutral-200 pb-4 lg:mt-4">
+						{#each cart.detailed as line (line.product.slug)}
+							<li class="flex items-baseline justify-between gap-3 text-sm">
+								<span class="min-w-0 text-neutral-600">
+									<span class="font-medium text-neutral-900">{localize(line.product.name, lang)}</span>
+									{' '}{interpolate(t.checkout.lineQty, { qty: line.qty })}
+								</span>
+								<span class="shrink-0 font-semibold text-neutral-900">
+									{formatPrice(line.product.price * line.qty, intlLocale)}
+								</span>
+							</li>
+						{/each}
+					</ul>
+					<dl class="mt-4 space-y-3 text-sm">
 						<div class="flex items-baseline justify-between">
-							<dt class="text-neutral-600">{t.cart.savings}</dt>
-							<dd class="font-semibold text-brand-700">
-								{formatPrice(cart.totals.savings, intlLocale)}
+							<dt class="text-neutral-600">{t.cart.subtotal}</dt>
+							<dd class="font-semibold text-neutral-900">
+								{formatPrice(cart.totals.subtotal, intlLocale)}
 							</dd>
 						</div>
-					{/if}
-					<div class="flex items-baseline justify-between">
-						<dt class="text-neutral-600">{t.cart.shipping}</dt>
-						<dd class="font-semibold text-neutral-900">{t.cart.shippingFree}</dd>
-					</div>
-					<div class="flex items-baseline justify-between border-t border-neutral-200 pt-3 text-base">
-						<dt class="font-bold text-neutral-900">{t.cart.total}</dt>
-						<dd class="font-bold text-neutral-900">{formatPrice(cart.totals.total, intlLocale)}</dd>
-					</div>
-				</dl>
-				<p class="mt-4 text-xs text-neutral-500">{t.checkout.demoNote}</p>
+						{#if cart.totals.savings > 0}
+							<div class="flex items-baseline justify-between">
+								<dt class="text-neutral-600">{t.cart.savings}</dt>
+								<dd class="font-semibold text-brand-700">
+									{formatPrice(cart.totals.savings, intlLocale)}
+								</dd>
+							</div>
+						{/if}
+						<div class="flex items-baseline justify-between">
+							<dt class="text-neutral-600">{t.cart.shipping}</dt>
+							<dd class="font-semibold text-neutral-900">{t.cart.shippingFree}</dd>
+						</div>
+						<div class="flex items-baseline justify-between border-t border-neutral-200 pt-3 text-base">
+							<dt class="font-bold text-neutral-900">{t.cart.total}</dt>
+							<dd class="font-bold text-neutral-900">{formatPrice(cart.totals.total, intlLocale)}</dd>
+						</div>
+					</dl>
+					<p class="mt-4 text-xs text-neutral-500">{t.checkout.demoNote}</p>
+				</div>
 			</aside>
 		</div>
 	{/if}

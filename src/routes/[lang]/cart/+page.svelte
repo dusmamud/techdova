@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Minus, Plus, ShoppingCart, Trash2 } from '@lucide/svelte';
+	import { reveal } from '#lib/actions/reveal';
 	import Picture from '#lib/components/Picture.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { formatPrice, interpolate } from '#lib/format';
@@ -18,7 +19,11 @@
 <Seo {lang} title={t.meta.cartTitle} description={t.meta.cartDescription} path="/cart" />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">{t.cart.title}</h1>
+	<div use:reveal>
+		<h1 class="text-[1.75rem] font-bold tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl">
+			{t.cart.title}
+		</h1>
+	</div>
 
 	{#if cart.detailed.length === 0}
 		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center">
@@ -36,12 +41,12 @@
 		<p class="mt-2 text-sm text-neutral-600" role="status">
 			{cart.count === 1 ? t.cart.itemOne : interpolate(t.cart.itemsLabel, { count: cart.count })}
 		</p>
-		<div class="mt-6 grid gap-8 lg:grid-cols-[1fr_380px]">
+		<div class="mt-6 grid gap-6 lg:grid-cols-[1fr_380px] lg:gap-8" use:reveal>
 			<div>
 				<ul class="divide-y divide-neutral-200 rounded-3xl bg-white ring-1 ring-neutral-200">
 					{#each cart.detailed as line (line.product.slug)}
 						{@const name = localize(line.product.name, lang)}
-						<li class="flex gap-4 p-4 sm:p-5">
+						<li class="flex gap-3 p-3 sm:gap-4 sm:p-5">
 							<a
 								href={productPath(lang, line.product.slug)}
 								tabindex="-1"
@@ -55,13 +60,13 @@
 									height={1760}
 									loading="lazy"
 									decoding="async"
-									class="h-24 w-24 shrink-0 rounded-2xl bg-brand-50 object-cover"
+									class="h-20 w-20 shrink-0 rounded-2xl bg-brand-50 object-cover sm:h-24 sm:w-24"
 								/>
 							</a>
 							<div class="min-w-0 flex-1">
 								<a
 									href={productPath(lang, line.product.slug)}
-									class="line-clamp-2 font-semibold text-neutral-900 hover:text-brand-800"
+									class="line-clamp-2 text-sm font-semibold text-neutral-900 hover:text-brand-800 sm:text-base"
 								>
 									{name}
 								</a>
@@ -99,7 +104,7 @@
 									</button>
 								</div>
 							</div>
-							<p class="shrink-0 font-bold text-neutral-900">
+							<p class="shrink-0 text-sm font-bold text-neutral-900 sm:text-base">
 								{formatPrice(line.product.price * line.qty, intlLocale)}
 							</p>
 						</li>
@@ -114,7 +119,7 @@
 				</button>
 			</div>
 
-			<aside aria-label={t.cart.total} class="h-fit rounded-3xl bg-white p-6 ring-1 ring-neutral-200">
+			<aside aria-label={t.cart.total} class="h-fit rounded-3xl bg-white p-4 ring-1 ring-neutral-200 sm:p-6">
 				<dl class="space-y-3 text-sm">
 					<div class="flex items-baseline justify-between">
 						<dt class="text-neutral-600">{t.cart.subtotal}</dt>

@@ -15,7 +15,7 @@
 		{@const isCurrent = step === current}
 		<li
 			aria-current={isCurrent ? 'step' : undefined}
-			class="flex flex-1 flex-col items-center gap-2 text-center"
+			class="flex min-w-0 flex-1 flex-col items-center gap-1.5 text-center sm:gap-2"
 		>
 			<span class="flex w-full items-center">
 				<span
@@ -23,10 +23,10 @@
 					class="h-0.5 flex-1 {i === 0 ? 'bg-transparent' : done || isCurrent ? 'bg-brand-700' : 'bg-neutral-200'}"
 				></span>
 				<span
-					class="grid h-11 w-11 shrink-0 place-items-center rounded-full text-sm font-bold {done
+					class="grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-bold sm:h-11 sm:w-11 sm:text-sm {done
 						? 'bg-brand-700 text-white'
 						: isCurrent
-							? 'bg-brand-700 text-white ring-4 ring-brand-100'
+							? 'bg-brand-700 text-white ring-2 ring-brand-100 sm:ring-4'
 							: 'bg-neutral-100 text-neutral-500 ring-1 ring-neutral-200'}"
 				>
 					{#if done}

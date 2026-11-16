@@ -29,6 +29,20 @@
 	let headerEl: HTMLElement | undefined = $state();
 	let menuOpen = $state(false);
 	let categoriesOpen = $state(false);
+	let scrolled = $state(false);
+
+	// Header shadow on scroll: mount-only passive listener, cleaned up on
+	// destroy. Shadow only — no layout shift. Initial call covers reloads
+	// restored mid-page.
+	$effect(() => {
+		if (!browser) return;
+		const onScroll = (): void => {
+			scrolled = window.scrollY > 4;
+		};
+		onScroll();
+		window.addEventListener('scroll', onScroll, { passive: true });
+		return () => window.removeEventListener('scroll', onScroll);
+	});
 
 	const currentPath = $derived(page.url.pathname);
 	// searchParams is unavailable during prerendering: read it only in the browser.
@@ -56,7 +70,10 @@
 	}
 
 	function switchHref(locale: Locale): string {
-		const suffix = browser ? page.url.search + page.url.hash : '';
+		// Effective URL: after a shallow replaceState (shop filters) the new
+		// query lives in `page.shallow.url`, not `page.url`.
+		const effective = page.shallow?.url ?? page.url;
+		const suffix = browser ? effective.search + effective.hash : '';
 		return switchLocalePath(currentPath, locale) + suffix;
 	}
 
@@ -69,10 +86,15 @@
 
 <svelte:window onclick={handleWindowClick} onkeydown={handleKeydown} />
 
-<header bind:this={headerEl} class="sticky top-0 z-40 border-b border-neutral-200 bg-white/95 backdrop-blur">
+<header
+	bind:this={headerEl}
+	class="sticky top-0 z-40 border-b border-neutral-200 bg-white/95 backdrop-blur motion-safe:transition-shadow motion-safe:duration-200 {scrolled
+		? 'shadow-md'
+		: ''}"
+>
 	<AnnouncementBar {lang} {t} />
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="flex h-16 items-center gap-2 lg:h-[72px] lg:gap-4">
+		<div class="flex h-16 items-center gap-1.5 sm:gap-2 lg:h-[72px] lg:gap-3 xl:gap-4">
 			<a
 				href={localizedPath(lang, '/')}
 				class="flex min-h-11 shrink-0 items-center gap-2 rounded-full"
@@ -81,17 +103,17 @@
 				<span class="grid h-10 w-10 place-items-center rounded-xl bg-brand-700 text-white">
 					<ShoppingBag class="h-5 w-5" aria-hidden="true" />
 				</span>
-				<span class="text-xl font-bold tracking-tight text-neutral-900">
+				<span class="text-lg font-bold tracking-tight text-neutral-900 sm:text-xl">
 					Tech<span class="text-brand-700">Dova</span>
 				</span>
 			</a>
 
-			<nav class="ml-2 hidden items-center gap-1 lg:flex" aria-label={t.nav.main}>
+			<nav class="ml-1 hidden items-center gap-0.5 lg:flex xl:ml-2 xl:gap-1" aria-label={t.nav.main}>
 				{#each navLinks.slice(0, 2) as link (link.href)}
 					<a
 						href={link.href}
 						aria-current={currentPath === link.href ? 'page' : undefined}
-						class="flex min-h-11 items-center rounded-full px-3 text-sm font-medium text-neutral-700 hover:bg-brand-50 hover:text-brand-800 aria-[current=page]:bg-brand-50 aria-[current=page]:text-brand-800"
+						class="flex min-h-11 items-center rounded-full px-2.5 text-sm font-medium text-neutral-700 hover:bg-brand-50 hover:text-brand-800 aria-[current=page]:bg-brand-50 aria-[current=page]:text-brand-800 xl:px-3"
 					>
 						{link.label}
 					</a>
@@ -104,7 +126,7 @@
 						onclick={() => {
 							categoriesOpen = !categoriesOpen;
 						}}
-						class="flex min-h-11 items-center gap-1 rounded-full px-3 text-sm font-medium text-neutral-700 hover:bg-brand-50 hover:text-brand-800"
+						class="flex min-h-11 items-center gap-1 rounded-full px-2.5 text-sm font-medium text-neutral-700 hover:bg-brand-50 hover:text-brand-800 xl:px-3"
 					>
 						{t.nav.categories}
 						<ChevronDown
@@ -140,7 +162,7 @@
 					<a
 						href={link.href}
 						aria-current={currentPath === link.href ? 'page' : undefined}
-						class="flex min-h-11 items-center rounded-full px-3 text-sm font-medium text-neutral-700 hover:bg-brand-50 hover:text-brand-800 aria-[current=page]:bg-brand-50 aria-[current=page]:text-brand-800"
+						class="flex min-h-11 items-center rounded-full px-2.5 text-sm font-medium text-neutral-700 hover:bg-brand-50 hover:text-brand-800 aria-[current=page]:bg-brand-50 aria-[current=page]:text-brand-800 xl:px-3"
 					>
 						{link.label}
 					</a>
@@ -152,7 +174,7 @@
 				{t}
 				id="header-search"
 				value={searchValue}
-				wrapperClass="relative ml-auto hidden min-w-0 flex-1 max-w-md md:block"
+				wrapperClass="relative ml-auto hidden min-w-0 flex-1 md:block md:max-w-[240px] lg:max-w-[280px] xl:max-w-md"
 				inputClass="h-11 w-full rounded-full bg-neutral-100 pl-10 pr-4 text-sm text-neutral-900 placeholder:text-neutral-500 focus:bg-white"
 			/>
 
@@ -169,7 +191,7 @@
 							aria-label={interpolate(t.nav.switchTo, {
 								language: dictionaries[locale].localeName
 							})}
-							class="flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-neutral-600 hover:text-brand-800 aria-[current=true]:bg-white aria-[current=true]:text-brand-800 aria-[current=true]:shadow"
+							class="flex min-h-11 items-center rounded-full px-2.5 text-sm font-semibold text-neutral-600 hover:text-brand-800 aria-[current=true]:bg-white aria-[current=true]:text-brand-800 aria-[current=true]:shadow xl:px-3"
 						>
 							{locale.toUpperCase()}
 						</a>
@@ -191,12 +213,14 @@
 				>
 					<ShoppingCart class="h-5 w-5" aria-hidden="true" />
 					{#if cart.count > 0}
-						<span
-							class="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-brand-700 px-1 text-[11px] font-bold text-white"
-							aria-hidden="true"
-						>
-							{cart.count}
-						</span>
+						{#key cart.count}
+							<span
+								class="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 animate-pop place-items-center rounded-full bg-brand-700 px-1 text-[11px] font-bold text-white"
+								aria-hidden="true"
+							>
+								{cart.count}
+							</span>
+						{/key}
 					{/if}
 				</a>
 
