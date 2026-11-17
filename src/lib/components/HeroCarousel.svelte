@@ -133,7 +133,7 @@
 				aria-hidden={i !== active}
 			>
 				<div class="grid gap-5 p-5 sm:gap-6 sm:p-8 lg:grid-cols-[1fr_1.15fr] lg:gap-0 lg:p-0">
-					<div class="lg:flex lg:flex-col lg:justify-center lg:p-12 lg:pr-8">
+					<div class="lg:flex lg:flex-col lg:justify-center lg:py-12 lg:pl-[4.75rem] lg:pr-8">
 						<p
 							class="inline-flex animate-fade-up items-center gap-1.5 self-start rounded-full bg-surface px-3 py-1.5 text-xs font-semibold text-brand-800 dark:text-brand-200 ring-1 ring-brand-200"
 						>
@@ -208,7 +208,7 @@
 		type="button"
 		onclick={previous}
 		aria-label={t.hero.previous}
-		class="absolute left-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-surface text-ink-soft shadow-lg ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft sm:grid"
+		class="absolute left-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-surface text-ink-soft shadow-lg ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft lg:grid"
 	>
 		<ChevronLeft class="h-5 w-5" aria-hidden="true" />
 	</button>
@@ -216,7 +216,7 @@
 		type="button"
 		onclick={next}
 		aria-label={t.hero.next}
-		class="absolute right-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-surface text-ink-soft shadow-lg ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft sm:grid"
+		class="absolute right-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-surface text-ink-soft shadow-lg ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft lg:grid"
 	>
 		<ChevronRight class="h-5 w-5" aria-hidden="true" />
 	</button>

@@ -17,6 +17,7 @@ export type ProductSpec = {
  */
 export type ProductVariant = {
 	id: string;
+	sku?: string;
 	kind: 'storage' | 'color';
 	label: LocalizedString;
 	priceDelta: number;
@@ -81,9 +82,9 @@ export const products: Product[] = [
 		image: '/images/product-iphone-15-pro',
 		images: ['/images/product-iphone-15-pro', '/images/product-iphone-15-pro-2', '/images/product-iphone-15-pro-3'],
 		variants: [
-			{ id: 'storage-128', kind: 'storage', label: { en: '128 GB', fr: '128 Go' }, priceDelta: -100, stock: 8 },
-			{ id: 'storage-256', kind: 'storage', label: { en: '256 GB', fr: '256 Go' }, priceDelta: 0, stock: 12 },
-			{ id: 'storage-512', kind: 'storage', label: { en: '512 GB', fr: '512 Go' }, priceDelta: 200, stock: 5 },
+			{ id: 'storage-128', sku: 'TD-IP15P-128', kind: 'storage', label: { en: '128 GB', fr: '128 Go' }, priceDelta: -100, stock: 8 },
+			{ id: 'storage-256', sku: 'TD-IP15P-256', kind: 'storage', label: { en: '256 GB', fr: '256 Go' }, priceDelta: 0, stock: 12 },
+			{ id: 'storage-512', sku: 'TD-IP15P-512', kind: 'storage', label: { en: '512 GB', fr: '512 Go' }, priceDelta: 200, stock: 5 },
 		],
 		inTheBox: [
 			{ en: 'iPhone 15 Pro', fr: 'iPhone 15 Pro' },
@@ -127,9 +128,9 @@ export const products: Product[] = [
 		image: '/images/product-galaxy-s24',
 		images: ['/images/product-galaxy-s24', '/images/product-galaxy-s24-2', '/images/product-galaxy-s24-3'],
 		variants: [
-			{ id: 'storage-128', kind: 'storage', label: { en: '128 GB', fr: '128 Go' }, priceDelta: -100, stock: 10 },
-			{ id: 'storage-256', kind: 'storage', label: { en: '256 GB', fr: '256 Go' }, priceDelta: 0, stock: 14 },
-			{ id: 'storage-512', kind: 'storage', label: { en: '512 GB', fr: '512 Go' }, priceDelta: 180, stock: 6 },
+			{ id: 'storage-128', sku: 'TD-GS24-128', kind: 'storage', label: { en: '128 GB', fr: '128 Go' }, priceDelta: -100, stock: 10 },
+			{ id: 'storage-256', sku: 'TD-GS24-256', kind: 'storage', label: { en: '256 GB', fr: '256 Go' }, priceDelta: 0, stock: 14 },
+			{ id: 'storage-512', sku: 'TD-GS24-512', kind: 'storage', label: { en: '512 GB', fr: '512 Go' }, priceDelta: 180, stock: 6 },
 		],
 		inTheBox: [
 			{ en: 'Samsung Galaxy S24', fr: 'Samsung Galaxy S24' },
@@ -173,9 +174,9 @@ export const products: Product[] = [
 		image: '/images/product-macbook-air-m2',
 		images: ['/images/product-macbook-air-m2', '/images/product-macbook-air-m2-2'],
 		variants: [
-			{ id: 'storage-256', kind: 'storage', label: { en: '256 GB', fr: '256 Go' }, priceDelta: 0, stock: 9 },
-			{ id: 'storage-512', kind: 'storage', label: { en: '512 GB', fr: '512 Go' }, priceDelta: 200, stock: 6 },
-			{ id: 'storage-1tb', kind: 'storage', label: { en: '1 TB', fr: '1 To' }, priceDelta: 400, stock: 3 },
+			{ id: 'storage-256', sku: 'TD-MBA-M2-256', kind: 'storage', label: { en: '256 GB', fr: '256 Go' }, priceDelta: 0, stock: 9 },
+			{ id: 'storage-512', sku: 'TD-MBA-M2-512', kind: 'storage', label: { en: '512 GB', fr: '512 Go' }, priceDelta: 200, stock: 6 },
+			{ id: 'storage-1tb', sku: 'TD-MBA-M2-1TB', kind: 'storage', label: { en: '1 TB', fr: '1 To' }, priceDelta: 400, stock: 3 },
 		],
 		inTheBox: [
 			{ en: 'MacBook Air M2', fr: 'MacBook Air M2' },

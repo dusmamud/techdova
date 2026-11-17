@@ -282,7 +282,7 @@
 												<a
 													href={localizedPath(lang, `/category/${category.slug}`)}
 													onclick={closeAll}
-													class="flex min-h-11 items-center gap-3 rounded-xl px-2 py-1.5 text-sm font-medium text-ink-soft hover:bg-brand-50 hover:text-brand-800"
+													class="flex min-h-11 flex-col items-start gap-1.5 rounded-xl px-2 py-2 text-sm font-medium text-ink-soft hover:bg-brand-50 hover:text-brand-800"
 												>
 													<span
 														class="h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-brand-50"

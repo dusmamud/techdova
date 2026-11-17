@@ -121,6 +121,11 @@ test('variant selection changes the price and the cart line carries the variant'
 	await expect(page.locator('main')).toContainText('999.00 DA');
 	await page.getByRole('button', { name: /512 GB/ }).first().click();
 	await expect(page.locator('main')).toContainText('1,199.00 DA');
+	// The SKU and the Storage spec row follow the selected variant.
+	await expect(page.locator('main')).toContainText('TD-IP15P-512');
+	const specs = page.locator('section[aria-labelledby="specs-heading"]');
+	await expect(specs).toContainText('512 GB');
+	await expect(specs).not.toContainText('256 GB');
 	await page.getByRole('button', { name: 'Add to cart' }).first().click();
 	const dialog = page.getByRole('dialog', { name: 'Your cart' });
 	await expect(dialog).toBeVisible();
@@ -128,6 +133,39 @@ test('variant selection changes the price and the cart line carries the variant'
 	await expect(dialog).toContainText('1,199.00 DA');
 	const stored = await page.evaluate(() => localStorage.getItem('techdova-cart'));
 	expect(JSON.parse(stored!)).toEqual([{ slug: 'iphone-15-pro', variantId: 'storage-512', qty: 1 }]);
+});
+
+test('hero carousel arrows clear the slide copy at desktop width', async ({ page }) => {
+	await suppressCookieBanner(page);
+	await page.setViewportSize({ width: 1280, height: 800 });
+	await page.goto('/en');
+	const prev = page.getByRole('button', { name: 'Previous slide' });
+	await expect(prev).toBeVisible();
+	// Let the slide transition settle before measuring boxes.
+	await page.waitForTimeout(700);
+	const slide = page.locator('[aria-roledescription="slide"][aria-hidden="false"]');
+	const copy = slide.locator('p.max-w-md');
+	const prevBox = await prev.boundingBox();
+	const copyBox = await copy.boundingBox();
+	expect(prevBox).not.toBeNull();
+	expect(copyBox).not.toBeNull();
+	expect(prevBox!.x + prevBox!.width).toBeLessThanOrEqual(copyBox!.x + 1);
+});
+
+test('mega menu category labels are fully visible, not clipped', async ({ page }) => {
+	await suppressCookieBanner(page);
+	await page.goto('/en');
+	await page.getByRole('button', { name: /Categories/ }).hover();
+	const panel = page.locator('#mega-menu');
+	await expect(panel).toBeVisible();
+	const clipped = await panel.evaluate((el) => {
+		const bad: string[] = [];
+		el.querySelectorAll('a[href*="/category/"]').forEach((a) => {
+			if (a.scrollWidth > a.clientWidth + 1) bad.push((a.textContent ?? '').trim());
+		});
+		return bad;
+	});
+	expect(clipped).toEqual([]);
 });
 
 test('gallery switches image by thumbnail and by arrows', async ({ page }) => {

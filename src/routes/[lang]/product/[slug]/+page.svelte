@@ -113,6 +113,25 @@
 	const selectedVariant = $derived(getVariant(product, selectedVariantId) ?? getDefaultVariant(product));
 	const displayPrice = $derived(variantPrice(product, selectedVariant));
 	const variantStock = $derived(selectedVariant?.stock ?? product.stock);
+	const displaySku = $derived(selectedVariant?.sku ?? product.sku);
+	// The Storage spec row follows the selected storage variant (keeping a
+	// ' SSD' qualifier when the static spec has one), so the table never
+	// disagrees with the variant selector.
+	const displaySpecs = $derived(
+		product.specs.map((spec) => {
+			if (localize(spec.label, 'en') === 'Storage' && selectedVariant?.kind === 'storage') {
+				const suffix = localize(spec.value, lang).endsWith(' SSD') ? ' SSD' : '';
+				return {
+					...spec,
+					value: {
+						en: `${localize(selectedVariant.label, 'en')}${suffix}`,
+						fr: `${localize(selectedVariant.label, 'fr')}${suffix}`
+					}
+				};
+			}
+			return spec;
+		})
+	);
 	const outOfStock = $derived(variantStock <= 0);
 	const lowStock = $derived(!outOfStock && variantStock <= 5);
 	const bundleTotal = $derived(
@@ -409,7 +428,7 @@
 		name,
 		image: product.images.map((image) => `${SITE_URL}${image}.jpg`),
 		description: localize(product.description, lang),
-		sku: product.sku,
+		sku: displaySku,
 		offers: {
 			'@type': 'Offer',
 			priceCurrency: 'DZD',
@@ -638,7 +657,7 @@
 			</p>
 			<p class="mt-2 text-sm text-muted">
 				{t.product.skuLabel}:
-				<span class="font-medium text-ink-soft">{product.sku}</span>
+				<span class="font-medium text-ink-soft">{displaySku}</span>
 			</p>
 			<p class="mt-4 flex flex-wrap items-baseline gap-3">
 				<span class="text-3xl font-bold text-ink">
@@ -921,7 +940,7 @@
 		<section aria-labelledby="specs-heading" use:reveal>
 			<h2 id="specs-heading" class="text-xl font-bold text-ink">{t.product.specifications}</h2>
 			<dl class="mt-3 divide-y divide-line rounded-3xl bg-surface-soft px-5">
-				{#each product.specs as spec (localize(spec.label, 'en'))}
+				{#each displaySpecs as spec (localize(spec.label, 'en'))}
 					<div class="grid grid-cols-2 gap-4 py-3 text-sm">
 						<dt class="font-medium text-muted">{localize(spec.label, lang)}</dt>
 						<dd class="font-semibold text-ink">{localize(spec.value, lang)}</dd>
