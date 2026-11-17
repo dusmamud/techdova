@@ -114,20 +114,23 @@
 </script>
 
 <section id="reviews" aria-labelledby="reviews-heading" class="mt-12 scroll-mt-24" use:reveal>
-	<h2 id="reviews-heading" class="text-2xl font-bold tracking-tight text-neutral-900">
+	<h2 id="reviews-heading" tabindex="-1" class="text-2xl font-bold tracking-tight text-ink focus:outline-none">
 		{t.reviews.heading}
 	</h2>
-	<p class="mt-2 text-sm text-neutral-500">{t.reviews.demoNote}</p>
+	<p class="mt-2 text-sm text-muted">{t.reviews.demoNote}</p>
+	<p class="mt-1 text-sm text-muted">
+		{interpolate(t.reviews.sampleNote, { count: formatCount(product.reviewCount, intlLocale) })}
+	</p>
 
 	<div class="mt-6 grid gap-8 lg:grid-cols-[1fr_2fr]">
 		<div>
 			<p class="flex flex-wrap items-center gap-2">
-				<span class="text-3xl font-bold text-neutral-900">
+				<span class="text-3xl font-bold text-ink">
 					{formatDecimal(product.rating, intlLocale)}
 				</span>
 				<Stars rating={product.rating} label={ratingLabel} />
 			</p>
-			<h3 class="mt-4 text-base font-semibold text-neutral-900">{t.reviews.breakdownLabel}</h3>
+			<h3 class="mt-4 text-base font-semibold text-ink">{t.reviews.breakdownLabel}</h3>
 			<div class="mt-2">
 				<RatingBreakdown {breakdown} totalLabel={basedOn} />
 			</div>
@@ -138,7 +141,7 @@
 				{@const author = localize(review.author, lang)}
 				{@const voted = votedIds.includes(review.id)}
 				{@const helpfulCount = review.helpful + (voted ? 1 : 0)}
-				<li class="rounded-3xl bg-white p-5 ring-1 ring-neutral-200">
+				<li class="rounded-3xl bg-surface p-5 ring-1 ring-line">
 					<div class="flex items-center gap-3">
 						<span
 							aria-hidden="true"
@@ -147,8 +150,8 @@
 							{initials(author)}
 						</span>
 						<div class="min-w-0">
-							<p class="text-sm font-semibold text-neutral-900">{author}</p>
-							<p class="text-sm text-neutral-500">
+							<p class="text-sm font-semibold text-ink">{author}</p>
+							<p class="text-sm text-muted">
 								{formatDate(parseDate(review.dateISO), intlLocale)}
 							</p>
 						</div>
@@ -159,17 +162,17 @@
 							/>
 						</span>
 					</div>
-					<h3 class="mt-3 text-base font-semibold text-neutral-900">
+					<h3 class="mt-3 text-base font-semibold text-ink">
 						{localize(review.title, lang)}
 					</h3>
-					<p class="mt-1 leading-relaxed text-neutral-600">{localize(review.text, lang)}</p>
+					<p class="mt-1 leading-relaxed text-muted">{localize(review.text, lang)}</p>
 					<button
 						type="button"
 						aria-pressed={voted}
 						onclick={() => toggleHelpful(review.id)}
 						class="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold ring-1 {voted
 							? 'bg-brand-50 text-brand-800 ring-brand-700'
-							: 'text-neutral-700 ring-neutral-300 hover:bg-neutral-50'}"
+							: 'text-ink-soft ring-line hover:bg-surface-soft'}"
 					>
 						<ThumbsUp class="h-4 w-4" aria-hidden="true" />
 						{interpolate(voted ? t.reviews.helpfulVoted : t.reviews.helpful, {
@@ -181,14 +184,14 @@
 		</ul>
 	</div>
 
-	<div class="mt-8 rounded-3xl bg-neutral-50 p-5 sm:p-6">
-		<h3 class="text-lg font-bold text-neutral-900">{t.reviews.writeTitle}</h3>
+	<div class="mt-8 rounded-3xl bg-surface-soft p-5 sm:p-6">
+		<h3 class="text-lg font-bold text-ink">{t.reviews.writeTitle}</h3>
 		<form id={formId} onsubmit={submitReview} novalidate class="mt-4 flex flex-col gap-4">
 			<div class="grid gap-4 sm:grid-cols-2">
 				<div>
 					<label
 						for="{formId}-name"
-						class="mb-1 block text-sm font-semibold text-neutral-900"
+						class="mb-1 block text-sm font-semibold text-ink"
 					>
 						{t.reviews.nameLabel}
 					</label>
@@ -200,16 +203,16 @@
 						aria-invalid={nameError ? 'true' : undefined}
 						aria-describedby={nameError ? `${formId}-name-error` : undefined}
 						autocomplete="name"
-						class="h-12 w-full rounded-2xl bg-white px-4 text-sm text-neutral-900 ring-1 ring-neutral-300 placeholder:text-neutral-500"
+						class="h-12 w-full rounded-2xl bg-surface px-4 text-sm text-ink ring-1 ring-line placeholder:text-muted"
 					/>
 					{#if nameError}
-						<p id="{formId}-name-error" class="mt-1 text-sm text-red-600">{nameError}</p>
+						<p id="{formId}-name-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{nameError}</p>
 					{/if}
 				</div>
 				<div>
 					<label
 						for="{formId}-rating"
-						class="mb-1 block text-sm font-semibold text-neutral-900"
+						class="mb-1 block text-sm font-semibold text-ink"
 					>
 						{t.reviews.ratingLabel}
 					</label>
@@ -217,7 +220,7 @@
 						id="{formId}-rating"
 						name="rating"
 						bind:value={rating}
-						class="h-12 w-full rounded-2xl bg-white px-4 text-sm text-neutral-900 ring-1 ring-neutral-300"
+						class="h-12 w-full rounded-2xl bg-surface px-4 text-sm text-ink ring-1 ring-line"
 					>
 						{#each [5, 4, 3, 2, 1] as n (n)}
 							<option value={n}>{interpolate(t.reviews.ratingOption, { n })}</option>
@@ -228,7 +231,7 @@
 			<div>
 				<label
 					for="{formId}-title"
-					class="mb-1 block text-sm font-semibold text-neutral-900"
+					class="mb-1 block text-sm font-semibold text-ink"
 				>
 					{t.reviews.titleLabel}
 				</label>
@@ -239,16 +242,16 @@
 					bind:value={title}
 					aria-invalid={titleError ? 'true' : undefined}
 					aria-describedby={titleError ? `${formId}-title-error` : undefined}
-					class="h-12 w-full rounded-2xl bg-white px-4 text-sm text-neutral-900 ring-1 ring-neutral-300 placeholder:text-neutral-500"
+					class="h-12 w-full rounded-2xl bg-surface px-4 text-sm text-ink ring-1 ring-line placeholder:text-muted"
 				/>
 				{#if titleError}
-					<p id="{formId}-title-error" class="mt-1 text-sm text-red-600">{titleError}</p>
+					<p id="{formId}-title-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{titleError}</p>
 				{/if}
 			</div>
 			<div>
 				<label
 					for="{formId}-text"
-					class="mb-1 block text-sm font-semibold text-neutral-900"
+					class="mb-1 block text-sm font-semibold text-ink"
 				>
 					{t.reviews.textLabel}
 				</label>
@@ -259,10 +262,10 @@
 					rows="4"
 					aria-invalid={textError ? 'true' : undefined}
 					aria-describedby={textError ? `${formId}-text-error` : undefined}
-					class="w-full rounded-2xl bg-white px-4 py-3 text-sm text-neutral-900 ring-1 ring-neutral-300 placeholder:text-neutral-500"
+					class="w-full rounded-2xl bg-surface px-4 py-3 text-sm text-ink ring-1 ring-line placeholder:text-muted"
 				></textarea>
 				{#if textError}
-					<p id="{formId}-text-error" class="mt-1 text-sm text-red-600">{textError}</p>
+					<p id="{formId}-text-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{textError}</p>
 				{/if}
 			</div>
 			<div>
@@ -273,7 +276,7 @@
 					{t.reviews.submit}
 				</button>
 				{#if submitted}
-					<p role="status" class="mt-2 text-sm font-medium text-brand-800">
+					<p role="status" class="mt-2 text-sm font-medium text-brand-800 dark:text-brand-200">
 						{t.reviews.successNote}
 					</p>
 				{/if}

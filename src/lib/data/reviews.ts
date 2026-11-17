@@ -86,6 +86,30 @@ export const demoReviews: DemoReview[] = [
 			fr: 'J’étais sceptique au début, mais cela a dépassé mes attentes. C’est confortable, fiable et agréable à utiliser. Le service client a aussi répondu rapidement à ma question.'
 		},
 		helpful: 7
+	},
+	{
+		id: 'review-7',
+		author: { en: 'Riad S.', fr: 'Riad S.' },
+		rating: 3,
+		dateISO: '2026-09-28',
+		title: { en: 'Decent, but not perfect', fr: 'Correct, mais pas parfait' },
+		text: {
+			en: 'It works as described, but I had a small issue during setup and the packaging could have been better. Fair for the price, though I expected a bit more polish.',
+			fr: 'Il fonctionne comme décrit, mais j’ai eu un petit souci lors de l’installation et l’emballage aurait pu être meilleur. Correct pour le prix, même si j’attendais un peu plus de finition.'
+		},
+		helpful: 3
+	},
+	{
+		id: 'review-8',
+		author: { en: 'Meriem L.', fr: 'Meriem L.' },
+		rating: 2,
+		dateISO: '2026-09-15',
+		title: { en: 'Disappointed by the details', fr: 'Déçue par les détails' },
+		text: {
+			en: 'The product itself is fine, but delivery took longer than promised and one accessory was missing from the box. Support resolved it eventually, but the experience was frustrating.',
+			fr: 'Le produit lui-même est correct, mais la livraison a pris plus de temps que promis et un accessoire manquait dans la boîte. Le service client a fini par résoudre le problème, mais l’expérience a été frustrante.'
+		},
+		helpful: 5
 	}
 ];
 
@@ -97,12 +121,21 @@ function hashSlug(slug: string): number {
 	return hash;
 }
 
-/** Deterministically pick 3 reviews for a product slug (same input, same output). */
+/**
+ * Deterministically pick 3 reviews for a product slug (same input, same
+ * output): exactly one critical review (3 stars or fewer) plus two
+ * rotating positive ones, so every product page shows a balanced sample.
+ * The product rating/reviewCount aggregates are untouched — this is only
+ * the 3-review sample shown on the page.
+ */
 export function getReviewsForProduct(slug: string): DemoReview[] {
-	const start = hashSlug(slug) % demoReviews.length;
-	const picked: DemoReview[] = [];
-	for (let i = 0; i < 3; i++) {
-		picked.push(demoReviews[(start + i) % demoReviews.length]);
+	const hash = hashSlug(slug);
+	const critical = demoReviews.filter((review) => review.rating <= 3);
+	const positive = demoReviews.filter((review) => review.rating > 3);
+	const picked: DemoReview[] = [critical[hash % critical.length]];
+	const start = hash % positive.length;
+	for (let i = 0; i < 2; i++) {
+		picked.push(positive[(start + i) % positive.length]);
 	}
 	return picked;
 }

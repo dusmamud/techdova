@@ -19,14 +19,31 @@ const PORT = 4175;
 const LIVE = process.env.BASE_URL;
 const BASE = LIVE ?? `http://127.0.0.1:${PORT}`;
 
+const PRODUCT_SLUGS = [
+	'iphone-15-pro',
+	'galaxy-s24',
+	'macbook-air-m2',
+	'dell-xps-13',
+	'airpods-pro',
+	'sony-wh1000xm5',
+	'galaxy-watch-6',
+	'apple-watch-9',
+	'dualsense-controller',
+	'nintendo-switch',
+	'magsafe-charger',
+	'usb-c-hub'
+];
+
 const PAGES = [
 	'/en',
 	'/en/shop',
-	'/en/product/iphone-15-pro',
 	'/en/category/audio',
 	'/en/blog',
 	'/en/blog/laptop-buying-guide-2026',
 	'/en/deals',
+	'/en/brands',
+	'/en/best-sellers',
+	...PRODUCT_SLUGS.map((slug) => `/en/product/${slug}`),
 	'/fr',
 	'/fr/product/iphone-15-pro',
 	'/fr/category/audio'
@@ -78,11 +95,43 @@ try {
 	let pictures = 0;
 	for (const path of PAGES) {
 		await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle' });
-		// Trigger lazy-loaded images below the fold.
-		await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-		await page.waitForTimeout(600);
-		await page.evaluate(() => window.scrollTo(0, 0));
-		await page.waitForTimeout(300);
+		// Step through the page so native lazy-loaded images (gallery
+		// thumbnails, below-fold cards) all fetch, then wait until every
+		// <img> is complete. A single jump to the bottom can skip images
+		// in the middle of long pages.
+		await page.evaluate(async () => {
+			document.documentElement.style.scrollBehavior = 'auto';
+			await new Promise((resolve) => {
+				let y = 0;
+				const step = () => {
+					y += 500;
+					window.scrollTo({ top: y, behavior: 'instant' });
+					if (y < document.body.scrollHeight) setTimeout(step, 100);
+					else {
+						window.scrollTo({ top: 0, behavior: 'instant' });
+						resolve();
+					}
+				};
+				step();
+			});
+		});
+		await page
+			.waitForFunction(() => [...document.images].every((img) => img.complete), null, {
+				timeout: 15000
+			})
+			.catch(() => {});
+		await page.waitForTimeout(400);
+		// On product pages, switch the gallery to every angle so the main
+		// image requests each gallery file too (thumbnails alone only
+		// prove the thumbnail requests).
+		if (path.includes('/product/')) {
+			const thumbs = page.getByRole('button', { name: /View image \d+/ });
+			const count = await thumbs.count();
+			for (let i = 1; i < Math.min(count, 3); i++) {
+				await thumbs.nth(i).click().catch(() => {});
+				await page.waitForTimeout(250);
+			}
+		}
 		const count = await page.evaluate(
 			() => document.querySelectorAll('picture source[type="image/avif"]').length
 		);

@@ -26,6 +26,12 @@
 	 * chips with × remove + Clear all. The bar sticks under the sticky
 	 * header (see `stickyTopClass`).
 	 *
+	 * Optional `facets` snippet: an extra row of facet controls (brand
+	 * checkboxes, rating radios, toggles, …) rendered bare below the main
+	 * row, above the chips. Gate its visibility with your own responsive
+	 * classes, e.g. `hidden lg:flex` when the same facets live in a drawer
+	 * on smaller screens. Pages that omit it keep the current layout.
+	 *
 	 * @example
 	 * ```svelte
 	 * <FilterBar
@@ -67,7 +73,8 @@
 		onClearAll,
 		id = 'filter-bar',
 		stickyTopClass = 'top-28 lg:top-[7.5rem]',
-		controls
+		controls,
+		facets
 	}: {
 		t: Dictionary;
 		resultCount: number;
@@ -90,6 +97,8 @@
 		stickyTopClass?: string;
 		/** Inline desktop controls (e.g. category chips, price slider). Rendered bare in the row — gate visibility with your own responsive classes, e.g. `hidden lg:flex`. */
 		controls?: Snippet;
+		/** Extra facet controls rendered bare below the main row, above the chips. Gate visibility with your own responsive classes. Omit to keep the current layout. */
+		facets?: Snippet;
 	} = $props();
 
 	const sortId = $derived(`${id}-sort`);
@@ -104,13 +113,13 @@
 	);
 </script>
 
-<div class="sticky {stickyTopClass} z-30 border-b border-neutral-200 bg-white/95 py-3 backdrop-blur">
+<div class="sticky {stickyTopClass} z-30 border-b border-line bg-surface/95 py-3 backdrop-blur">
 	<div class="flex flex-wrap items-center gap-3">
 		{#if onOpenFilters}
 			<button
 				type="button"
 				onclick={onOpenFilters}
-				class="inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold text-neutral-900 ring-1 ring-neutral-300 hover:bg-brand-50 {hideFiltersButtonOnDesktop
+				class="inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold text-ink ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft {hideFiltersButtonOnDesktop
 					? 'lg:hidden'
 					: ''}"
 			>
@@ -132,14 +141,14 @@
 
 		{#if showSort}
 			<div class="flex items-center gap-2">
-				<label for={sortId} class="sr-only text-sm font-medium text-neutral-700 sm:not-sr-only">
+				<label for={sortId} class="sr-only text-sm font-medium text-ink-soft sm:not-sr-only">
 					{t.filters.sortBy}
 				</label>
 				<select
 					id={sortId}
 					value={sortValue}
 					onchange={(event) => onSortChange?.((event.target as HTMLSelectElement).value)}
-					class="h-11 rounded-full bg-neutral-100 px-3 text-sm font-medium text-neutral-900"
+					class="h-11 rounded-full bg-surface-soft px-3 text-sm font-medium text-ink"
 				>
 					{#each sortOptions ?? [] as option (option.value)}
 						<option value={option.value}>{option.label}</option>
@@ -152,10 +161,14 @@
 			{@render controls()}
 		{/if}
 
-		<p role="status" aria-live="polite" class="ml-auto text-sm font-medium text-neutral-600">
+		<p role="status" aria-live="polite" class="ml-auto text-sm font-medium text-muted">
 			{resultLine}
 		</p>
 	</div>
+
+	{#if facets}
+		{@render facets()}
+	{/if}
 
 	{#if chips.length > 0}
 		<div
@@ -186,7 +199,7 @@
 				<button
 					type="button"
 					onclick={onClearAll}
-					class="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-brand-700 ring-1 ring-brand-700 hover:bg-brand-50"
+					class="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-brand-700 dark:text-brand-300 dark:hover:text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
 				>
 					{t.filters.clearAll}
 				</button>

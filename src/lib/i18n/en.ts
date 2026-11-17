@@ -93,7 +93,25 @@ export const en = {
 		bestSellersDescription:
 			'TechDova’s most-loved demo products, rated by fictional customers: phones, laptops, audio and more.',
 		notFoundTitle: 'Page not found | TechDova',
-		notFoundDescription: 'The requested page could not be found.'
+		notFoundDescription: 'The requested page could not be found.',
+		brandsTitle: 'Shop by brand | TechDova',
+		brandsDescription:
+			'Browse TechDova products by brand: Apple, Samsung, Sony, Dell, PlayStation, Nintendo and TechDova.',
+		rewardsTitle: 'Rewards programme | TechDova',
+		rewardsDescription:
+			'Demo rewards programme: earn points on demo orders, climb tiers and unlock fictional perks. Nothing is tracked or sent anywhere.',
+		tradeInTitle: 'Trade in your device | TechDova',
+		tradeInDescription:
+			'Demo trade-in estimator: estimate the credit your old device could be worth. No device is collected and no credit is issued.',
+		financingTitle: 'Financing and instalments | TechDova',
+		financingDescription:
+			'Demo financing explainer and instalment calculator: split a purchase into monthly payments at 0% demo interest. No credit agreement is offered.',
+		warrantyTitle: 'Extended warranty | TechDova',
+		warrantyDescription:
+			'Demo extended warranty and protection plans: compare cover levels and fictional prices. No plan is sold and no claim can be filed.',
+		cookiesTitle: 'Cookie and storage policy | TechDova',
+		cookiesDescription:
+			'How TechDova stores data honestly: no tracking cookies, no analytics — only local browser storage for your cart, wishlist, theme and language.'
 	},
 	nav: {
 		home: 'Home',
@@ -121,8 +139,16 @@ export const en = {
 		removedFromCart: 'Removed {name} from your cart.'
 	},
 	announcementBar: {
-		text: 'Free delivery on all orders — delivered within 24/48h',
-		short: 'Free delivery on all orders',
+		messages: [
+			'Free delivery on all orders — delivered within 24/48h',
+			'Original products with manufacturer warranty',
+			'Secure payment and customer support, always here to help'
+		],
+		shortMessages: [
+			'Free delivery on all orders',
+			'Original products, warranty included',
+			'Secure payment and support'
+		],
 		linkLabel: 'Delivery info'
 	},
 	searchAutocomplete: {
@@ -167,6 +193,7 @@ export const en = {
 		goToSlide: 'Go to slide {n}',
 		carouselLabel: 'Featured products',
 		slideLabel: 'Slide {n} of {total}',
+		dotsLabel: 'Choose a slide',
 		trust: [
 			{ title: 'Fast delivery', subtitle: 'Within 24/48h' },
 			{ title: 'Secure payment', subtitle: '100% reliable' },
@@ -183,7 +210,8 @@ export const en = {
 		heading: 'Best sellers',
 		previous: 'Previous products',
 		next: 'Next products',
-		viewAll: 'View all products'
+		viewAll: 'View all products',
+		carouselLabel: 'Best sellers carousel'
 	},
 	productCard: {
 		addToCart: 'Add to cart',
@@ -200,6 +228,10 @@ export const en = {
 	backToTop: {
 		label: 'Back to top'
 	},
+	theme: {
+		switchToDark: 'Switch to dark mode',
+		switchToLight: 'Switch to light mode'
+	},
 	recentlyViewed: {
 		heading: 'Recently viewed'
 	},
@@ -215,6 +247,28 @@ export const en = {
 		shipping: 'Delivery',
 		payment: 'Payment'
 	},
+	megaMenu: {
+		categoriesHeading: 'Shop by category',
+		featuredHeading: 'Featured products',
+		promoTitle: 'Up to -20% on a selection',
+		promoText: 'Discover this week’s deals on phones, laptops and audio.',
+		promoCta: 'View all deals'
+	},
+	marquee: {
+		label: 'Current offers and brands',
+		offers: [
+			'Free delivery on all orders',
+			'Up to 20% off selected products',
+			'30-day returns',
+			'Secure payment',
+			'Manufacturer warranty'
+		],
+		brands: ['Apple', 'Samsung', 'Dell', 'Sony', 'PlayStation', 'Nintendo', 'TechDova']
+	},
+	tabReminder: {
+		waiting: 'items waiting in your cart'
+	},
+
 	testimonialsSection: {
 		eyebrow: 'Testimonials',
 		heading: 'What customers say',
@@ -238,7 +292,9 @@ export const en = {
 		nameError: 'Please enter your name.',
 		titleError: 'Please enter a review title.',
 		textError: 'Please write at least 10 characters.',
-		ratingOption: '{n} out of 5 stars'
+		ratingOption: '{n} out of 5 stars',
+		sampleNote:
+			'Showing a 3-review sample, including one critical review. Averages reflect all {count} reviews.'
 	},
 	promo: {
 		eyebrow: 'Special offer',
@@ -255,6 +311,25 @@ export const en = {
 			{ title: 'Secure payment', subtitle: '100% reliable' },
 			{ title: 'Customer support', subtitle: 'Always here to help' }
 		]
+	},
+	brandsSection: {
+		eyebrow: 'Our brands',
+		heading: 'Shop by brand',
+		oneProduct: '1 product',
+		manyProducts: '{count} products'
+	},
+	bentoSection: {
+		eyebrow: 'Discover more',
+		heading: 'More ways to explore',
+		explore: 'Explore',
+		spotlightTitle: 'Gaming, ready to play',
+		spotlightText: 'Controllers, consoles and accessories for every player.',
+		dealsTitle: 'Save on selected tech',
+		dealsText: 'Discounted phones, laptops, audio and more.',
+		newTitle: 'Fresh arrivals',
+		newText: 'The latest phones, headphones and consoles, just landed.',
+		giftTitle: 'Gift cards',
+		giftText: 'Let them choose — a TechDova gift card for any occasion.'
 	},
 	newArrivals: {
 		eyebrow: 'Just landed',
@@ -317,7 +392,14 @@ export const en = {
 		giftCards: 'Gift cards',
 		help: 'Help centre',
 		newArrivals: 'New arrivals',
-		bestSellers: 'Best sellers'
+		bestSellers: 'Best sellers',
+		brands: 'Brands',
+		rewards: 'Rewards',
+		tradeIn: 'Trade-in',
+		financing: 'Financing',
+		warranty: 'Warranty',
+		cookies: 'Cookie policy',
+		cookieSettings: 'Cookie settings'
 	},
 	shop: {
 		title: 'Shop',
@@ -351,7 +433,18 @@ export const en = {
 		sortBy: 'Sort by',
 		results: '{count} results',
 		resultOne: '1 result',
-		activeCount: '{count} active'
+		activeCount: '{count} active',
+		brandsLabel: 'Brands',
+		allBrands: 'All brands',
+		ratingLabel: 'Minimum rating',
+		ratingAny: 'Any rating',
+		ratingFourPlus: '4 stars & up',
+		ratingThreePlus: '3 stars & up',
+		inStockOnly: 'In stock only',
+		onSaleOnly: 'On sale only',
+		showingOf: 'Showing {shown} of {total} products',
+		showingOfOne: 'Showing 1 of {total} products',
+		facetsHeading: 'Refine results'
 	},
 	categoryPage: {
 		breadcrumbLabel: 'Breadcrumb',
@@ -376,7 +469,11 @@ export const en = {
 			'Browse the shop categories to discover similar products.'
 		],
 		suggestionsLabel: 'Try one of these popular searches',
-		browseShop: 'Browse the shop'
+		browseShop: 'Browse the shop',
+		categoryFilterLabel: 'Filter by category',
+		allCategories: 'All categories',
+		synonymsNote:
+			'Related terms are matched too: “laptop”, “phone” and similar words find their categories.'
 	},
 	wishlistPage: {
 		title: 'Your wishlist',
@@ -397,6 +494,7 @@ export const en = {
 		emptyHint: 'Add up to 4 products to compare their prices, ratings and specifications.',
 		browseShop: 'Browse the shop',
 		clearAll: 'Clear all',
+		highlightDifferences: 'Highlight differences',
 		comparing: 'Comparing {count} products',
 		tableLabel: 'Product comparison',
 		rowProduct: 'Product',
@@ -457,7 +555,33 @@ export const en = {
 		zoomLabel: 'Enlarge the product image',
 		compareAdd: 'Add to compare',
 		compareRemove: 'Remove from compare',
-		compareFull: 'Compare is full — you can compare up to 4 products.'
+		compareFull: 'Compare is full — you can compare up to 4 products.',
+		skuLabel: 'SKU',
+		variantStorageLabel: 'Storage',
+		variantColorLabel: 'Colour',
+		variantSelected: 'Selected: {label}',
+		variantOutOfStockSuffix: '(out of stock)',
+		galleryPrevious: 'Previous image',
+		galleryNext: 'Next image',
+		galleryImageLabel: 'Product image {current} of {total}',
+		galleryThumbnailLabel: 'View image {n}',
+		magnifierHint: 'Hover to magnify',
+		deliveryCountdown: 'Order within {time} for delivery by {date}',
+		deliveryCountdownTime: '{hours}h {minutes}m',
+		deliveryCountdownMinutes: '{minutes}m',
+		deliveryDemoNote: 'Demo estimate — delivery dates are illustrative.',
+		estimatedCost: 'Estimated total: {total}',
+		returnPolicyLink: 'Returns policy',
+		inTheBoxTitle: 'What’s in the box',
+		qaTitle: 'Questions & answers',
+		qaDemoNote: 'Demo questions and answers, written for illustration.',
+		bundleTitle: 'Frequently bought together',
+		bundleTotal: 'Total for {count} items: {total}',
+		bundleAddAll: 'Add all {count} to cart',
+		bundleAdded: 'Bundle added to cart',
+		variantsNote: 'Available in {count} variants, from {price}',
+		variantsLabel: 'Variants',
+		scrollProgressLabel: 'Page progress'
 	},
 	cart: {
 		title: 'Your cart',
@@ -480,7 +604,19 @@ export const en = {
 		checkoutDemoNote: 'Demo checkout: no payment was taken and nothing was sent anywhere.',
 		checkoutAgain: 'Place another order',
 		orderLabel: 'Order',
-		viewCart: 'View cart'
+		viewCart: 'View cart',
+		promoLabel: 'Promo code',
+		promoPlaceholder: 'Enter a code, e.g. TECHDOVA10',
+		promoApply: 'Apply',
+		promoError: 'That code is not recognised. Try TECHDOVA10.',
+		promoHint: 'Demo codes: TECHDOVA10 (−10%), WELCOME15 (−15%), SAVE20 (−20%).',
+		promoApplied: 'Code {code} applied: {label}',
+		promoRemove: 'Remove promo code {code}',
+		promoDiscount: 'Promo discount ({code})',
+		returnNudgeTitle: 'Welcome back',
+		returnNudgeText: 'Your cart is waiting — {count} items are still there.',
+		returnNudgeTextOne: 'Your cart is waiting — 1 item is still there.',
+		returnNudgeDismiss: 'Dismiss'
 	},
 	cartDrawer: {
 		title: 'Your cart',
@@ -606,7 +742,23 @@ export const en = {
 		wishlistShortcut: 'Your wishlist',
 		wishlistCount: '{count} saved items',
 		wishlistEmpty: 'No saved items yet.',
-		browseShop: 'Browse products'
+		browseShop: 'Browse products',
+		editTitle: 'Edit your profile',
+		editButton: 'Edit profile',
+		editDescription:
+			'Change the name and email stored for this demo account. Nothing leaves your device.',
+		saveButton: 'Save profile',
+		cancelButton: 'Cancel',
+		savedMessage: 'Profile saved.',
+		notificationsTitle: 'Notification preferences',
+		notificationsDescription:
+			'Choose which demo notifications you would like. These toggles are stored only in this browser and no message is ever sent.',
+		ordersLabel: 'Order updates',
+		ordersHint: 'Demo updates when a demo order ships or arrives.',
+		offersLabel: 'Offers and deals',
+		offersHint: 'Demo messages about deals and new arrivals.',
+		newsletterLabel: 'Newsletter',
+		newsletterHint: 'The same demo newsletter as the footer form — nothing is sent.'
 	},
 	contact: {
 		title: 'Contact us',
@@ -693,7 +845,14 @@ export const en = {
 		backToBlog: 'Back to blog',
 		prevPost: 'Previous article',
 		nextPost: 'Next article',
-		breadcrumbBlog: 'Blog'
+		breadcrumbBlog: 'Blog',
+		filterLabel: 'Filter articles by category',
+		allCategories: 'All categories',
+		results: '{count} articles',
+		resultOne: '1 article',
+		noResults: 'No articles in this category yet.',
+		relatedTitle: 'Related articles',
+		progressLabel: 'Reading progress'
 	},
 	terms: {
 		title: 'Terms and conditions',
@@ -1120,10 +1279,299 @@ export const en = {
 		saveButton: 'Save address',
 		cancelButton: 'Cancel'
 	},
+	cookieConsent: {
+		bannerTitle: 'Your privacy, honestly',
+		bannerText:
+			'TechDova uses no tracking cookies and no analytics. The only things stored on your device are your cart, wishlist, theme and language choices, kept in your browser.',
+		accept: 'Accept',
+		decline: 'Decline',
+		customize: 'Customise',
+		learnMore: 'Learn more',
+		modalTitle: 'Cookie and storage settings',
+		modalIntro:
+			'This demo storefront sets no cookies at all — tracking or otherwise. Everything below is stored only in your own browser, using localStorage, and nothing is ever sent to a server.',
+		storageTitle: 'What is stored on your device',
+		storageText:
+			'Your cart, wishlist, compare list, demo orders, demo account profile, saved addresses, recently viewed products, review votes, language and theme choices. Each item exists only so the demo works across page visits.',
+		trackersTitle: 'What is never stored',
+		trackersText:
+			'No tracking cookies, no analytics, no advertising identifiers and no third-party requests. There is nothing to opt out of, because nothing watches you here.',
+		declineNote:
+			'Declining changes nothing: there are no trackers to turn off, and the site works exactly the same either way. Your choice is remembered on this device only.',
+		clearData: 'Clear my stored data',
+		clearDataDone:
+			'Stored data cleared. Your cart, wishlist, theme, language and other demo data were removed from this browser.',
+		close: 'Close settings',
+		choiceSaved: 'Your choice has been saved on this device.'
+	},
+	chatWidget: {
+		buttonLabel: 'Open live chat (demo)',
+		closeLabel: 'Close chat',
+		title: 'TechDova chat',
+		subtitle: 'Demo assistant — instant canned answers',
+		demoNote:
+			'Demo chat: a small set of canned answers, running entirely in your browser. No messages are sent and no human reads them.',
+		greeting:
+			'Hello! I am the TechDova demo assistant. Ask about delivery, returns, tracking, payment or warranty — or tap a suggestion below.',
+		inputLabel: 'Your message',
+		placeholder: 'Type a question…',
+		sendLabel: 'Send message',
+		typingLabel: 'Assistant is typing…',
+		quickLabel: 'Quick questions',
+		quickShipping: 'How fast is delivery?',
+		quickReturns: 'How do returns work?',
+		quickTracking: 'How do I track my order?',
+		quickContact: 'How do I contact a human?',
+		answerGreeting:
+			'Hello! Happy to help. Try asking about delivery, returns, order tracking, payment or warranty.',
+		answerShipping:
+			'Delivery is free on all demo orders, arriving within an estimated 24/48h. Nothing is actually shipped — see the delivery information page for the demo regions.',
+		answerReturns:
+			'You have 30 days from the demo delivery date to return a product, with free return shipping in this demo. Returns are illustrative only: nothing is collected and no refund is processed. See the returns page for the steps.',
+		answerTracking:
+			'Use the track-order page with your demo order number. Order history is stored only in this browser, so tracking works on the device where the order was placed.',
+		answerPayment:
+			'The demo checkout lists cards, cash on delivery and instalments. No real payment is processed and no card data leaves your device — never enter real card details on a demo site.',
+		answerWarranty:
+			'Every demo product includes a 2-year manufacturer warranty, and demo extended plans are shown on the warranty page. No plan is sold and no claim can actually be filed.',
+		answerContact:
+			'You can reach the demo support team through the contact page — the form is validated locally and nothing is sent anywhere.',
+		fallback:
+			'I only know a few demo topics: delivery, returns, order tracking, payment, warranty and contact. Could you try one of those?'
+	},
+	brandsPage: {
+		title: 'Shop by brand',
+		description:
+			'Browse the TechDova catalogue by brand, from phones and laptops to gaming and accessories.',
+		demoNote:
+			'Demo catalogue: 12 products across 7 brands. Brand names are used for demonstration only.',
+		productsCount: '{count} products',
+		productOne: '1 product',
+		shopBrand: 'Shop all {brand}',
+		previewLabel: '{brand} products',
+		browseShop: 'Browse the full shop'
+	},
+	rewardsPage: {
+		title: 'TechDova Rewards',
+		description:
+			'Earn points on demo orders, climb tiers and unlock fictional perks. A demonstration loyalty programme — nothing is tracked and nothing is sent anywhere.',
+		demoNote:
+			'Demo programme: points, tiers and perks are fictional. Joining stores nothing and sends nothing.',
+		howTitle: 'How it works',
+		howSteps: [
+			'Earn 1 point for every 10 DA you spend in a demo order.',
+			'Collect points to climb from Bronze to Silver to Gold.',
+			'Redeem 100 points for 100 DA off a demo order — fictional credit, never charged.'
+		],
+		tiersTitle: 'Membership tiers',
+		tiers: [
+			{
+				name: 'Bronze',
+				threshold: '0+ points',
+				description: 'Everyone starts here.',
+				perks: ['1 point per 10 DA spent', 'Birthday demo treat', 'Early access to demo deals']
+			},
+			{
+				name: 'Silver',
+				threshold: '500+ points',
+				description: 'For returning demo shoppers.',
+				perks: ['Everything in Bronze', 'Double points weekends (demo)', 'Free demo gift wrapping']
+			},
+			{
+				name: 'Gold',
+				threshold: '1,500+ points',
+				description: 'Our most loyal demo members.',
+				perks: ['Everything in Silver', 'Priority demo support', 'Exclusive Gold demo offers']
+			}
+		],
+		joinTitle: 'Join Rewards (demo)',
+		joinText: 'Enter a name and email to see the demo welcome state. Nothing is stored or sent.',
+		nameLabel: 'Full name',
+		namePlaceholder: 'Your name',
+		emailLabel: 'Email address',
+		emailPlaceholder: 'you@example.com',
+		joinButton: 'Join Rewards',
+		requiredError: 'This field is required.',
+		emailError: 'Please enter a valid email address.',
+		errorSummary: 'Please correct the following errors:',
+		successTitle: 'Welcome to TechDova Rewards!',
+		successText:
+			'Thanks {name} — you are a demo Bronze member. This is only a local success state: no account was created and nothing was sent.',
+		joinAnother: 'Join with different details'
+	},
+	tradeInPage: {
+		title: 'Trade in your device',
+		description:
+			'Estimate what your old device could be worth as demo trade-in credit towards your next tech.',
+		demoNote:
+			'Demo estimator: no device is collected, no credit is issued and nothing is sent anywhere.',
+		categoryLabel: 'Device type',
+		deviceTypes: ['Smartphone', 'Laptop', 'Tablet', 'Smartwatch', 'Headphones', 'Games console'],
+		conditionLabel: 'Condition',
+		conditions: ['Like new', 'Good', 'Fair', 'Poor'],
+		conditionHints: [
+			'No scratches, works perfectly',
+			'Light wear, works perfectly',
+			'Visible wear, works well',
+			'Damage or faults, still powers on'
+		],
+		ageLabel: 'Age of the device',
+		ages: ['Less than 1 year', '1–2 years', '2–3 years', 'More than 3 years'],
+		estimateTitle: 'Your estimated demo credit',
+		estimateText: 'Estimated credit: {amount}',
+		estimateHint:
+			'This estimate is illustrative only, based on the demo values below. A real trade-in would need an in-person inspection.',
+		howTitle: 'How the demo estimate works',
+		howText:
+			'Each device type starts from a demo base value, adjusted by condition and age. The calculation runs entirely in your browser.',
+		disclaimer:
+			'Demo only: TechDova does not collect devices or issue trade-in credit. Do not send any device anywhere.',
+		ctaTitle: 'Questions about trade-in?',
+		ctaText: 'Ask the demo support team — the contact form is local-only and nothing is sent.',
+		ctaLink: 'Contact us'
+	},
+	financingPage: {
+		title: 'Financing and instalments',
+		description:
+			'Split a purchase into monthly payments with the demo instalment calculator — 0% interest, no fees, no credit check.',
+		demoNote:
+			'Demo only: no financing agreement is offered, no credit check happens and no instalment plan is created.',
+		calculatorTitle: 'Instalment calculator',
+		priceLabel: 'Purchase price',
+		monthsLabel: 'Pay over',
+		months: ['3 months', '6 months', '12 months', '24 months'],
+		monthlyLabel: 'Monthly payment',
+		monthlyText: '{amount} per month',
+		totalLabel: 'Total to pay',
+		totalText: '{amount} — 0% demo interest, no fees',
+		calculatorNote:
+			'The calculator runs entirely in your browser. Changing the price or the term updates the result instantly.',
+		bnplTitle: 'Buy now, pay later (demo)',
+		bnplText:
+			'BNPL-style instalments would split a purchase into equal monthly payments with no interest in this demo. In a real store, eligibility, fees and late-payment terms would apply — here, none of that exists.',
+		stepsTitle: 'How demo instalments would work',
+		steps: [
+			'Choose a product and pick instalments at demo checkout.',
+			'Pick a term: 3, 6, 12 or 24 monthly payments.',
+			'Pay the same amount each month — 0% interest in this demo.',
+			'In this demo, no plan is created and no payment is taken.'
+		],
+		disclaimer:
+			'Demo explainer only: TechDova offers no credit. Never share bank or card details on a demo site.'
+	},
+	warrantyPage: {
+		title: 'Extended warranty',
+		description:
+			'Compare demo protection plans that extend your cover beyond the included manufacturer warranty.',
+		demoNote:
+			'Demo plans: no warranty is sold, no claim can be filed and nothing is charged. Prices are fictional.',
+		includedTitle: 'Included with every product',
+		includedText:
+			'Every product in the demo catalogue includes a 2-year manufacturer warranty covering manufacturing defects. Extended plans below would add accidental-damage cover and faster demo support.',
+		plansTitle: 'Protection plans',
+		plans: [
+			{
+				name: 'Standard',
+				duration: '2 years included',
+				description: 'The manufacturer warranty, already included.',
+				features: ['Manufacturing defects covered', 'Demo support by email', 'Standard repair time']
+			},
+			{
+				name: 'Plus',
+				duration: '3 years total',
+				description: 'One extra year, plus accident cover.',
+				features: [
+					'Everything in Standard',
+					'Accidental damage cover (demo)',
+					'One extra year of cover',
+					'Priority demo support'
+				]
+			},
+			{
+				name: 'Premium',
+				duration: '4 years total',
+				description: 'The fullest demo cover we illustrate.',
+				features: [
+					'Everything in Plus',
+					'Two extra years of cover',
+					'Express demo replacement',
+					'Battery replacement (demo)'
+				]
+			}
+		],
+		perYear: 'per year',
+		includedLabel: 'Included free',
+		planNote: 'Demo prices shown per year of cover, per device. Nothing is charged.',
+		notCoveredTitle: 'What is never covered',
+		notCovered: [
+			'Loss or theft',
+			'Deliberate damage',
+			'Wear from normal use, such as scratched screens from everyday handling',
+			'Software issues or data loss'
+		],
+		ctaTitle: 'Questions about cover?',
+		ctaText: 'Read the help centre or ask the demo support team — nothing you send leaves your device.',
+		helpLink: 'Visit the help centre',
+		contactLink: 'Contact us'
+	},
+	cookiesPage: {
+		title: 'Cookie and storage policy',
+		description:
+			'An honest account of what TechDova stores in your browser: no cookies, no trackers, only local demo data.',
+		updated: 'Last updated: 17 November 2026',
+		intro:
+			'TechDova is a fully static demo storefront. It sets no cookies — not for tracking, analytics, advertising or anything else. This page lists everything the site stores in your browser, and why.',
+		noCookiesTitle: 'No cookies, no trackers',
+		noCookiesText:
+			'No first-party or third-party cookies are set, no analytics script runs and no request is made to any external server for tracking. The site works fully offline once loaded. Because there are no trackers, there is nothing to opt out of: accepting or declining the cookie banner changes nothing about tracking.',
+		storageTitle: 'What is stored in your browser',
+		storageIntro:
+			'The site uses your browser’s localStorage (and one sessionStorage entry) so the demo remembers your choices between visits. All of it stays on your device and can be cleared below or from your browser settings.',
+		storageRows: [
+			{ key: 'techdova-cart', purpose: 'Your cart contents, so items stay in your cart between visits.' },
+			{ key: 'techdova-promo', purpose: 'The promo code applied to your cart, so the discount survives reloads.' },
+			{ key: 'techdova-wishlist', purpose: 'Products you saved to your wishlist.' },
+			{ key: 'techdova-compare', purpose: 'Products on your compare list.' },
+			{
+				key: 'techdova-orders',
+				purpose: 'Demo orders placed in this browser, shown on the account and track-order pages.'
+			},
+			{ key: 'techdova-account', purpose: 'Your demo account name and email (no password is ever stored).' },
+			{ key: 'techdova-addresses', purpose: 'Delivery addresses you saved for the demo checkout.' },
+			{ key: 'techdova-recently-viewed', purpose: 'Products you recently viewed, for the recently-viewed strip.' },
+			{
+				key: 'techdova-review-votes',
+				purpose: 'Which demo reviews you marked as helpful, so a vote cannot be repeated.'
+			},
+			{
+				key: 'techdova-locale',
+				purpose: 'Your language choice (English or French), so the landing page can honour it.'
+			},
+			{ key: 'techdova-theme', purpose: 'Your light/dark theme choice.' },
+			{ key: 'techdova-cookie-consent', purpose: 'Your cookie-banner choice, so the banner does not ask again.' },
+			{
+				key: 'techdova-checkout',
+				purpose: 'A checkout draft kept in sessionStorage (cleared when the tab closes). Card details are never stored.'
+			}
+		],
+		choicesTitle: 'Your choices',
+		choicesText:
+			'You can re-open the cookie settings at any time from the “Cookie settings” link in the footer. Clearing your stored data below removes everything listed above from this browser.',
+		clearData: 'Clear my stored data',
+		clearDataDone:
+			'Stored data cleared. Your cart, wishlist, theme, language and other demo data were removed from this browser.',
+		browserText:
+			'You can also clear this data from your browser settings at any time: look for “site data” or “storage” for this site.'
+	},
 	notFound: {
 		eyebrow: 'Error 404',
 		title: 'Page not found',
 		description: 'Sorry, the page you are looking for does not exist or has moved.',
-		backHome: 'Back to home'
+		backHome: 'Back to home',
+		searchLabel: 'Search the catalogue',
+		searchPlaceholder: 'Search products…',
+		searchButton: 'Search',
+		bestSellersTitle: 'Our best sellers',
+		popularTitle: 'Popular pages'
 	}
 };

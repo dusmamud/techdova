@@ -248,12 +248,12 @@ test('deals page shows a countdown timer and a non-empty discounted grid', async
 	await expect(page.locator('main article')).toHaveCount(12);
 });
 
-test('blog: index lists 3 posts; a post page shows body and prev/next links', async ({
+test('blog: index lists 6 posts; a post page shows body and prev/next links', async ({
 	page
 }) => {
 	await page.goto('/en/blog');
 	await expect(page.locator('main h1')).toContainText('TechDova blog');
-	await expect(page.locator('main article')).toHaveCount(3);
+	await expect(page.locator('main article')).toHaveCount(6);
 	await expect(page.locator('main')).toContainText('How to choose noise-cancelling headphones');
 	await expect(page.locator('main')).toContainText('Laptop buying guide: what matters in 2026');
 	await expect(page.locator('main')).toContainText('Smartwatch health features, explained simply');

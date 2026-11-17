@@ -51,14 +51,14 @@
 			{ label: t.testimonialsPage.title }
 		]}
 	/>
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>
+	<h1 class="text-3xl font-bold tracking-tight text-ink sm:text-4xl" use:reveal>
 		{t.testimonialsPage.title}
 	</h1>
-	<p class="mt-3 max-w-2xl leading-relaxed text-neutral-600">
+	<p class="mt-3 max-w-2xl leading-relaxed text-muted">
 		{t.testimonialsPage.description}
 	</p>
-	<p class="mt-2 text-sm text-neutral-500">{t.testimonialsSection.demoNote}</p>
-	<p class="mt-4 flex flex-wrap items-center gap-2 text-sm text-neutral-600">
+	<p class="mt-2 text-sm text-muted">{t.testimonialsSection.demoNote}</p>
+	<p class="mt-4 flex flex-wrap items-center gap-2 text-sm text-muted">
 		<Stars
 			rating={average}
 			label={interpolate(t.productCard.ratingLabel, {
@@ -72,7 +72,7 @@
 		{#each testimonials as testimonial, i (localize(testimonial.name, 'en'))}
 			{@const name = localize(testimonial.name, lang)}
 			<figure
-				class="card-lift flex flex-col gap-4 rounded-3xl bg-white p-6 ring-1 ring-neutral-200"
+				class="card-lift flex flex-col gap-4 rounded-3xl bg-surface p-6 ring-1 ring-line"
 				use:reveal={{ delay: Math.min(i * 60, 300) }}
 			>
 				<Stars
@@ -81,7 +81,7 @@
 						rating: formatDecimal(testimonial.rating, intlLocale)
 					})}
 				/>
-				<blockquote class="flex-1 leading-relaxed text-neutral-700">
+				<blockquote class="flex-1 leading-relaxed text-ink-soft">
 					“{localize(testimonial.quote, lang)}”
 				</blockquote>
 				<figcaption class="flex items-center gap-3">
@@ -92,8 +92,8 @@
 						{initials(name)}
 					</span>
 					<span>
-						<span class="block text-sm font-semibold text-neutral-900">{name}</span>
-						<span class="block text-sm text-neutral-500">
+						<span class="block text-sm font-semibold text-ink">{name}</span>
+						<span class="block text-sm text-muted">
 							{localize(testimonial.role, lang)} · {localize(testimonial.city, lang)}
 						</span>
 					</span>

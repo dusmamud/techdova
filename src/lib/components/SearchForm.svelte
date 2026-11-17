@@ -125,7 +125,7 @@
 	<div bind:this={wrapperEl} class="relative">
 		<label class="sr-only" for={id}>{t.nav.searchLabel}</label>
 		<Search
-			class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500"
+			class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
 			aria-hidden="true"
 		/>
 		<input
@@ -154,13 +154,13 @@
 		/>
 		{#if open}
 			<div
-				class="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-neutral-200"
+				class="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl bg-surface shadow-xl ring-1 ring-line"
 			>
 				{#if trimmed}
 					{#if suggestions.length > 0}
 						<p
 							id="{id}-label"
-							class="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-neutral-500"
+							class="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-muted"
 						>
 							{t.searchAutocomplete.suggestionsLabel}
 						</p>
@@ -173,13 +173,13 @@
 										onmouseenter={() => {
 											activeIndex = i;
 										}}
-										class="flex min-h-11 items-center justify-between gap-3 rounded-xl px-3 text-sm text-neutral-800 hover:bg-brand-50 {activeIndex ===
+										class="flex min-h-11 items-center justify-between gap-3 rounded-xl px-3 text-sm text-ink-soft hover:bg-brand-50 dark:hover:bg-surface-soft {activeIndex ===
 										i
-											? 'bg-brand-50'
+											? 'bg-brand-50 dark:bg-surface-soft'
 											: ''}"
 									>
 										<span class="min-w-0 truncate">{localize(product.name, lang)}</span>
-										<span class="shrink-0 font-semibold text-brand-700">
+										<span class="shrink-0 font-semibold text-brand-700 dark:text-brand-300">
 											{formatPrice(product.price, t.meta.intlLocale)}
 										</span>
 									</a>
@@ -187,14 +187,14 @@
 							{/each}
 						</ul>
 					{:else}
-						<p role="status" class="px-4 py-3 text-sm text-neutral-600">
+						<p role="status" class="px-4 py-3 text-sm text-muted">
 							{t.searchAutocomplete.noResults}
 						</p>
 					{/if}
 					<a
 						href="{localizedPath(lang, '/search')}?q={encodeURIComponent(trimmed)}"
 						onclick={close}
-						class="flex min-h-11 items-center border-t border-neutral-100 px-4 text-sm font-semibold text-brand-700 hover:bg-brand-50"
+						class="flex min-h-11 items-center border-t border-line px-4 text-sm font-semibold text-brand-700 dark:text-brand-300 dark:hover:text-brand-800 hover:bg-brand-50"
 					>
 						{t.searchAutocomplete.viewAllResults}
 					</a>
@@ -213,9 +213,9 @@
 									onmouseenter={() => {
 										activeIndex = i;
 									}}
-									class="flex min-h-11 w-full items-center gap-2 rounded-xl px-3 text-left text-sm text-neutral-800 hover:bg-brand-50 {activeIndex ===
+									class="flex min-h-11 w-full items-center gap-2 rounded-xl px-3 text-left text-sm text-ink-soft hover:bg-brand-50 dark:hover:bg-surface-soft {activeIndex ===
 									i
-										? 'bg-brand-50'
+										? 'bg-brand-50 dark:bg-surface-soft'
 										: ''}"
 								>
 									<Search class="h-4 w-4 shrink-0 text-neutral-400" aria-hidden="true" />

@@ -4,8 +4,13 @@
 	import type { Dictionary, Locale } from '#lib/i18n/index';
 	import { localizedPath } from '#lib/paths';
 	import { compare } from '#lib/stores/compare.svelte';
+	import { cookieBanner } from '#lib/stores/cookie-banner.svelte';
 
 	let { lang, t }: { lang: Locale; t: Dictionary } = $props();
+
+	// Lift above the cookie banner while it is visible so the tray stays
+	// tappable on a first visit; 16px (bottom-4) otherwise.
+	const bottom = $derived(cookieBanner.height > 0 ? cookieBanner.height + 16 : 16);
 
 	const countText = $derived(
 		compare.count === 1
@@ -15,7 +20,10 @@
 </script>
 
 {#if compare.count > 0}
-	<div class="pointer-events-none fixed inset-x-4 bottom-4 z-40 flex justify-center">
+	<div
+		class="pointer-events-none fixed inset-x-4 z-40 flex justify-center"
+		style:bottom="{bottom}px"
+	>
 		<div
 			role="region"
 			aria-label={t.comparePage.trayAriaLabel}
@@ -24,7 +32,7 @@
 			<p class="min-w-0 flex-1 truncate text-sm font-semibold">{countText}</p>
 			<a
 				href={localizedPath(lang, '/compare')}
-				class="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-semibold text-brand-900 hover:bg-brand-50"
+				class="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full bg-surface px-4 text-sm font-semibold text-brand-900 dark:text-brand-200 dark:hover:text-brand-800 hover:bg-brand-50"
 			>
 				{t.comparePage.trayCompareNow}
 				<ArrowRight class="h-4 w-4" aria-hidden="true" />

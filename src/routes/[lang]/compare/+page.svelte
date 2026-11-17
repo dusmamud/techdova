@@ -5,7 +5,7 @@
 	import Seo from '#lib/components/Seo.svelte';
 	import Stars from '#lib/components/Stars.svelte';
 	import { getCategory } from '#lib/data/categories';
-	import { getProduct, type Product } from '#lib/data/products';
+	import { getProduct, variantPrice, type Product } from '#lib/data/products';
 	import { formatCount, formatDecimal, formatPrice, interpolate } from '#lib/format';
 	import { getDictionary, localize } from '#lib/i18n/index';
 	import { localizedPath, productPath, shopPath } from '#lib/paths';
@@ -18,6 +18,10 @@
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
 	const intlLocale = $derived(t.meta.intlLocale);
+
+	// Highlight-differences toggle: default off, no persistence. Local
+	// component state only — nothing about the compare list changes.
+	let highlightDifferences = $state(false);
 
 	// Store-driven like the cart page: the compare list loads from
 	// localStorage in the browser, so SSR/prerender shows the empty state.
@@ -47,10 +51,34 @@
 		return spec ? localize(spec.value, lang) : null;
 	}
 
+	// Spec keys whose values differ across the compared products. A missing
+	// value counts as different from a present one; a single product never
+	// differs from itself, so nothing highlights with one product.
+	const differingKeys = $derived(
+		new Set(
+			specRows
+				.filter((row) => new Set(compared.map((p) => specValue(p, row.key))).size > 1)
+				.map((row) => row.key)
+		)
+	);
+
 	function stockText(product: Product): string {
 		if (product.stock <= 0) return t.product.outOfStock;
 		if (product.stock <= 5) return interpolate(t.product.lowStock, { count: product.stock });
 		return t.product.inStock;
+	}
+
+	// Additive variant note only: the compare store stays slug-keyed and
+	// add-to-cart keeps the default variant (same decision as the wishlist).
+	// "From" is the cheapest variant price; null when a product has no variants.
+	function variantsNote(product: Product): string | null {
+		const variants = product.variants ?? [];
+		if (variants.length === 0) return null;
+		const fromPrice = Math.min(...variants.map((variant) => variantPrice(product, variant)));
+		return interpolate(t.product.variantsNote, {
+			count: variants.length,
+			price: formatPrice(fromPrice, intlLocale)
+		});
 	}
 
 	function ratingLabel(product: Product): string {
@@ -67,17 +95,17 @@
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<div use:reveal>
-		<h1 class="text-[1.75rem] font-bold tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl">
+		<h1 class="text-[1.75rem] font-bold tracking-tight text-ink sm:text-3xl lg:text-4xl">
 			{t.comparePage.title}
 		</h1>
-		<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.comparePage.description}</p>
+		<p class="mt-2 max-w-2xl leading-relaxed text-muted">{t.comparePage.description}</p>
 	</div>
 
 	{#if compared.length === 0}
-		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center">
-			<ArrowLeftRight class="h-12 w-12 text-brand-700" aria-hidden="true" />
-			<h2 class="text-xl font-bold text-neutral-900">{t.comparePage.empty}</h2>
-			<p class="max-w-sm text-neutral-600">{t.comparePage.emptyHint}</p>
+		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center dark:bg-surface-soft">
+			<ArrowLeftRight class="h-12 w-12 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+			<h2 class="text-xl font-bold text-ink">{t.comparePage.empty}</h2>
+			<p class="max-w-sm text-muted">{t.comparePage.emptyHint}</p>
 			<a
 				href={localizedPath(lang, '/shop')}
 				class="mt-2 inline-flex min-h-11 items-center rounded-full bg-brand-700 px-6 text-sm font-semibold text-white hover:bg-brand-800"
@@ -87,16 +115,40 @@
 		</div>
 	{:else}
 		<div class="mt-4 flex flex-wrap items-center justify-between gap-3">
-			<p class="text-sm font-medium text-neutral-600" role="status">
+			<p class="text-sm font-medium text-muted" role="status">
 				{interpolate(t.comparePage.comparing, { count: compared.length })}
 			</p>
-			<button
-				type="button"
-				onclick={() => compare.clear()}
-				class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold text-red-600 ring-1 ring-red-200 hover:bg-red-50"
-			>
-				{t.comparePage.clearAll}
-			</button>
+			<div class="flex flex-wrap items-center gap-2">
+				<button
+					type="button"
+					aria-pressed={highlightDifferences}
+					onclick={() => {
+						highlightDifferences = !highlightDifferences;
+					}}
+					class="inline-flex min-h-11 items-center gap-2 rounded-full px-3 text-sm font-semibold text-ink-soft ring-1 ring-line hover:bg-surface-soft"
+				>
+					<span
+						aria-hidden="true"
+						class="relative h-6 w-11 shrink-0 rounded-full motion-safe:transition-colors {highlightDifferences
+							? 'bg-brand-700'
+							: 'bg-line'}"
+					>
+						<span
+							class="absolute top-0.5 h-5 w-5 rounded-full bg-white shadow motion-safe:transition-transform {highlightDifferences
+								? 'translate-x-[1.375rem]'
+								: 'translate-x-0.5'}"
+						></span>
+					</span>
+					{t.comparePage.highlightDifferences}
+				</button>
+				<button
+					type="button"
+					onclick={() => compare.clear()}
+					class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold text-red-600 dark:text-red-400 ring-1 ring-red-200 dark:ring-red-900 hover:bg-red-50 dark:hover:bg-red-950/60"
+				>
+					{t.comparePage.clearAll}
+				</button>
+			</div>
 		</div>
 
 		<!-- Stacked per-product cards below lg: the table would squeeze to
@@ -104,8 +156,9 @@
 		<div class="mt-6 space-y-4 lg:hidden">
 			{#each compared as product, i (product.slug)}
 				{@const name = localize(product.name, lang)}
+				{@const note = variantsNote(product)}
 				<article
-					class="rounded-3xl bg-white p-4 ring-1 ring-neutral-200 sm:p-5"
+					class="rounded-3xl bg-surface p-4 ring-1 ring-line sm:p-5"
 					use:reveal={{ delay: Math.min(i * 60, 300) }}
 				>
 					<div class="flex gap-4">
@@ -126,35 +179,35 @@
 							</div>
 						</a>
 						<div class="min-w-0 flex-1">
-							<h2 class="line-clamp-2 font-semibold leading-snug text-neutral-900">
-								<a href={productPath(lang, product.slug)} class="hover:text-brand-800">
+							<h2 class="line-clamp-2 font-semibold leading-snug text-ink">
+								<a href={productPath(lang, product.slug)} class="hover:text-brand-800 dark:hover:text-brand-200">
 									{name}
 								</a>
 							</h2>
 							<p class="mt-1 flex flex-wrap items-baseline gap-2">
-								<span class="text-base font-bold text-neutral-900">
+								<span class="text-base font-bold text-ink">
 									{formatPrice(product.price, intlLocale)}
 								</span>
 								{#if product.oldPrice}
-									<s class="text-sm text-neutral-500">
+									<s class="text-sm text-muted">
 										{formatPrice(product.oldPrice, intlLocale)}
 									</s>
 								{/if}
 							</p>
 							<p class="mt-1 flex flex-wrap items-center gap-1.5">
 								<Stars rating={product.rating} label={ratingLabel(product)} />
-								<span class="text-sm text-neutral-500" aria-hidden="true">
+								<span class="text-sm text-muted" aria-hidden="true">
 									({formatCount(product.reviewCount, intlLocale)})
 								</span>
 							</p>
 							<p
 								class="mt-1 flex items-center gap-2 text-sm font-semibold {product.stock <= 0
-									? 'text-red-600'
-									: 'text-brand-700'}"
+									? 'text-red-600 dark:text-red-400'
+									: 'text-brand-700 dark:text-brand-300'}"
 							>
 								<span
 									class="h-2.5 w-2.5 shrink-0 rounded-full {product.stock <= 0
-										? 'bg-red-500'
+										? 'bg-red-50 dark:bg-red-950/600'
 										: product.stock <= 5
 											? 'bg-amber-500'
 											: 'bg-brand-600'}"
@@ -164,23 +217,36 @@
 							</p>
 						</div>
 					</div>
-					<dl class="mt-4 divide-y divide-neutral-100 border-t border-neutral-100 text-sm">
+					<dl class="mt-4 divide-y divide-line border-t border-line text-sm">
 						<div class="flex items-baseline justify-between gap-4 py-2.5">
-							<dt class="shrink-0 font-medium text-neutral-500">{t.comparePage.rowCategory}</dt>
+							<dt class="shrink-0 font-medium text-muted">{t.comparePage.rowCategory}</dt>
 							<dd class="min-w-0 text-right">
 								<a
 									href={shopPath(lang, product.category)}
-									class="font-medium text-brand-700 hover:text-brand-800"
+									class="font-medium text-brand-700 dark:text-brand-300 hover:text-brand-800 dark:hover:text-brand-200"
 								>
 									{localize(getCategory(product.category).name, lang)}
 								</a>
 							</dd>
 						</div>
+						{#if note}
+							<div class="flex items-baseline justify-between gap-4 py-2.5">
+								<dt class="shrink-0 font-medium text-muted">{t.product.variantsLabel}</dt>
+								<dd class="min-w-0 text-right font-medium text-ink">
+									{note}
+								</dd>
+							</div>
+						{/if}
 						{#each specRows as row (row.key)}
 							{@const value = specValue(product, row.key)}
-							<div class="flex items-baseline justify-between gap-4 py-2.5">
-								<dt class="shrink-0 font-medium text-neutral-500">{row.label}</dt>
-								<dd class="min-w-0 text-right font-medium text-neutral-900">
+							<div
+								class="flex items-baseline justify-between gap-4 py-2.5 {highlightDifferences &&
+								differingKeys.has(row.key)
+									? 'bg-brand-50 dark:bg-surface-strong'
+									: ''}"
+							>
+								<dt class="shrink-0 font-medium text-muted">{row.label}</dt>
+								<dd class="min-w-0 text-right font-medium text-ink">
 									{value ?? '—'}
 								</dd>
 							</div>
@@ -191,7 +257,7 @@
 							type="button"
 							disabled={product.stock <= 0}
 							onclick={() => cart.add(product.slug, 1)}
-							class="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800 disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-500"
+							class="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800 disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
 						>
 							{#if product.stock <= 0}
 								{t.productCard.outOfStock}
@@ -203,7 +269,7 @@
 						<button
 							type="button"
 							onclick={() => compare.remove(product.slug)}
-							class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-neutral-600 ring-1 ring-neutral-300 hover:bg-red-50 hover:text-red-600"
+							class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-muted ring-1 ring-line hover:bg-red-50 dark:hover:bg-red-950/60 hover:text-red-600 dark:hover:text-red-400"
 						>
 							<X class="h-4 w-4" aria-hidden="true" />
 							{interpolate(t.comparePage.remove, { name })}
@@ -213,12 +279,12 @@
 			{/each}
 		</div>
 
-		<div class="mt-6 hidden overflow-x-auto rounded-3xl bg-white ring-1 ring-neutral-200 lg:block">
+		<div class="mt-6 hidden overflow-x-auto rounded-3xl bg-surface ring-1 ring-line lg:block">
 			<table class="w-full min-w-[38rem] border-collapse">
 				<caption class="sr-only">{t.comparePage.tableLabel}</caption>
 				<thead>
-					<tr class="border-b border-neutral-200">
-						<th scope="col" class="sticky left-0 z-10 w-32 bg-white p-4 text-left align-top">
+					<tr class="border-b border-line">
+						<th scope="col" class="sticky left-0 z-10 w-32 bg-surface p-4 text-left align-top">
 							<span class="sr-only">{t.comparePage.rowProduct}</span>
 						</th>
 						{#each compared as product (product.slug)}
@@ -242,7 +308,7 @@
 								</a>
 								<a
 									href={productPath(lang, product.slug)}
-									class="mt-3 line-clamp-2 block font-semibold leading-snug text-neutral-900 hover:text-brand-800"
+									class="mt-3 line-clamp-2 block font-semibold leading-snug text-ink hover:text-brand-800 dark:hover:text-brand-200"
 								>
 									{name}
 								</a>
@@ -250,33 +316,33 @@
 						{/each}
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-neutral-100 text-sm">
+				<tbody class="divide-y divide-line text-sm">
 					<tr>
-						<th scope="row" class="sticky left-0 z-10 bg-white p-4 text-left font-medium text-neutral-500">
+						<th scope="row" class="sticky left-0 z-10 bg-surface p-4 text-left font-medium text-muted">
 							{t.comparePage.rowPrice}
 						</th>
 						{#each compared as product (product.slug)}
 							<td class="p-4 align-top">
-								<p class="text-base font-bold text-neutral-900">
+								<p class="text-base font-bold text-ink">
 									{formatPrice(product.price, intlLocale)}
 								</p>
 								{#if product.oldPrice}
 									<p>
-										<s class="text-neutral-500">{formatPrice(product.oldPrice, intlLocale)}</s>
+										<s class="text-muted">{formatPrice(product.oldPrice, intlLocale)}</s>
 									</p>
 								{/if}
 							</td>
 						{/each}
 					</tr>
 					<tr>
-						<th scope="row" class="sticky left-0 z-10 bg-white p-4 text-left font-medium text-neutral-500">
+						<th scope="row" class="sticky left-0 z-10 bg-surface p-4 text-left font-medium text-muted">
 							{t.comparePage.rowRating}
 						</th>
 						{#each compared as product (product.slug)}
 							<td class="p-4 align-top">
 								<p class="flex flex-wrap items-center gap-1.5">
 									<Stars rating={product.rating} label={ratingLabel(product)} />
-									<span class="text-neutral-500" aria-hidden="true">
+									<span class="text-muted" aria-hidden="true">
 										({formatCount(product.reviewCount, intlLocale)})
 									</span>
 								</p>
@@ -284,14 +350,14 @@
 						{/each}
 					</tr>
 					<tr>
-						<th scope="row" class="sticky left-0 z-10 bg-white p-4 text-left font-medium text-neutral-500">
+						<th scope="row" class="sticky left-0 z-10 bg-surface p-4 text-left font-medium text-muted">
 							{t.comparePage.rowCategory}
 						</th>
 						{#each compared as product (product.slug)}
 							<td class="p-4 align-top">
 								<a
 									href={shopPath(lang, product.category)}
-									class="inline-flex min-h-11 items-center font-medium text-brand-700 hover:text-brand-800"
+									class="inline-flex min-h-11 items-center font-medium text-brand-700 dark:text-brand-300 hover:text-brand-800 dark:hover:text-brand-200"
 								>
 									{localize(getCategory(product.category).name, lang)}
 								</a>
@@ -299,19 +365,19 @@
 						{/each}
 					</tr>
 					<tr>
-						<th scope="row" class="sticky left-0 z-10 bg-white p-4 text-left font-medium text-neutral-500">
+						<th scope="row" class="sticky left-0 z-10 bg-surface p-4 text-left font-medium text-muted">
 							{t.comparePage.rowStock}
 						</th>
 						{#each compared as product (product.slug)}
 							<td class="p-4 align-top">
 								<p
 									class="flex items-center gap-2 font-semibold {product.stock <= 0
-										? 'text-red-600'
-										: 'text-brand-700'}"
+										? 'text-red-600 dark:text-red-400'
+										: 'text-brand-700 dark:text-brand-300'}"
 								>
 									<span
 										class="h-2.5 w-2.5 shrink-0 rounded-full {product.stock <= 0
-											? 'bg-red-500'
+											? 'bg-red-50 dark:bg-red-950/600'
 											: product.stock <= 5
 												? 'bg-amber-500'
 												: 'bg-brand-600'}"
@@ -322,21 +388,41 @@
 							</td>
 						{/each}
 					</tr>
+					<tr>
+						<th scope="row" class="sticky left-0 z-10 bg-surface p-4 text-left font-medium text-muted">
+							{t.product.variantsLabel}
+						</th>
+						{#each compared as product (product.slug)}
+							<td class="p-4 align-top font-medium text-ink">
+								{variantsNote(product) ?? '—'}
+							</td>
+						{/each}
+					</tr>
 					{#each specRows as row (row.key)}
-						<tr>
-							<th scope="row" class="sticky left-0 z-10 bg-white p-4 text-left font-medium text-neutral-500">
+						<tr
+							class={highlightDifferences && differingKeys.has(row.key)
+								? 'bg-brand-50 dark:bg-surface-strong'
+								: ''}
+						>
+							<th
+								scope="row"
+								class="sticky left-0 z-10 p-4 text-left font-medium text-muted {highlightDifferences &&
+								differingKeys.has(row.key)
+									? 'bg-brand-50 dark:bg-surface-strong'
+									: 'bg-surface'}"
+							>
 								{row.label}
 							</th>
 							{#each compared as product (product.slug)}
 								{@const value = specValue(product, row.key)}
-								<td class="p-4 align-top font-medium text-neutral-900">
+								<td class="p-4 align-top font-medium text-ink">
 									{value ?? '—'}
 								</td>
 							{/each}
 						</tr>
 					{/each}
 					<tr>
-						<th scope="row" class="sticky left-0 z-10 bg-white p-4 text-left font-medium text-neutral-500">
+						<th scope="row" class="sticky left-0 z-10 bg-surface p-4 text-left font-medium text-muted">
 							{t.comparePage.rowActions}
 						</th>
 						{#each compared as product (product.slug)}
@@ -347,7 +433,7 @@
 										type="button"
 										disabled={product.stock <= 0}
 										onclick={() => cart.add(product.slug, 1)}
-										class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800 disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-500"
+										class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800 disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
 									>
 										{#if product.stock <= 0}
 											{t.productCard.outOfStock}
@@ -359,7 +445,7 @@
 									<button
 										type="button"
 										onclick={() => compare.remove(product.slug)}
-										class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-neutral-600 ring-1 ring-neutral-300 hover:bg-red-50 hover:text-red-600"
+										class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-muted ring-1 ring-line hover:bg-red-50 dark:hover:bg-red-950/60 hover:text-red-600 dark:hover:text-red-400"
 									>
 										<X class="h-4 w-4" aria-hidden="true" />
 										{interpolate(t.comparePage.remove, { name })}

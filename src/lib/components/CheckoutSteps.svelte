@@ -20,14 +20,14 @@
 			<span class="flex w-full items-center">
 				<span
 					aria-hidden="true"
-					class="h-0.5 flex-1 {i === 0 ? 'bg-transparent' : done || isCurrent ? 'bg-brand-700' : 'bg-neutral-200'}"
+					class="h-0.5 flex-1 {i === 0 ? 'bg-transparent' : done || isCurrent ? 'bg-brand-700' : 'bg-line'}"
 				></span>
 				<span
 					class="grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-bold sm:h-11 sm:w-11 sm:text-sm {done
 						? 'bg-brand-700 text-white'
 						: isCurrent
 							? 'bg-brand-700 text-white ring-2 ring-brand-100 sm:ring-4'
-							: 'bg-neutral-100 text-neutral-500 ring-1 ring-neutral-200'}"
+							: 'bg-surface-soft text-muted ring-1 ring-line'}"
 				>
 					{#if done}
 						<Check class="h-5 w-5" aria-hidden="true" />
@@ -37,11 +37,11 @@
 				</span>
 				<span
 					aria-hidden="true"
-					class="h-0.5 flex-1 {i === steps.length - 1 ? 'bg-transparent' : done ? 'bg-brand-700' : 'bg-neutral-200'}"
+					class="h-0.5 flex-1 {i === steps.length - 1 ? 'bg-transparent' : done ? 'bg-brand-700' : 'bg-line'}"
 				></span>
 			</span>
 			<span
-				class="text-xs font-semibold sm:text-sm {isCurrent ? 'text-neutral-900' : 'text-neutral-500'}"
+				class="text-xs font-semibold sm:text-sm {isCurrent ? 'text-ink' : 'text-muted'}"
 			>
 				{stepLabel}
 			</span>

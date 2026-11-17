@@ -6,7 +6,7 @@ import { defaultLocale, locales } from '#lib/i18n/index';
 
 export const prerender = true;
 
-const LASTMOD = '2026-11-16';
+const LASTMOD = '2026-11-17';
 
 const staticPaths = [
 	'',
@@ -37,7 +37,13 @@ const staticPaths = [
 	'/gift-cards',
 	'/help',
 	'/new-arrivals',
-	'/best-sellers'
+	'/best-sellers',
+	'/brands',
+	'/rewards',
+	'/trade-in',
+	'/financing',
+	'/warranty',
+	'/cookies'
 ];
 
 function absoluteUrl(locale: string, path: string): string {

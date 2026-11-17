@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Check, Eye, Heart, Scale, ShoppingCart } from '@lucide/svelte';
 	import type { Product } from '#lib/data/products';
+	import { flyToCart } from '#lib/fly-cart';
 	import { formatCount, formatDecimal, formatPrice, interpolate } from '#lib/format';
 	import { localize, type Dictionary, type Locale } from '#lib/i18n/index';
 	import { productPath } from '#lib/paths';
@@ -23,9 +24,12 @@
 	let timer: ReturnType<typeof setTimeout> | undefined;
 	let quickViewOpen = $state(false);
 	// Pop counters: incremented only by this card's own toggle clicks, so the
-	// keyed icons pop on interaction — never on initial render. The
-	// `animate-pop` class is gated on the counter for the same reason, and
-	// app.css disables it entirely under reduced motion.
+	// keyed icons animate on interaction — never on initial render. The
+	// animation classes are gated on the counter for the same reason, and
+	// app.css disables them entirely under reduced motion. The heart uses
+	// the spring burst, and only when the toggle ADDS the product (the
+	// class is additionally gated on `wished`); the compare icon keeps
+	// the plain pop on every toggle.
 	let heartPopKey = $state(0);
 	let comparePopKey = $state(0);
 
@@ -34,6 +38,13 @@
 	const outOfStock = $derived(product.stock <= 0);
 	const wished = $derived(wishlist.has(product.slug));
 	const compared = $derived(compare.has(product.slug));
+	// Second gallery image for the hover swap, when the catalogue provides
+	// one that differs from the primary shot. Defensive: while `images[]`
+	// holds only the primary shot (or the same base twice) the card falls
+	// back to the zoom-only hover with no extra request.
+	const alternateImage = $derived(
+		product.images?.[1] && product.images[1] !== product.image ? product.images[1] : undefined
+	);
 
 	const ratingLabel = $derived(
 		`${interpolate(t.productCard.ratingLabel, { rating: formatDecimal(product.rating, intlLocale) })} — ${interpolate(t.productCard.reviewsLabel, { count: formatCount(product.reviewCount, intlLocale) })}`
@@ -66,7 +77,10 @@
 		compact ? 'inset-x-2 bottom-2' : 'inset-x-2 bottom-2 sm:inset-x-3 sm:bottom-3'
 	);
 
-	function addToCart(): void {
+	function addToCart(sourceEl: HTMLElement): void {
+		// Fly-to-cart is a safe no-op under reduced motion / without a
+		// header target; the cart update below never depends on it.
+		flyToCart(sourceEl, product.image);
 		cart.add(product.slug, 1);
 		added = true;
 		cart.openDrawer();
@@ -89,11 +103,11 @@
 </script>
 
 <article
-	class="group flex h-full flex-col overflow-hidden bg-white ring-1 ring-neutral-200 motion-safe:transition-shadow motion-safe:duration-200 hover:shadow-lg {radius}"
+	class="group flex h-full flex-col overflow-hidden bg-surface ring-1 ring-line motion-safe:transition-shadow motion-safe:duration-200 hover:shadow-lg {radius}"
 >
 	<div class="relative bg-brand-50">
 		<a href={productPath(lang, product.slug)} tabindex="-1" aria-hidden="true" class="block">
-			<div class="aspect-[4/5]">
+			<div class="relative aspect-[4/5] overflow-hidden">
 				<Picture
 					base={product.image}
 					alt={localize(product.imageAlt, lang)}
@@ -101,8 +115,19 @@
 					height={1760}
 					loading="lazy"
 					decoding="async"
-					class="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-enter motion-safe:group-hover:scale-[1.03]"
+					class="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-enter motion-safe:group-hover:scale-[1.06]"
 				/>
+				{#if alternateImage}
+					<Picture
+						base={alternateImage}
+						alt={localize(product.imageAlt, lang)}
+						width={1408}
+						height={1760}
+						loading="lazy"
+						decoding="async"
+						class="absolute inset-0 h-full w-full object-cover opacity-0 motion-safe:transition-[opacity,transform] motion-safe:duration-300 motion-safe:ease-enter motion-safe:group-hover:scale-[1.06] group-hover:opacity-100 group-focus-within:opacity-100"
+					/>
+				{/if}
 			</div>
 		</a>
 		{#if product.badge}
@@ -117,12 +142,12 @@
 			aria-pressed={wished}
 			aria-label="{wished ? t.productCard.removeFromWishlist : t.productCard.addToWishlist} ({name})"
 			onclick={toggleWishlist}
-			class="absolute grid h-11 w-11 place-items-center rounded-full bg-white text-neutral-600 shadow hover:text-rose-600 {heartClass}"
+			class="absolute grid h-11 w-11 place-items-center rounded-full bg-surface text-muted shadow hover:text-rose-600 {heartClass}"
 		>
 			{#key heartPopKey}
 				<Heart
-					class="h-5 w-5 {wished ? 'text-rose-600' : ''} {heartPopKey > 0
-						? 'animate-pop'
+					class="h-5 w-5 {wished ? 'text-rose-600' : ''} {wished && heartPopKey > 0
+						? 'animate-heart-burst'
 						: ''}"
 					fill={wished ? 'currentColor' : 'none'}
 					aria-hidden="true"
@@ -134,9 +159,9 @@
 			aria-pressed={compared}
 			aria-label="{compared ? t.product.compareRemove : t.product.compareAdd} ({name})"
 			onclick={toggleCompare}
-			class="absolute grid h-11 w-11 place-items-center rounded-full bg-white shadow {compared
-				? 'text-brand-700 ring-2 ring-brand-700'
-				: 'text-neutral-600 hover:text-brand-700'} {compareClass}"
+			class="absolute grid h-11 w-11 place-items-center rounded-full bg-surface shadow {compared
+				? 'text-brand-700 dark:text-brand-300 ring-2 ring-brand-700'
+				: 'text-muted hover:text-brand-700 dark:hover:text-brand-300'} {compareClass}"
 		>
 			{#key comparePopKey}
 				<Scale
@@ -151,7 +176,7 @@
 				quickViewOpen = true;
 			}}
 			aria-label="{t.quickView.label} ({name})"
-			class="pointer-events-none absolute flex min-h-11 items-center justify-center gap-2 rounded-full bg-white/95 px-4 text-sm font-semibold text-neutral-900 opacity-0 shadow motion-safe:transition-opacity motion-safe:duration-200 motion-safe:ease-enter hover:bg-white group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 {quickViewClass}"
+			class="pointer-events-none absolute flex min-h-11 items-center justify-center gap-2 rounded-full bg-surface/95 px-4 text-sm font-semibold text-ink opacity-0 shadow motion-safe:translate-y-2 motion-safe:transition-[opacity,transform] motion-safe:duration-200 motion-safe:ease-enter hover:bg-surface group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 motion-safe:group-hover:translate-y-0 motion-safe:group-focus-within:translate-y-0 {quickViewClass}"
 		>
 			<Eye class="h-4 w-4" aria-hidden="true" />
 			{t.quickView.label}
@@ -159,30 +184,30 @@
 	</div>
 
 	<div class="flex flex-1 flex-col {bodyClass}">
-		<h3 class="line-clamp-2 font-semibold leading-snug text-neutral-900 {titleClass}">
-			<a href={productPath(lang, product.slug)} class="hover:text-brand-800">
+		<h3 class="line-clamp-2 font-semibold leading-snug text-ink {titleClass}">
+			<a href={productPath(lang, product.slug)} class="hover:text-brand-800 dark:hover:text-brand-200">
 				{name}
 			</a>
 		</h3>
 		<p class="flex items-center gap-1.5">
 			<Stars rating={product.rating} label={ratingLabel} />
-			<span class="text-neutral-500 {countClass}" aria-hidden="true">
+			<span class="text-muted {countClass}" aria-hidden="true">
 				({formatCount(product.reviewCount, intlLocale)})
 			</span>
 		</p>
 		<p class="mt-auto flex flex-wrap items-baseline gap-2 pt-1">
-			<span class="font-bold text-neutral-900 {priceClass}">
+			<span class="font-bold text-ink {priceClass}">
 				{formatPrice(product.price, intlLocale)}
 			</span>
 			{#if product.oldPrice}
-				<s class="text-neutral-500 {oldPriceClass}">{formatPrice(product.oldPrice, intlLocale)}</s>
+				<s class="text-muted {oldPriceClass}">{formatPrice(product.oldPrice, intlLocale)}</s>
 			{/if}
 		</p>
 		<button
 			type="button"
 			disabled={outOfStock}
-			onclick={addToCart}
-			class="mt-2 flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white motion-safe:transition-[background-color,transform] motion-safe:duration-200 motion-safe:ease-enter hover:bg-brand-800 motion-safe:active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-500"
+			onclick={(event) => addToCart(event.currentTarget)}
+			class="mt-2 flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white motion-safe:transition-[background-color,transform] motion-safe:duration-200 motion-safe:ease-enter hover:bg-brand-800 motion-safe:active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
 		>
 			{#if added}
 				<Check class="h-4 w-4" aria-hidden="true" />

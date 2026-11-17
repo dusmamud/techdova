@@ -1,6 +1,7 @@
 import type { Locale, LocalizedString } from '#lib/i18n/index';
 import { localize } from '#lib/i18n/index';
 import { getCategory, type CategorySlug } from './categories';
+import { getSynonymCategories } from './search-synonyms';
 
 export type ProductSpec = {
 	label: LocalizedString;
@@ -8,13 +9,34 @@ export type ProductSpec = {
 };
 
 /**
+ * A purchasable variant of a product (storage size or colour). `priceDelta`
+ * is added to the product base price; `stock` caps that variant's cart
+ * quantity. `swatch` is a hex colour for colour variants; `image` is the
+ * extensionless image base shown when the variant is selected. Variant data
+ * below is demo data.
+ */
+export type ProductVariant = {
+	id: string;
+	kind: 'storage' | 'color';
+	label: LocalizedString;
+	priceDelta: number;
+	stock: number;
+	swatch?: string;
+	image?: string;
+};
+
+/**
  * Single source of truth for the catalogue. Prices are plain DZD numbers
  * (formatted per locale at render time); names, descriptions, specs and alt
  * text are localized. `badge` is the exact discount label shown on cards.
+ * `image` is the primary shot used by cards; `images` holds every gallery
+ * angle (extensionless bases), starting with the primary shot.
  */
 export type Product = {
 	slug: string;
 	category: CategorySlug;
+	brand: string;
+	sku: string;
 	name: LocalizedString;
 	shortDescription: LocalizedString;
 	description: LocalizedString;
@@ -25,8 +47,12 @@ export type Product = {
 	reviewCount: number;
 	stock: number;
 	image: string;
+	images: string[];
 	imageAlt: LocalizedString;
 	specs: ProductSpec[];
+	variants?: ProductVariant[];
+	inTheBox?: LocalizedString[];
+	pairsWellWith?: string[];
 	featured?: boolean;
 	isNew?: boolean;
 };
@@ -35,6 +61,8 @@ export const products: Product[] = [
 	{
 		slug: 'iphone-15-pro',
 		category: 'smartphones',
+		brand: 'Apple',
+		sku: 'TD-IP15P-256',
 		name: { en: 'iPhone 15 Pro', fr: 'iPhone 15 Pro' },
 		shortDescription: {
 			en: 'Titanium design, A17 Pro chip and a pro camera system.',
@@ -51,6 +79,19 @@ export const products: Product[] = [
 		reviewCount: 124,
 		stock: 12,
 		image: '/images/product-iphone-15-pro',
+		images: ['/images/product-iphone-15-pro', '/images/product-iphone-15-pro-2', '/images/product-iphone-15-pro-3'],
+		variants: [
+			{ id: 'storage-128', kind: 'storage', label: { en: '128 GB', fr: '128 Go' }, priceDelta: -100, stock: 8 },
+			{ id: 'storage-256', kind: 'storage', label: { en: '256 GB', fr: '256 Go' }, priceDelta: 0, stock: 12 },
+			{ id: 'storage-512', kind: 'storage', label: { en: '512 GB', fr: '512 Go' }, priceDelta: 200, stock: 5 },
+		],
+		inTheBox: [
+			{ en: 'iPhone 15 Pro', fr: 'iPhone 15 Pro' },
+			{ en: 'USB-C cable', fr: 'Câble USB-C' },
+			{ en: 'SIM ejector tool', fr: 'Outil d’éjection de la carte SIM' },
+			{ en: 'Quick start guide', fr: 'Guide de démarrage rapide' },
+		],
+		pairsWellWith: ['magsafe-charger', 'airpods-pro'],
 		imageAlt: {
 			en: 'iPhone 15 Pro smartphone in dark titanium showing the triple camera',
 			fr: 'Smartphone iPhone 15 Pro en titane sombre montrant le triple appareil photo'
@@ -66,6 +107,8 @@ export const products: Product[] = [
 	{
 		slug: 'galaxy-s24',
 		category: 'smartphones',
+		brand: 'Samsung',
+		sku: 'TD-GS24-256',
 		name: { en: 'Samsung Galaxy S24', fr: 'Samsung Galaxy S24' },
 		shortDescription: {
 			en: 'Galaxy AI, a brilliant 120Hz display and a versatile triple camera.',
@@ -82,6 +125,19 @@ export const products: Product[] = [
 		reviewCount: 86,
 		stock: 14,
 		image: '/images/product-galaxy-s24',
+		images: ['/images/product-galaxy-s24', '/images/product-galaxy-s24-2', '/images/product-galaxy-s24-3'],
+		variants: [
+			{ id: 'storage-128', kind: 'storage', label: { en: '128 GB', fr: '128 Go' }, priceDelta: -100, stock: 10 },
+			{ id: 'storage-256', kind: 'storage', label: { en: '256 GB', fr: '256 Go' }, priceDelta: 0, stock: 14 },
+			{ id: 'storage-512', kind: 'storage', label: { en: '512 GB', fr: '512 Go' }, priceDelta: 180, stock: 6 },
+		],
+		inTheBox: [
+			{ en: 'Samsung Galaxy S24', fr: 'Samsung Galaxy S24' },
+			{ en: 'USB-C cable', fr: 'Câble USB-C' },
+			{ en: 'SIM ejector tool', fr: 'Outil d’éjection de la carte SIM' },
+			{ en: 'Quick start guide', fr: 'Guide de démarrage rapide' },
+		],
+		pairsWellWith: ['galaxy-watch-6', 'sony-wh1000xm5'],
 		imageAlt: {
 			en: 'Samsung Galaxy S24 smartphone, front view with green gradient wallpaper',
 			fr: 'Smartphone Samsung Galaxy S24, vue de face avec fond vert dégradé'
@@ -97,6 +153,8 @@ export const products: Product[] = [
 	{
 		slug: 'macbook-air-m2',
 		category: 'computers',
+		brand: 'Apple',
+		sku: 'TD-MBA-M2-256',
 		name: { en: 'MacBook Air M2', fr: 'MacBook Air M2' },
 		shortDescription: {
 			en: 'Feather-light laptop with the M2 chip and up to 18 hours of battery.',
@@ -113,6 +171,19 @@ export const products: Product[] = [
 		reviewCount: 98,
 		stock: 9,
 		image: '/images/product-macbook-air-m2',
+		images: ['/images/product-macbook-air-m2', '/images/product-macbook-air-m2-2'],
+		variants: [
+			{ id: 'storage-256', kind: 'storage', label: { en: '256 GB', fr: '256 Go' }, priceDelta: 0, stock: 9 },
+			{ id: 'storage-512', kind: 'storage', label: { en: '512 GB', fr: '512 Go' }, priceDelta: 200, stock: 6 },
+			{ id: 'storage-1tb', kind: 'storage', label: { en: '1 TB', fr: '1 To' }, priceDelta: 400, stock: 3 },
+		],
+		inTheBox: [
+			{ en: 'MacBook Air M2', fr: 'MacBook Air M2' },
+			{ en: '30W USB-C power adapter', fr: 'Adaptateur secteur USB-C 30 W' },
+			{ en: 'USB-C to MagSafe 3 cable', fr: 'Câble USB-C vers MagSafe 3' },
+			{ en: 'Quick start guide', fr: 'Guide de démarrage rapide' },
+		],
+		pairsWellWith: ['usb-c-hub', 'sony-wh1000xm5'],
 		imageAlt: {
 			en: 'Silver MacBook Air M2 laptop open showing a green wave wallpaper',
 			fr: 'Ordinateur portable argenté MacBook Air M2 ouvert affichant un fond vert ondulé'
@@ -128,6 +199,8 @@ export const products: Product[] = [
 	{
 		slug: 'dell-xps-13',
 		category: 'computers',
+		brand: 'Dell',
+		sku: 'TD-XPS13-I7',
 		name: { en: 'Dell XPS 13', fr: 'Dell XPS 13' },
 		shortDescription: {
 			en: 'Premium ultrabook with an edge-to-edge display and Intel Core power.',
@@ -144,6 +217,18 @@ export const products: Product[] = [
 		reviewCount: 54,
 		stock: 3,
 		image: '/images/product-dell-xps-13',
+		images: ['/images/product-dell-xps-13', '/images/product-dell-xps-13-2', '/images/product-dell-xps-13-3'],
+		variants: [
+			{ id: 'storage-512', kind: 'storage', label: { en: '512 GB', fr: '512 Go' }, priceDelta: 0, stock: 3 },
+			{ id: 'storage-1tb', kind: 'storage', label: { en: '1 TB', fr: '1 To' }, priceDelta: 200, stock: 2 },
+		],
+		inTheBox: [
+			{ en: 'Dell XPS 13', fr: 'Dell XPS 13' },
+			{ en: '60W USB-C power adapter', fr: 'Adaptateur secteur USB-C 60 W' },
+			{ en: 'USB-C cable', fr: 'Câble USB-C' },
+			{ en: 'Quick start guide', fr: 'Guide de démarrage rapide' },
+		],
+		pairsWellWith: ['usb-c-hub', 'sony-wh1000xm5'],
 		imageAlt: {
 			en: 'Dark grey Dell XPS 13 laptop open, front view',
 			fr: 'Ordinateur portable gris foncé Dell XPS 13 ouvert, vue de face'
@@ -158,6 +243,8 @@ export const products: Product[] = [
 	{
 		slug: 'airpods-pro',
 		category: 'audio',
+		brand: 'Apple',
+		sku: 'TD-APP-USBC',
 		name: { en: 'AirPods Pro', fr: 'AirPods Pro' },
 		shortDescription: {
 			en: 'Active noise cancellation and personalised spatial audio.',
@@ -174,6 +261,19 @@ export const products: Product[] = [
 		reviewCount: 76,
 		stock: 20,
 		image: '/images/product-airpods-pro',
+		images: ['/images/product-airpods-pro', '/images/product-airpods-pro-2', '/images/product-airpods-pro-3'],
+		variants: [
+			{ id: 'color-white', kind: 'color', label: { en: 'White', fr: 'Blanc' }, priceDelta: 0, stock: 20, swatch: '#f5f5f4' },
+			{ id: 'color-black', kind: 'color', label: { en: 'Black', fr: 'Noir' }, priceDelta: 0, stock: 9, swatch: '#1c1c1e' },
+		],
+		inTheBox: [
+			{ en: 'AirPods Pro', fr: 'AirPods Pro' },
+			{ en: 'MagSafe charging case', fr: 'Boîtier de charge MagSafe' },
+			{ en: 'Silicone ear tips in four sizes', fr: 'Embouts en silicone en quatre tailles' },
+			{ en: 'USB-C cable', fr: 'Câble USB-C' },
+			{ en: 'Quick start guide', fr: 'Guide de démarrage rapide' },
+		],
+		pairsWellWith: ['magsafe-charger', 'iphone-15-pro'],
 		imageAlt: {
 			en: 'White AirPods Pro earbuds beside their open charging case',
 			fr: 'Écouteurs blancs AirPods Pro à côté de leur boîtier de charge ouvert'
@@ -189,6 +289,8 @@ export const products: Product[] = [
 	{
 		slug: 'sony-wh1000xm5',
 		category: 'audio',
+		brand: 'Sony',
+		sku: 'TD-WH1000XM5',
 		name: { en: 'Sony WH-1000XM5', fr: 'Sony WH-1000XM5' },
 		shortDescription: {
 			en: 'Industry-leading noise cancelling with 30-hour battery life.',
@@ -205,6 +307,20 @@ export const products: Product[] = [
 		reviewCount: 112,
 		stock: 11,
 		image: '/images/product-sony-wh1000xm5',
+		images: ['/images/product-sony-wh1000xm5', '/images/product-sony-wh1000xm5-2', '/images/product-sony-wh1000xm5-3'],
+		variants: [
+			{ id: 'color-black', kind: 'color', label: { en: 'Black', fr: 'Noir' }, priceDelta: 0, stock: 11, swatch: '#111111' },
+			{ id: 'color-silver', kind: 'color', label: { en: 'Silver', fr: 'Argent' }, priceDelta: 0, stock: 0, swatch: '#c0c0c0' },
+			{ id: 'color-midnight-blue', kind: 'color', label: { en: 'Midnight Blue', fr: 'Bleu nuit' }, priceDelta: 20, stock: 6, swatch: '#1f2a44' },
+		],
+		inTheBox: [
+			{ en: 'Sony WH-1000XM5', fr: 'Sony WH-1000XM5' },
+			{ en: 'Carrying case', fr: 'Étui de transport' },
+			{ en: 'Headphone cable', fr: 'Câble pour casque' },
+			{ en: 'USB-C cable', fr: 'Câble USB-C' },
+			{ en: 'Quick start guide', fr: 'Guide de démarrage rapide' },
+		],
+		pairsWellWith: ['iphone-15-pro', 'macbook-air-m2'],
 		imageAlt: {
 			en: 'Black Sony WH-1000XM5 over-ear headphones',
 			fr: 'Casque noir Sony WH-1000XM5'
@@ -220,6 +336,8 @@ export const products: Product[] = [
 	{
 		slug: 'galaxy-watch-6',
 		category: 'smartwatches',
+		brand: 'Samsung',
+		sku: 'TD-GWATCH6',
 		name: { en: 'Samsung Galaxy Watch 6', fr: 'Samsung Galaxy Watch 6' },
 		shortDescription: {
 			en: 'Advanced health tracking on a bright, larger display.',
@@ -236,6 +354,19 @@ export const products: Product[] = [
 		reviewCount: 63,
 		stock: 15,
 		image: '/images/product-galaxy-watch-6',
+		images: ['/images/product-galaxy-watch-6', '/images/product-galaxy-watch-6-2', '/images/product-galaxy-watch-6-3'],
+		variants: [
+			{ id: 'color-graphite', kind: 'color', label: { en: 'Graphite', fr: 'Graphite' }, priceDelta: 0, stock: 15, swatch: '#2b2b2e' },
+			{ id: 'color-silver', kind: 'color', label: { en: 'Silver', fr: 'Argent' }, priceDelta: 0, stock: 7, swatch: '#d8d8d8' },
+			{ id: 'color-gold', kind: 'color', label: { en: 'Gold', fr: 'Or' }, priceDelta: 30, stock: 4, swatch: '#d4af7a' },
+		],
+		inTheBox: [
+			{ en: 'Samsung Galaxy Watch 6', fr: 'Samsung Galaxy Watch 6' },
+			{ en: 'Sport band', fr: 'Bracelet sport' },
+			{ en: 'Wireless charger', fr: 'Chargeur sans fil' },
+			{ en: 'Quick start guide', fr: 'Guide de démarrage rapide' },
+		],
+		pairsWellWith: ['galaxy-s24', 'sony-wh1000xm5'],
 		imageAlt: {
 			en: 'Black Samsung Galaxy Watch 6 with a dark green watch face',
 			fr: 'Montre connectée noire Samsung Galaxy Watch 6 avec cadran vert foncé'
@@ -251,6 +382,8 @@ export const products: Product[] = [
 	{
 		slug: 'apple-watch-9',
 		category: 'smartwatches',
+		brand: 'Apple',
+		sku: 'TD-AW9',
 		name: { en: 'Apple Watch Series 9', fr: 'Apple Watch Series 9' },
 		shortDescription: {
 			en: 'Brighter display, Double Tap gesture and powerful health features.',
@@ -267,6 +400,19 @@ export const products: Product[] = [
 		reviewCount: 91,
 		stock: 8,
 		image: '/images/product-apple-watch-9',
+		images: ['/images/product-apple-watch-9', '/images/product-apple-watch-9-2', '/images/product-apple-watch-9-3'],
+		variants: [
+			{ id: 'color-midnight', kind: 'color', label: { en: 'Midnight', fr: 'Minuit' }, priceDelta: 0, stock: 8, swatch: '#1c1e24' },
+			{ id: 'color-starlight', kind: 'color', label: { en: 'Starlight', fr: 'Lumière stellaire' }, priceDelta: 0, stock: 6, swatch: '#e8ddd0' },
+			{ id: 'color-red', kind: 'color', label: { en: '(PRODUCT)RED', fr: '(PRODUCT)RED' }, priceDelta: 0, stock: 3, swatch: '#b91c1c' },
+		],
+		inTheBox: [
+			{ en: 'Apple Watch Series 9', fr: 'Apple Watch Series 9' },
+			{ en: 'Sport band', fr: 'Bracelet sport' },
+			{ en: 'Magnetic fast charger to USB-C cable', fr: 'Câble de charge rapide magnétique vers USB-C' },
+			{ en: 'Quick start guide', fr: 'Guide de démarrage rapide' },
+		],
+		pairsWellWith: ['iphone-15-pro', 'airpods-pro'],
 		imageAlt: {
 			en: 'Smartwatch with a light band and bright gradient watch face',
 			fr: 'Montre connectée avec bracelet clair et cadran dégradé lumineux'
@@ -282,6 +428,8 @@ export const products: Product[] = [
 	{
 		slug: 'dualsense-controller',
 		category: 'gaming',
+		brand: 'PlayStation',
+		sku: 'TD-DUALSENSE',
 		name: { en: 'DualSense Controller', fr: 'Manette DualSense' },
 		shortDescription: {
 			en: 'Haptic feedback and adaptive triggers for deeper immersion.',
@@ -298,6 +446,18 @@ export const products: Product[] = [
 		reviewCount: 203,
 		stock: 25,
 		image: '/images/product-dualsense-controller',
+		images: ['/images/product-dualsense-controller', '/images/product-dualsense-controller-2', '/images/product-dualsense-controller-3'],
+		variants: [
+			{ id: 'color-white', kind: 'color', label: { en: 'White', fr: 'Blanc' }, priceDelta: 0, stock: 25, swatch: '#f2f2f2' },
+			{ id: 'color-midnight-black', kind: 'color', label: { en: 'Midnight Black', fr: 'Noir minuit' }, priceDelta: 0, stock: 12, swatch: '#17171a' },
+			{ id: 'color-cosmic-red', kind: 'color', label: { en: 'Cosmic Red', fr: 'Rouge cosmique' }, priceDelta: 10, stock: 8, swatch: '#a31621' },
+		],
+		inTheBox: [
+			{ en: 'DualSense controller', fr: 'Manette DualSense' },
+			{ en: 'USB-C cable', fr: 'Câble USB-C' },
+			{ en: 'Quick start guide', fr: 'Guide de démarrage rapide' },
+		],
+		pairsWellWith: ['nintendo-switch', 'sony-wh1000xm5'],
 		imageAlt: {
 			en: 'White and black DualSense game controller',
 			fr: 'Manette de jeu DualSense blanche et noire'
@@ -312,6 +472,8 @@ export const products: Product[] = [
 	{
 		slug: 'nintendo-switch',
 		category: 'gaming',
+		brand: 'Nintendo',
+		sku: 'TD-NSW-32GB',
 		name: { en: 'Nintendo Switch', fr: 'Nintendo Switch' },
 		shortDescription: {
 			en: 'Play at home on TV or on the go — one console, endless fun.',
@@ -328,6 +490,19 @@ export const products: Product[] = [
 		reviewCount: 167,
 		stock: 7,
 		image: '/images/product-nintendo-switch',
+		images: ['/images/product-nintendo-switch', '/images/product-nintendo-switch-2', '/images/product-nintendo-switch-3'],
+		variants: [
+			{ id: 'color-neon', kind: 'color', label: { en: 'Neon Blue / Neon Red', fr: 'Bleu néon / rouge néon' }, priceDelta: 0, stock: 7, swatch: '#3b82f6' },
+			{ id: 'color-grey', kind: 'color', label: { en: 'Grey', fr: 'Gris' }, priceDelta: 0, stock: 5, swatch: '#6b7280' },
+		],
+		inTheBox: [
+			{ en: 'Nintendo Switch console', fr: 'Console Nintendo Switch' },
+			{ en: 'Joy-Con controllers', fr: 'Manettes Joy-Con' },
+			{ en: 'Nintendo Switch dock', fr: 'Station d’accueil Nintendo Switch' },
+			{ en: 'HDMI cable', fr: 'Câble HDMI' },
+			{ en: 'AC adapter', fr: 'Adaptateur secteur' },
+		],
+		pairsWellWith: ['dualsense-controller', 'sony-wh1000xm5'],
 		imageAlt: {
 			en: 'Handheld Nintendo Switch console with attached controllers',
 			fr: 'Console portable Nintendo Switch avec manettes attachées'
@@ -343,6 +518,8 @@ export const products: Product[] = [
 	{
 		slug: 'magsafe-charger',
 		category: 'accessories',
+		brand: 'Apple',
+		sku: 'TD-MAGSAFE-15W',
 		name: { en: 'MagSafe Charger', fr: 'Chargeur MagSafe' },
 		shortDescription: {
 			en: 'Snap-on magnetic wireless charging at up to 15W.',
@@ -359,6 +536,17 @@ export const products: Product[] = [
 		reviewCount: 78,
 		stock: 30,
 		image: '/images/product-magsafe-charger',
+		images: ['/images/product-magsafe-charger', '/images/product-magsafe-charger-2', '/images/product-magsafe-charger-3'],
+		variants: [
+			{ id: 'color-white', kind: 'color', label: { en: 'White', fr: 'Blanc' }, priceDelta: 0, stock: 30, swatch: '#f5f5f4' },
+			{ id: 'color-midnight', kind: 'color', label: { en: 'Midnight', fr: 'Minuit' }, priceDelta: 10, stock: 12, swatch: '#26262b' },
+		],
+		inTheBox: [
+			{ en: 'MagSafe Charger', fr: 'Chargeur MagSafe' },
+			{ en: 'Integrated USB-C cable (1 m)', fr: 'Câble USB-C intégré (1 m)' },
+			{ en: 'Quick start guide', fr: 'Guide de démarrage rapide' },
+		],
+		pairsWellWith: ['iphone-15-pro', 'airpods-pro'],
 		imageAlt: {
 			en: 'White round MagSafe magnetic charging puck with coiled cable',
 			fr: 'Chargeur magnétique rond blanc MagSafe avec câble enroulé'
@@ -373,6 +561,8 @@ export const products: Product[] = [
 	{
 		slug: 'usb-c-hub',
 		category: 'accessories',
+		brand: 'TechDova',
+		sku: 'TD-HUB-7IN1',
 		name: { en: 'USB-C Hub 7-in-1', fr: 'Concentrateur USB-C 7-en-1' },
 		shortDescription: {
 			en: 'Seven ports in one slim aluminium hub: HDMI, USB and more.',
@@ -389,6 +579,17 @@ export const products: Product[] = [
 		reviewCount: 45,
 		stock: 0,
 		image: '/images/product-usb-c-hub',
+		images: ['/images/product-usb-c-hub', '/images/product-usb-c-hub-2', '/images/product-usb-c-hub-3'],
+		variants: [
+			{ id: 'color-space-grey', kind: 'color', label: { en: 'Space Grey', fr: 'Gris sidéral' }, priceDelta: 0, stock: 0, swatch: '#4b4b4f' },
+			{ id: 'color-silver', kind: 'color', label: { en: 'Silver', fr: 'Argent' }, priceDelta: 0, stock: 0, swatch: '#d1d1d6' },
+		],
+		inTheBox: [
+			{ en: 'USB-C Hub 7-in-1', fr: 'Concentrateur USB-C 7-en-1' },
+			{ en: 'Travel pouch', fr: 'Pochette de transport' },
+			{ en: 'Quick start guide', fr: 'Guide de démarrage rapide' },
+		],
+		pairsWellWith: ['macbook-air-m2', 'dell-xps-13'],
 		imageAlt: {
 			en: 'Dark grey aluminium USB-C hub with ports and short cable',
 			fr: 'Concentrateur USB-C aluminium gris foncé avec ports et câble court'
@@ -404,6 +605,37 @@ export const products: Product[] = [
 
 export function getProduct(slug: string): Product | undefined {
 	return products.find((p) => p.slug === slug);
+}
+
+/** Find a variant by id, or undefined for the default (no-variant) choice. */
+export function getVariant(product: Product, variantId: string | undefined): ProductVariant | undefined {
+	if (!variantId) return undefined;
+	return (product.variants ?? []).find((v) => v.id === variantId);
+}
+
+/** Price of a product with a variant applied: base price + priceDelta. */
+export function variantPrice(product: Product, variant: ProductVariant | undefined): number {
+	return product.price + (variant?.priceDelta ?? 0);
+}
+
+/**
+ * The default variant: the one priced at the product base price
+ * (priceDelta 0), so PDP and QuickView show the same price as the cards
+ * until the shopper picks another option. Falls back to the first variant
+ * when no variant is priced at base (no catalogue product does this today).
+ */
+export function getDefaultVariant(product: Product): ProductVariant | undefined {
+	const variants = product.variants ?? [];
+	return variants.find((v) => v.priceDelta === 0) ?? variants[0];
+}
+
+/** Unique brands in first-seen catalogue order. */
+export function getBrands(): string[] {
+	return [...new Set(products.map((p) => p.brand))];
+}
+
+export function getProductsByBrand(brand: string): Product[] {
+	return products.filter((p) => p.brand === brand);
 }
 
 export function getProductsByCategory(category: CategorySlug): Product[] {
@@ -463,15 +695,25 @@ export function getRelatedProducts(product: Product, count = 4): Product[] {
 
 export type SortKey = 'featured' | 'price-asc' | 'price-desc' | 'rating';
 
-export function filterProducts(
-	items: Product[],
-	options: { query?: string; category?: CategorySlug | null; maxPrice?: number | null },
-	locale: Locale
-): Product[] {
+export type FilterOptions = {
+	query?: string;
+	category?: CategorySlug | null;
+	maxPrice?: number | null;
+	brands?: string[];
+	minRating?: number | null;
+	inStockOnly?: boolean;
+	onSaleOnly?: boolean;
+};
+
+export function filterProducts(items: Product[], options: FilterOptions, locale: Locale): Product[] {
 	const query = (options.query ?? '').trim().toLowerCase();
 	return items.filter((product) => {
 		if (options.category && product.category !== options.category) return false;
 		if (options.maxPrice != null && product.price > options.maxPrice) return false;
+		if (options.brands?.length && !options.brands.includes(product.brand)) return false;
+		if (options.minRating != null && product.rating < options.minRating) return false;
+		if (options.inStockOnly && product.stock <= 0) return false;
+		if (options.onSaleOnly && !(product.oldPrice && product.oldPrice > product.price)) return false;
 		if (!query) return true;
 		const haystack = [
 			localize(product.name, locale),
@@ -481,7 +723,13 @@ export function filterProducts(
 		]
 			.join(' ')
 			.toLowerCase();
-		return query.split(/\s+/).every((word) => haystack.includes(word));
+		// Each word matches literally or via a category synonym (see
+		// search-synonyms.ts); every word must match (AND semantics).
+		return query
+			.split(/\s+/)
+			.every(
+				(word) => haystack.includes(word) || getSynonymCategories(word).includes(product.category)
+			);
 	});
 }
 

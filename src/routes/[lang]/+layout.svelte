@@ -4,10 +4,14 @@
 	import { fade } from 'svelte/transition';
 	import BackToTop from '#lib/components/BackToTop.svelte';
 	import CartDrawer from '#lib/components/CartDrawer.svelte';
+	import CartReturnNudge from '#lib/components/CartReturnNudge.svelte';
 	import CompareTray from '#lib/components/CompareTray.svelte';
+	import CookieBanner from '#lib/components/CookieBanner.svelte';
 	import Footer from '#lib/components/Footer.svelte';
 	import Header from '#lib/components/Header.svelte';
+	import LiveChat from '#lib/components/LiveChat.svelte';
 	import LiveRegion from '#lib/components/LiveRegion.svelte';
+	import TabReminder from '#lib/components/TabReminder.svelte';
 	import Toast from '#lib/components/Toast.svelte';
 	import { LOCALE_STORAGE_KEY } from '#lib/config';
 	import { getDictionary } from '#lib/i18n/index';
@@ -45,6 +49,7 @@
 	{t.nav.skipToContent}
 </a>
 <Header lang={data.lang} {t} />
+<CartReturnNudge lang={data.lang} {t} />
 <LiveRegion lang={data.lang} {t} />
 <main id="main-content">
 	{#key pathname}
@@ -52,6 +57,9 @@
 	{/key}
 </main>
 <Footer lang={data.lang} {t} />
+<TabReminder lang={data.lang} {t} />
+<CookieBanner lang={data.lang} {t} />
+<LiveChat lang={data.lang} {t} />
 <CartDrawer lang={data.lang} {t} />
 <CompareTray lang={data.lang} {t} />
 <Toast dismissLabel={t.toast.dismiss} />

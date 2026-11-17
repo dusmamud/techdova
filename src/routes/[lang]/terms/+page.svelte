@@ -22,13 +22,13 @@
 			{ label: t.terms.title }
 		]}
 	/>
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>{t.terms.title}</h1>
-	<p class="mt-2 text-sm text-neutral-500">{t.terms.updated}</p>
+	<h1 class="text-3xl font-bold tracking-tight text-ink sm:text-4xl" use:reveal>{t.terms.title}</h1>
+	<p class="mt-2 text-sm text-muted">{t.terms.updated}</p>
 	<div class="mt-6 space-y-6">
 		{#each t.terms.sections as section, i (section.heading)}
 			<section use:reveal={{ delay: Math.min(i * 60, 300) }}>
-				<h2 class="text-lg font-bold text-neutral-900">{section.heading}</h2>
-				<p class="mt-1 leading-relaxed text-neutral-600">{section.body}</p>
+				<h2 class="text-lg font-bold text-ink">{section.heading}</h2>
+				<p class="mt-1 leading-relaxed text-muted">{section.body}</p>
 			</section>
 		{/each}
 	</div>

@@ -177,7 +177,7 @@
 	}
 
 	const inputClass =
-		'w-full rounded-xl border border-neutral-300 bg-white px-3 py-3 text-sm text-neutral-900 placeholder:text-neutral-500';
+		'w-full rounded-xl border border-line bg-surface px-3 py-3 text-sm text-ink placeholder:text-muted';
 </script>
 
 <Seo
@@ -196,11 +196,11 @@
 				{ label: t.giftCardsPage.title }
 			]}
 		/>
-		<h1 class="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+		<h1 class="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
 			{t.giftCardsPage.title}
 		</h1>
-		<p class="mt-2 leading-relaxed text-neutral-600">{t.giftCardsPage.description}</p>
-		<p class="mt-4 rounded-2xl bg-brand-50 p-4 text-sm text-neutral-600">
+		<p class="mt-2 leading-relaxed text-muted">{t.giftCardsPage.description}</p>
+		<p class="mt-4 rounded-2xl bg-brand-50 p-4 text-sm text-muted dark:bg-surface-soft">
 			{t.giftCardsPage.demoNote}
 		</p>
 	</div>
@@ -228,8 +228,8 @@
 				{/if}
 				<p class="mt-4 font-mono text-sm tracking-wider text-brand-300">{preview.code}</p>
 			</div>
-			<p class="mt-3 text-sm text-neutral-600">{t.giftCardsPage.previewText}</p>
-			<p class="mt-1 text-sm text-neutral-600">
+			<p class="mt-3 text-sm text-muted">{t.giftCardsPage.previewText}</p>
+			<p class="mt-1 text-sm text-muted">
 				{interpolate(t.giftCardsPage.previewCodeHint, { code: preview.code })}
 			</p>
 			<button
@@ -244,7 +244,7 @@
 		<form
 			onsubmit={submit}
 			novalidate
-			class="mt-8 space-y-5 rounded-3xl bg-white p-6 ring-1 ring-neutral-200"
+			class="mt-8 space-y-5 rounded-3xl bg-surface p-6 ring-1 ring-line"
 			use:reveal
 		>
 			{#if showSummary && errorEntries.length > 0}
@@ -252,9 +252,9 @@
 					bind:this={summaryEl}
 					tabindex="-1"
 					role="alert"
-					class="rounded-2xl bg-red-50 p-4 ring-1 ring-red-200 focus:outline-2 focus:outline-offset-2 focus:outline-red-600"
+					class="rounded-2xl bg-red-50 dark:bg-red-950/60 p-4 ring-1 ring-red-200 dark:ring-red-900 focus:outline-2 focus:outline-offset-2 focus:outline-red-600"
 				>
-					<p class="text-sm font-semibold text-red-800">{t.giftCardsPage.errorSummary}</p>
+					<p class="text-sm font-semibold text-red-800 dark:text-red-200">{t.giftCardsPage.errorSummary}</p>
 					<ul class="mt-2 list-disc space-y-1 pl-5 text-sm">
 						{#each errorEntries as entry (entry.field)}
 							<li>
@@ -264,7 +264,7 @@
 										event.preventDefault();
 										focusField(entry.id);
 									}}
-									class="text-red-700 underline hover:text-red-800"
+									class="text-red-700 dark:text-red-300 underline hover:text-red-800 dark:hover:text-red-200"
 								>
 									{entry.label}
 								</a>
@@ -279,13 +279,13 @@
 				aria-labelledby="gift-amount-label"
 				aria-describedby={errors.amount ? 'gift-amount-error' : undefined}
 			>
-				<p id="gift-amount-label" class="mb-2 text-sm font-medium text-neutral-700">
+				<p id="gift-amount-label" class="mb-2 text-sm font-medium text-ink-soft">
 					{t.giftCardsPage.amountLabel}
 				</p>
 				<div class="flex flex-wrap gap-2">
 					{#each PRESET_AMOUNTS as amount (amount)}
 						<label
-							class="inline-flex min-h-11 cursor-pointer items-center rounded-full px-4 text-sm font-semibold ring-1 ring-neutral-300 hover:bg-brand-50 has-checked:bg-brand-700 has-checked:text-white has-checked:ring-brand-700 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-brand-700"
+							class="inline-flex min-h-11 cursor-pointer items-center rounded-full px-4 text-sm font-semibold ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft has-checked:bg-brand-700 has-checked:text-white has-checked:ring-brand-700 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-brand-700"
 						>
 							<input
 								type="radio"
@@ -306,7 +306,7 @@
 				</div>
 				<label
 					for="gift-custom-amount"
-					class="mb-1 mt-4 block text-sm font-medium text-neutral-700"
+					class="mb-1 mt-4 block text-sm font-medium text-ink-soft"
 				>
 					{t.giftCardsPage.customAmountLabel}
 				</label>
@@ -327,12 +327,12 @@
 					class="{inputClass} min-h-12"
 				/>
 				{#if errors.amount}
-					<p id="gift-amount-error" class="mt-1 text-sm text-red-600">{errors.amount}</p>
+					<p id="gift-amount-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{errors.amount}</p>
 				{/if}
 			</div>
 
 			<div>
-				<label for="gift-recipient-name" class="mb-1 block text-sm font-medium text-neutral-700">
+				<label for="gift-recipient-name" class="mb-1 block text-sm font-medium text-ink-soft">
 					{t.giftCardsPage.recipientNameLabel}
 				</label>
 				<input
@@ -349,14 +349,14 @@
 					class="{inputClass} min-h-12"
 				/>
 				{#if errors.recipientName}
-					<p id="gift-recipient-name-error" class="mt-1 text-sm text-red-600">
+					<p id="gift-recipient-name-error" class="mt-1 text-sm text-red-600 dark:text-red-400">
 						{errors.recipientName}
 					</p>
 				{/if}
 			</div>
 
 			<div>
-				<label for="gift-recipient-email" class="mb-1 block text-sm font-medium text-neutral-700">
+				<label for="gift-recipient-email" class="mb-1 block text-sm font-medium text-ink-soft">
 					{t.giftCardsPage.recipientEmailLabel}
 				</label>
 				<input
@@ -373,14 +373,14 @@
 					class="{inputClass} min-h-12"
 				/>
 				{#if errors.recipientEmail}
-					<p id="gift-recipient-email-error" class="mt-1 text-sm text-red-600">
+					<p id="gift-recipient-email-error" class="mt-1 text-sm text-red-600 dark:text-red-400">
 						{errors.recipientEmail}
 					</p>
 				{/if}
 			</div>
 
 			<div>
-				<label for="gift-sender-name" class="mb-1 block text-sm font-medium text-neutral-700">
+				<label for="gift-sender-name" class="mb-1 block text-sm font-medium text-ink-soft">
 					{t.giftCardsPage.senderNameLabel}
 				</label>
 				<input
@@ -397,14 +397,14 @@
 					class="{inputClass} min-h-12"
 				/>
 				{#if errors.senderName}
-					<p id="gift-sender-name-error" class="mt-1 text-sm text-red-600">
+					<p id="gift-sender-name-error" class="mt-1 text-sm text-red-600 dark:text-red-400">
 						{errors.senderName}
 					</p>
 				{/if}
 			</div>
 
 			<div>
-				<label for="gift-message" class="mb-1 block text-sm font-medium text-neutral-700">
+				<label for="gift-message" class="mb-1 block text-sm font-medium text-ink-soft">
 					{t.giftCardsPage.messageLabel}
 				</label>
 				<textarea
@@ -429,18 +429,18 @@
 
 	<section
 		aria-labelledby="gift-balance-heading"
-		class="mt-10 rounded-3xl bg-white p-6 ring-1 ring-neutral-200"
+		class="mt-10 rounded-3xl bg-surface p-6 ring-1 ring-line"
 		use:reveal
 	>
-		<h2 id="gift-balance-heading" class="text-xl font-bold text-neutral-900">
+		<h2 id="gift-balance-heading" class="text-xl font-bold text-ink">
 			{t.giftCardsPage.balanceTitle}
 		</h2>
-		<p class="mt-1 text-sm leading-relaxed text-neutral-600">
+		<p class="mt-1 text-sm leading-relaxed text-muted">
 			{t.giftCardsPage.balanceDescription}
 		</p>
 		<form onsubmit={checkBalance} novalidate class="mt-4 space-y-3">
 			<div>
-				<label for="gift-balance-code" class="mb-1 block text-sm font-medium text-neutral-700">
+				<label for="gift-balance-code" class="mb-1 block text-sm font-medium text-ink-soft">
 					{t.giftCardsPage.balanceCodeLabel}
 				</label>
 				<input
@@ -460,20 +460,20 @@
 					class="{inputClass} min-h-12 font-mono uppercase"
 				/>
 				{#if balanceError}
-					<p id="gift-balance-code-error" class="mt-1 text-sm text-red-600">{balanceError}</p>
+					<p id="gift-balance-code-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{balanceError}</p>
 				{/if}
 			</div>
 			<button
 				type="submit"
-				class="inline-flex min-h-11 items-center rounded-full px-5 text-sm font-semibold text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
+				class="inline-flex min-h-11 items-center rounded-full px-5 text-sm font-semibold text-brand-800 dark:text-brand-200 dark:hover:text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
 			>
 				{t.giftCardsPage.balanceButton}
 			</button>
 		</form>
 		<div aria-live="polite">
 			{#if balanceResult}
-				<p class="mt-4 flex items-start gap-2 rounded-2xl bg-brand-50 p-4 text-sm text-neutral-700">
-					<CheckCircle2 class="mt-0.5 h-5 w-5 shrink-0 text-brand-700" aria-hidden="true" />
+				<p class="mt-4 flex items-start gap-2 rounded-2xl bg-brand-50 p-4 text-sm text-ink-soft dark:bg-surface-soft">
+					<CheckCircle2 class="mt-0.5 h-5 w-5 shrink-0 text-brand-700 dark:text-brand-300" aria-hidden="true" />
 					<span>
 						{interpolate(t.giftCardsPage.balanceFound, {
 							code: balanceResult.code,
@@ -482,7 +482,7 @@
 					</span>
 				</p>
 			{:else if balanceNotFound}
-				<p class="mt-4 rounded-2xl bg-red-50 p-4 text-sm text-red-700 ring-1 ring-red-200">
+				<p class="mt-4 rounded-2xl bg-red-50 dark:bg-red-950/60 p-4 text-sm text-red-700 dark:text-red-300 ring-1 ring-red-200 dark:ring-red-900">
 					{interpolate(t.giftCardsPage.balanceNotFound, { code: balanceNotFound })}
 				</p>
 			{/if}
@@ -490,19 +490,19 @@
 	</section>
 
 	<section aria-labelledby="gift-how-heading" class="mt-10" use:reveal>
-		<h2 id="gift-how-heading" class="text-xl font-bold text-neutral-900">
+		<h2 id="gift-how-heading" class="text-xl font-bold text-ink">
 			{t.giftCardsPage.howTitle}
 		</h2>
 		<ol class="mt-4 space-y-3">
 			{#each t.giftCardsPage.howSteps as step, i (i)}
-				<li class="flex gap-3 rounded-3xl bg-white p-4 ring-1 ring-neutral-200">
+				<li class="flex gap-3 rounded-3xl bg-surface p-4 ring-1 ring-line">
 					<span
 						class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-700 text-sm font-bold text-white"
 						aria-hidden="true"
 					>
 						{i + 1}
 					</span>
-					<p class="text-sm leading-relaxed text-neutral-600">{step}</p>
+					<p class="text-sm leading-relaxed text-muted">{step}</p>
 				</li>
 			{/each}
 		</ol>

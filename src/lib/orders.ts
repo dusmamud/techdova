@@ -2,7 +2,7 @@ import { browser } from '$app/env';
 import { ORDERS_STORAGE_KEY } from '#lib/config';
 
 /** Demo orders live only in the browser: nothing is sent anywhere. */
-export type DemoOrderLine = { slug: string; qty: number; unitPrice: number };
+export type DemoOrderLine = { slug: string; variantId?: string; qty: number; unitPrice: number };
 
 export type DemoOrder = {
 	id: string;
@@ -11,6 +11,9 @@ export type DemoOrder = {
 	email: string;
 	lines: DemoOrderLine[];
 	total: number;
+	/** Promo snapshot: when present, `total` is the post-discount amount. */
+	promoCode?: string;
+	promoDiscount?: number;
 };
 
 export type OrderStatus = 'ordered' | 'shipped' | 'out-for-delivery' | 'delivered';

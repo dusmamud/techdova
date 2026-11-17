@@ -115,49 +115,77 @@
 	onfocusout={() => {
 		hoverPaused = false;
 	}}
-	class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand-50 via-brand-50/70 to-white ring-1 ring-brand-100"
+	class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand-50 via-brand-50/70 to-white ring-1 ring-brand-100 dark:from-surface-strong dark:via-surface-soft dark:to-surface"
 >
 	<div class="relative">
 		<div class="grid">
 		{#each t.hero.slides as slide, i (i)}
 			{@const image = slideImages[i]}
 			<div
-				class="col-start-1 row-start-1 motion-safe:transition-opacity motion-safe:duration-400 motion-safe:ease-enter {i === active
-					? 'opacity-100'
-					: 'pointer-events-none opacity-0'}"
+				class="col-start-1 row-start-1 motion-safe:transition-[opacity,transform] motion-safe:duration-500 motion-safe:ease-enter {i === active
+					? 'z-[1] translate-x-0 opacity-100'
+					: i > active
+						? 'pointer-events-none translate-x-10 opacity-0'
+						: 'pointer-events-none -translate-x-10 opacity-0'}"
 				role="group"
 				aria-roledescription="slide"
 				aria-label={interpolate(t.hero.slideLabel, { n: i + 1, total })}
 				aria-hidden={i !== active}
 			>
-				<div class="grid items-center gap-5 p-5 sm:gap-6 sm:p-8 lg:grid-cols-2 lg:gap-10 lg:p-10 lg:pl-16">
-					<div>
+				<div class="grid gap-5 p-5 sm:gap-6 sm:p-8 lg:grid-cols-[1fr_1.15fr] lg:gap-0 lg:p-0">
+					<div class="lg:flex lg:flex-col lg:justify-center lg:p-12 lg:pr-8">
 						<p
-							class="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-brand-800 ring-1 ring-brand-200"
+							class="inline-flex animate-fade-up items-center gap-1.5 self-start rounded-full bg-surface px-3 py-1.5 text-xs font-semibold text-brand-800 dark:text-brand-200 ring-1 ring-brand-200"
 						>
 							<Sparkles class="h-3.5 w-3.5" aria-hidden="true" />
 							{slide.badge}
 						</p>
 						<svelte:element
 							this={i === 0 ? 'h1' : 'h2'}
-							class="mt-3 text-3xl font-bold leading-[1.05] tracking-tight text-neutral-900 sm:mt-4 sm:text-4xl lg:text-5xl"
+							class="mt-3 animate-fade-up text-4xl font-bold leading-[1.02] tracking-tight text-ink [animation-delay:75ms] sm:mt-4 sm:text-5xl lg:text-[3.5rem]"
 						>
 							{slide.titleA}
-							<span class="block text-brand-700">{slide.titleB}</span>
+							<span class="block text-brand-700 dark:text-brand-300">{slide.titleB}</span>
 						</svelte:element>
-						<p class="mt-3 max-w-md text-sm leading-relaxed text-neutral-600 sm:mt-4 sm:text-base">
+						<p
+							class="mt-3 max-w-md animate-fade-up text-sm leading-relaxed text-muted [animation-delay:150ms] sm:mt-4 sm:text-base"
+						>
 							{slide.subtitle}
 						</p>
 						<a
 							href={slideTargets[i]}
 							tabindex={i === active ? undefined : -1}
-							class="mt-5 inline-flex min-h-12 items-center gap-2 rounded-full bg-brand-800 px-6 text-sm font-semibold text-white hover:bg-brand-900 sm:mt-6"
+							class="group mt-5 inline-flex animate-fade-up min-h-12 items-center gap-2 self-start rounded-full bg-brand-800 px-6 text-sm font-semibold text-white shadow-sm [animation-delay:225ms] hover:bg-brand-900 motion-safe:transition-colors motion-safe:duration-200 sm:mt-6"
 						>
 							{slide.cta}
-							<ArrowRight class="h-4 w-4" aria-hidden="true" />
+							<ArrowRight
+								class="h-4 w-4 motion-safe:transition-transform motion-safe:duration-200 group-hover:translate-x-0.5"
+								aria-hidden="true"
+							/>
 						</a>
+						<ul
+							class="mt-6 grid animate-fade-up grid-cols-3 gap-3 border-t border-brand-100 pt-5 [animation-delay:300ms] dark:border-line sm:gap-4"
+						>
+							{#each t.hero.trust as item, j (j)}
+								{@const TrustIcon = trustIcons[j]}
+								<li class="flex min-w-0 flex-col gap-1 sm:flex-row sm:items-start sm:gap-2">
+									<TrustIcon
+										class="h-5 w-5 shrink-0 text-brand-700 dark:text-brand-300 sm:mt-0.5"
+										aria-hidden="true"
+									/>
+									<div class="min-w-0">
+										<p class="text-[11px] font-semibold leading-snug text-ink sm:text-xs">
+											{item.title}
+										</p>
+										<p class="text-[11px] leading-snug text-muted">{item.subtitle}</p>
+									</div>
+								</li>
+							{/each}
+						</ul>
 					</div>
-					<div class="relative aspect-[16/10] overflow-hidden rounded-3xl sm:aspect-[21/9] lg:aspect-[4/3] lg:min-h-[380px]">
+					<div
+						class="relative aspect-[16/10] animate-fade-up overflow-hidden rounded-3xl [animation-delay:300ms] sm:aspect-[21/9] lg:aspect-auto lg:min-h-[440px] lg:rounded-none"
+					>
 						<Picture
 							base={image.src}
 							alt={slide.imageAlt}
@@ -166,7 +194,9 @@
 							loading={i === 0 ? 'eager' : 'lazy'}
 							fetchPriority={i === 0 ? 'high' : undefined}
 							decoding="async"
-							class="absolute inset-0 h-full w-full object-cover"
+							class="absolute inset-0 h-full w-full object-cover {i === active
+								? 'animate-ken-burns'
+								: ''}"
 						/>
 					</div>
 				</div>
@@ -178,7 +208,7 @@
 		type="button"
 		onclick={previous}
 		aria-label={t.hero.previous}
-		class="absolute left-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-neutral-800 shadow-lg ring-1 ring-neutral-200 hover:bg-brand-50 sm:grid"
+		class="absolute left-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-surface text-ink-soft shadow-lg ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft sm:grid"
 	>
 		<ChevronLeft class="h-5 w-5" aria-hidden="true" />
 	</button>
@@ -186,24 +216,39 @@
 		type="button"
 		onclick={next}
 		aria-label={t.hero.next}
-		class="absolute right-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-neutral-800 shadow-lg ring-1 ring-neutral-200 hover:bg-brand-50 sm:grid"
+		class="absolute right-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-surface text-ink-soft shadow-lg ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft sm:grid"
 	>
 		<ChevronRight class="h-5 w-5" aria-hidden="true" />
 	</button>
 	</div>
 
-	<div class="flex justify-center gap-0.5 px-4 pb-2 pt-1">
+	<div
+		role="group"
+		aria-label={t.hero.dotsLabel}
+		class="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-0.5 rounded-full bg-surface/85 py-1 pl-1.5 pr-1 shadow-md ring-1 ring-line backdrop-blur-sm"
+	>
 		{#each t.hero.slides as _, i (i)}
 			<button
 				type="button"
 				onclick={() => goTo(i)}
 				aria-label={interpolate(t.hero.goToSlide, { n: i + 1 })}
 				aria-current={i === active ? 'true' : undefined}
-				class="grid h-11 w-11 place-items-center"
+				class="grid h-10 w-10 place-items-center rounded-full"
 			>
 				<span
-					class="h-2 rounded-full motion-safe:transition-colors motion-safe:duration-200 motion-safe:ease-enter {i === active ? 'w-6 bg-brand-700' : 'w-2 bg-brand-300'}"
-				></span>
+					class="relative h-2 overflow-hidden rounded-full motion-safe:transition-colors motion-safe:duration-200 motion-safe:ease-enter {i === active
+						? reduceMotion
+							? 'w-6 bg-brand-700 dark:bg-brand-300'
+							: 'w-7 bg-brand-200 dark:bg-white/25'
+						: 'w-2 bg-brand-300/80 dark:bg-brand-400/60'}"
+				>
+					{#if i === active && !reduceMotion}
+						<span
+							class="absolute inset-0 origin-left animate-dot-progress rounded-full bg-brand-700 dark:bg-brand-300"
+							style:animation-play-state={hoverPaused || userPaused ? 'paused' : 'running'}
+						></span>
+					{/if}
+				</span>
 			</button>
 		{/each}
 		{#if !reduceMotion}
@@ -214,27 +259,14 @@
 				}}
 				aria-label={userPaused ? t.hero.play : t.hero.pause}
 				aria-pressed={userPaused}
-				class="grid h-11 w-11 place-items-center rounded-full bg-white text-neutral-800 shadow-lg ring-1 ring-neutral-200 hover:bg-brand-50"
+				class="grid h-10 w-10 place-items-center rounded-full text-ink-soft hover:bg-brand-50 dark:hover:bg-surface-soft"
 			>
 				{#if userPaused}
-					<Play class="h-5 w-5" aria-hidden="true" />
+					<Play class="h-4 w-4" aria-hidden="true" />
 				{:else}
-					<Pause class="h-5 w-5" aria-hidden="true" />
+					<Pause class="h-4 w-4" aria-hidden="true" />
 				{/if}
 			</button>
 		{/if}
-	</div>
-
-	<div class="grid grid-cols-3 gap-3 border-t border-brand-100 px-4 py-4 sm:gap-4 sm:px-8 sm:py-5 lg:px-10">
-		{#each t.hero.trust as item, i (i)}
-			{@const TrustIcon = trustIcons[i]}
-			<div class="flex min-w-0 flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
-				<TrustIcon class="h-5 w-5 shrink-0 text-brand-700 sm:mt-0.5 sm:h-6 sm:w-6" aria-hidden="true" />
-				<div class="min-w-0">
-					<p class="text-xs font-semibold leading-snug text-neutral-900 sm:text-sm">{item.title}</p>
-					<p class="text-[11px] leading-snug text-neutral-600 sm:text-xs">{item.subtitle}</p>
-				</div>
-			</div>
-		{/each}
 	</div>
 </section>

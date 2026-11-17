@@ -238,6 +238,41 @@ supplied by the coordinator; each line says what it supports.
 - https://rdigital.co/blog/26-must-have-pages-every-eshop-shall-have/ — store addresses, help.
 - https://dokan.co/blog/4672/ecommerce-website-pages-list/ — store locator.
 
+### Elevation round (2026-11-17)
+
+Sources for the UI/UX elevation round (foundation worker): 2026 e-commerce
+UI trends, page checklists, product-page conversion practice, and reference
+implementations. Grouped as supplied by the coordinator; each line says what
+it supports. Some URLs repeat earlier rounds — they were re-supplied for
+this round and are listed again as checked for it.
+
+**E-commerce UI trends 2026**
+- https://commercev3.com/resources/blog/ecommerce-ui-trends-visual-design-patterns-guide — CommerceV3 — e-commerce UI trends and visual design patterns for the elevation round.
+- https://www.apponix.com/blog/explore-the-latestui-ux-design-trends-in-2026 — Apponix — latest UI/UX design trends in 2026.
+- https://papathemes.com/blog/ecommerce-design-trends-2026-bigcommerce-store/ — PapaThemes — e-commerce design trends for 2026 storefronts.
+- https://www.enerpize.com/hub/future-of-ecommerce — Enerpize — the future of e-commerce: where storefront UX is heading.
+- https://www.designstudiouiux.com/blog/ecommerce-web-design-trends/ — Design Studio UI/UX — e-commerce web design trends.
+- https://hireecom.com/blog/top-ecommerce-website-design-trends-for-2026/ — HireEcom — top e-commerce website design trends for 2026.
+
+**Page checklists and must-have features**
+- https://crocoblock.com/blog/important-ecommerce-website-pages/ — Crocoblock — 13-page e-commerce checklist, re-checked for the elevation round.
+- https://www.komalnakrani.com/blog/astro-ecommerce-page-checklist/ — Komal Nakrani — core e-commerce page set, re-checked for the elevation round.
+- https://www.mediasearchgroup.com/blog/must-have-features-ecommerce-websites/ — Media Search Group — must-have e-commerce features, re-checked for the elevation round.
+- https://emergent.sh/learn/ecommerce-website-features — Emergent — e-commerce website features checklist.
+
+**Product-page conversion**
+- https://github.com/the-up/hydrogen-ecommerce-ux/blob/HEAD/references/product-page.md — hydrogen-ecommerce-ux (GitHub, the-up) — product-page UX reference: galleries, variants, buy box.
+- https://www.techcelerant.com/blog/product-page-best-practices — TechCelerant — product page best practices, re-checked for the elevation round.
+- https://www.ontapgroup.com/blog/shopify-product-page-optimization — OnTap Group — product-page optimisation practice.
+- https://github.com/nemolabsdev/conversion-craft/blob/HEAD/skills/product-page-cro/SKILL.md — conversion-craft (GitHub, Nemo Labs) — product-page CRO skill: conversion-focused page structure.
+- https://www.getglued.co/insights/product-page-optimization — GetGlued — product page optimisation, re-checked for the elevation round.
+
+**Reference implementations and components**
+- https://codecanyon.net/item/shopo-multivendor-ecommerce-flutter-app/39965496?s_rank=20 — CodeCanyon (ShopO listing) — reference e-commerce app UI patterns.
+- https://themeforest.net/item/minimog-the-high-converting-ecommerce-wordpress-theme/36947163 — ThemeForest (Minimog listing) — high-converting e-commerce theme patterns.
+- https://plugg.is/en/add-ons/mega-menu — Plugg — mega-menu add-on: navigation pattern reference.
+- https://wrapmarket.com/item/shopverse-responsive-multipurpose-ecommerce-html-template-WT7R65G69 — WrapMarket (Shopverse listing) — responsive multipurpose e-commerce template patterns.
+
 ## 3. Conflicts, uncertainties, and what the builder must verify
 
 1. **Paraglide "missing key" claims conflict — resolved as above.** One blog says TypeScript catches a key forgotten in the second locale file; a project doc says the compiler silently falls back to the base locale. The consistent reading: call-site typos and keys missing from the *base* locale fail; translations missing from a *non-base* locale do not. Hence the custom-dictionary recommendation and, if Paraglide is used, the mandatory `@inlang/cli check` gate.

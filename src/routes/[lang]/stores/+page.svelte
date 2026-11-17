@@ -45,11 +45,11 @@
 				{ label: t.storesPage.title }
 			]}
 		/>
-		<h1 class="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+		<h1 class="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
 			{t.storesPage.title}
 		</h1>
-		<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.storesPage.description}</p>
-		<p class="mt-4 rounded-2xl bg-brand-50 p-4 text-sm text-neutral-600">
+		<p class="mt-2 max-w-2xl leading-relaxed text-muted">{t.storesPage.description}</p>
+		<p class="mt-4 rounded-2xl bg-brand-50 p-4 text-sm text-muted dark:bg-surface-soft">
 			{t.storesPage.demoNote}
 		</p>
 	</div>
@@ -66,7 +66,7 @@
 				onclick={() => {
 					selectedCity = null;
 				}}
-				class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium ring-1 ring-neutral-300 hover:bg-brand-50 aria-pressed:bg-brand-700 aria-pressed:text-white aria-pressed:ring-brand-700"
+				class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft aria-pressed:bg-brand-700 aria-pressed:text-white aria-pressed:ring-brand-700"
 			>
 				{t.storesPage.allCities}
 			</button>
@@ -77,24 +77,24 @@
 					onclick={() => {
 						selectedCity = city.slug;
 					}}
-					class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium ring-1 ring-neutral-300 hover:bg-brand-50 aria-pressed:bg-brand-700 aria-pressed:text-white aria-pressed:ring-brand-700"
+					class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft aria-pressed:bg-brand-700 aria-pressed:text-white aria-pressed:ring-brand-700"
 				>
 					{localize(city.name, lang)}
 				</button>
 			{/each}
 		</div>
-		<p role="status" aria-live="polite" class="mt-4 text-sm font-medium text-neutral-600">
+		<p role="status" aria-live="polite" class="mt-4 text-sm font-medium text-muted">
 			{countText}
 		</p>
 	</div>
 
 	{#if visibleStores.length === 0}
 		<div
-			class="mt-6 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center"
+			class="mt-6 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center dark:bg-surface-soft"
 			use:reveal
 		>
-			<Store class="h-10 w-10 text-brand-700" aria-hidden="true" />
-			<h2 class="text-xl font-bold text-neutral-900">{t.storesPage.noResults}</h2>
+			<Store class="h-10 w-10 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+			<h2 class="text-xl font-bold text-ink">{t.storesPage.noResults}</h2>
 			<a
 				href={localizedPath(lang, '/shop')}
 				class="mt-2 inline-flex min-h-11 items-center rounded-full bg-brand-700 px-6 text-sm font-semibold text-white hover:bg-brand-800"
@@ -106,25 +106,25 @@
 		<ul class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
 			{#each visibleStores as store, i (store.id)}
 				<li
-					class="flex flex-col rounded-3xl bg-white p-5 ring-1 ring-neutral-200"
+					class="flex flex-col rounded-3xl bg-surface p-5 ring-1 ring-line"
 					use:reveal={{ delay: Math.min(i * 60, 300) }}
 				>
-					<h2 class="text-lg font-bold text-neutral-900">{localize(store.name, lang)}</h2>
-					<p class="mt-1 text-sm font-medium text-brand-700">{localize(store.city, lang)}</p>
-					<ul class="mt-4 space-y-3 text-sm text-neutral-600">
+					<h2 class="text-lg font-bold text-ink">{localize(store.name, lang)}</h2>
+					<p class="mt-1 text-sm font-medium text-brand-700 dark:text-brand-300">{localize(store.city, lang)}</p>
+					<ul class="mt-4 space-y-3 text-sm text-muted">
 						<li class="flex items-start gap-3">
-							<MapPin class="mt-0.5 h-5 w-5 shrink-0 text-brand-700" aria-hidden="true" />
+							<MapPin class="mt-0.5 h-5 w-5 shrink-0 text-brand-700 dark:text-brand-300" aria-hidden="true" />
 							<span>{localize(store.address, lang)}</span>
 						</li>
 						<li class="flex items-start gap-3">
-							<Clock class="mt-0.5 h-5 w-5 shrink-0 text-brand-700" aria-hidden="true" />
+							<Clock class="mt-0.5 h-5 w-5 shrink-0 text-brand-700 dark:text-brand-300" aria-hidden="true" />
 							<span>
 								<span class="sr-only">{t.storesPage.hoursLabel}: </span>
 								{localize(store.hours, lang)}
 							</span>
 						</li>
 						<li class="flex items-start gap-3">
-							<Phone class="mt-0.5 h-5 w-5 shrink-0 text-brand-700" aria-hidden="true" />
+							<Phone class="mt-0.5 h-5 w-5 shrink-0 text-brand-700 dark:text-brand-300" aria-hidden="true" />
 							<span>
 								<span class="sr-only">{t.storesPage.phoneLabel}: </span>
 								{store.phone}
@@ -138,7 +138,7 @@
 						aria-label={interpolate(t.storesPage.directionsLabel, {
 							name: localize(store.name, lang)
 						})}
-						class="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
+						class="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-brand-800 dark:text-brand-200 dark:hover:text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
 					>
 						<Navigation class="h-4 w-4" aria-hidden="true" />
 						{t.storesPage.directions}

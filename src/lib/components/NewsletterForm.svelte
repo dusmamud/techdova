@@ -38,12 +38,12 @@
 			aria-invalid={error ? 'true' : undefined}
 			aria-describedby={error ? errorId : success ? successId : undefined}
 			autocomplete="email"
-			class="h-12 w-full rounded-full bg-white pl-4 pr-14 text-sm text-neutral-900 placeholder:text-neutral-500"
+			class="h-12 w-full rounded-full bg-surface pl-4 pr-14 text-sm text-ink placeholder:text-muted"
 		/>
 		<button
 			type="submit"
 			aria-label={t.footer.subscribe}
-			class="absolute right-1 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-brand-600 text-white hover:bg-brand-500"
+			class="absolute right-1 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-brand-600 text-white hover:bg-brand-50 dark:hover:bg-surface-soft0"
 		>
 			<Send class="h-4 w-4" aria-hidden="true" />
 		</button>

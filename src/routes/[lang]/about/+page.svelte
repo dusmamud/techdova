@@ -27,15 +27,15 @@
 	/>
 	<section aria-labelledby="about-heading" class="grid items-center gap-8 lg:grid-cols-2" use:reveal>
 		<div>
-			<p class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-700">
+			<p class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-700 dark:text-brand-300">
 				<span class="h-px w-6 bg-brand-700" aria-hidden="true"></span>
 				{t.about.storyEyebrow}
 			</p>
-			<h1 id="about-heading" class="mt-3 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+			<h1 id="about-heading" class="mt-3 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
 				{t.about.storyTitle}
 			</h1>
-			<p class="mt-4 leading-relaxed text-neutral-600">{t.about.storyText1}</p>
-			<p class="mt-3 leading-relaxed text-neutral-600">{t.about.storyText2}</p>
+			<p class="mt-4 leading-relaxed text-muted">{t.about.storyText1}</p>
+			<p class="mt-3 leading-relaxed text-muted">{t.about.storyText2}</p>
 		</div>
 		<div class="relative min-h-[260px] overflow-hidden rounded-[2rem] sm:min-h-[320px]">
 			<Picture
@@ -51,23 +51,23 @@
 	</section>
 
 	<section aria-labelledby="values-heading" class="mt-14" use:reveal>
-		<p class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-700">
+		<p class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-700 dark:text-brand-300">
 			<span class="h-px w-6 bg-brand-700" aria-hidden="true"></span>
 			{t.about.valuesEyebrow}
 		</p>
-		<h2 id="values-heading" class="mt-3 text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+		<h2 id="values-heading" class="mt-3 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
 			{t.about.valuesTitle}
 		</h2>
 		<div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
 			{#each t.about.values as value, i (i)}
 				{@const ValueIcon = valueIcons[i]}
 				<div
-					class="card-lift rounded-3xl bg-brand-50 p-5"
+					class="card-lift rounded-3xl bg-brand-50 p-5 dark:bg-surface-soft"
 					use:reveal={{ delay: Math.min(i * 60, 300) }}
 				>
-					<ValueIcon class="h-7 w-7 text-brand-700" aria-hidden="true" />
-					<h3 class="mt-3 font-semibold text-neutral-900">{value.title}</h3>
-					<p class="mt-1 text-sm leading-relaxed text-neutral-600">{value.text}</p>
+					<ValueIcon class="h-7 w-7 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+					<h3 class="mt-3 font-semibold text-ink">{value.title}</h3>
+					<p class="mt-1 text-sm leading-relaxed text-muted">{value.text}</p>
 				</div>
 			{/each}
 		</div>
@@ -89,6 +89,8 @@
 			{t.about.ctaTitle}
 		</h2>
 		<p class="mx-auto mt-2 max-w-md text-brand-100">{t.about.ctaText}</p>
+		<!-- White button on the dark green CTA section: stays white in both
+			modes (bg-surface would turn dark and hide the brand-800 text). -->
 		<a
 			href={localizedPath(lang, '/shop')}
 			class="mt-6 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-brand-800 hover:bg-brand-50"

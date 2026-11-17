@@ -27,19 +27,19 @@
 			{ label: t.accessibility.title }
 		]}
 	/>
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>
+	<h1 class="text-3xl font-bold tracking-tight text-ink sm:text-4xl" use:reveal>
 		{t.accessibility.title}
 	</h1>
-	<p class="mt-2 text-sm text-neutral-500">{t.accessibility.updated}</p>
+	<p class="mt-2 text-sm text-muted">{t.accessibility.updated}</p>
 	<div class="mt-6 space-y-6">
 		{#each t.accessibility.sections as section, i (section.heading)}
 			<section use:reveal={{ delay: Math.min(i * 60, 300) }}>
-				<h2 class="text-lg font-bold text-neutral-900">{section.heading}</h2>
-				<p class="mt-1 leading-relaxed text-neutral-600">{section.body}</p>
+				<h2 class="text-lg font-bold text-ink">{section.heading}</h2>
+				<p class="mt-1 leading-relaxed text-muted">{section.body}</p>
 				{#if i === 2}
 					<a
 						href={localizedPath(lang, '/contact')}
-						class="mt-3 inline-flex min-h-11 items-center font-semibold text-brand-700 underline underline-offset-2 hover:text-brand-800"
+						class="mt-3 inline-flex min-h-11 items-center font-semibold text-brand-700 dark:text-brand-300 underline underline-offset-2 hover:text-brand-800 dark:hover:text-brand-200"
 					>
 						{t.accessibility.contactLink}
 					</a>
@@ -47,8 +47,8 @@
 			</section>
 			{#if i === 0}
 				<section use:reveal={{ delay: 60 }}>
-					<h2 class="text-lg font-bold text-neutral-900">{t.accessibility.featuresHeading}</h2>
-					<ul class="mt-1 list-disc space-y-1 pl-5 leading-relaxed text-neutral-600">
+					<h2 class="text-lg font-bold text-ink">{t.accessibility.featuresHeading}</h2>
+					<ul class="mt-1 list-disc space-y-1 pl-5 leading-relaxed text-muted">
 						{#each t.accessibility.features as feature (feature)}
 							<li>{feature}</li>
 						{/each}

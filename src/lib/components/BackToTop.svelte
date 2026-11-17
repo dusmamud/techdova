@@ -2,6 +2,7 @@
 	import { browser } from '$app/env';
 	import { ArrowUp } from '@lucide/svelte';
 	import { compare } from '#lib/stores/compare.svelte';
+	import { cookieBanner } from '#lib/stores/cookie-banner.svelte';
 
 	let { label }: { label: string } = $props();
 
@@ -10,8 +11,12 @@
 	// The compare tray is fixed to the bottom of the viewport and spans the
 	// full width on small screens, where it would sit under this button
 	// (both are bottom-4). Lift the button above the tray while the tray is
-	// open so both stay tappable.
+	// open so both stay tappable. Likewise lift above the cookie banner
+	// while it is visible (16px gap in both cases).
 	const trayOpen = $derived(compare.count > 0);
+	const bottom = $derived(
+		(cookieBanner.height > 0 ? cookieBanner.height + 16 : 16) + (trayOpen ? 80 : 0)
+	);
 
 	$effect(() => {
 		if (!browser) return;
@@ -35,9 +40,9 @@
 		type="button"
 		onclick={scrollToTop}
 		aria-label={label}
-		class="fixed right-4 z-40 grid h-12 w-12 place-items-center rounded-full bg-brand-700 text-white shadow-lg hover:bg-brand-800 motion-safe:transition-colors {trayOpen
-			? 'bottom-24'
-			: 'bottom-4'}"
+		class="fixed right-4 z-40 grid h-12 w-12 place-items-center rounded-full bg-brand-700 text-white shadow-lg hover:bg-brand-800 motion-safe:transition-colors"
+		style:bottom="{bottom}px"
+	>
 	>
 		<ArrowUp class="h-5 w-5" aria-hidden="true" />
 	</button>

@@ -14,6 +14,7 @@
 	import { SITE_URL } from '#lib/config';
 	import {
 		filterProducts,
+		getBrands,
 		getProductsByCategory,
 		sortProducts,
 		type SortKey
@@ -37,23 +38,61 @@
 	const SLIDER_STEP = 50;
 
 	// Local filter state (the category itself is fixed by the route). Same
-	// filter/sort vocabulary as the shop page: text query, max price, sort.
+	// filter/sort vocabulary as the shop page: text query, max price, sort,
+	// plus brand / rating / availability facets.
 	let query = $state('');
 	let sort = $state<SortKey>('featured');
 	let sliderValue = $state(SLIDER_MAX);
+	let selectedBrands = $state<string[]>([]);
+	let minRating = $state<number | null>(null);
+	let inStockOnly = $state(false);
+	let onSaleOnly = $state(false);
+
+	// Only brands present in this category are offered as facets.
+	const brandOptions = $derived(
+		getBrands().filter((brand) =>
+			categoryProducts.some((product) => product.brand === brand)
+		)
+	);
 
 	const maxPrice = $derived(sliderValue >= SLIDER_MAX ? null : sliderValue);
 	const filtered = $derived(
 		sortProducts(
-			filterProducts(categoryProducts, { query, maxPrice }, lang),
+			filterProducts(
+				categoryProducts,
+				{
+					query,
+					maxPrice,
+					brands: selectedBrands.length > 0 ? selectedBrands : undefined,
+					minRating,
+					inStockOnly,
+					onSaleOnly
+				},
+				lang
+			),
 			sort
 		)
 	);
 
+	const filterSignature = $derived(
+		[
+			query,
+			sort,
+			maxPrice ?? '',
+			selectedBrands.join(','),
+			minRating ?? '',
+			inStockOnly,
+			onSaleOnly
+		].join('|')
+	);
+
 	const countText = $derived(
 		filtered.length === 1
-			? t.categoryPage.resultOne
-			: interpolate(t.categoryPage.results, { count: filtered.length })
+			? interpolate(t.filters.showingOfOne, { total: categoryProducts.length })
+			: interpolate(t.filters.showingOf, {
+					shown: filtered.length,
+					total: categoryProducts.length
+				})
 	);
 
 	const sortOptions = $derived<SortOption[]>([
@@ -72,7 +111,12 @@
 	);
 
 	const activeFilterCount = $derived(
-		(query.trim() !== '' ? 1 : 0) + (maxPrice !== null ? 1 : 0)
+		(query.trim() !== '' ? 1 : 0) +
+			(maxPrice !== null ? 1 : 0) +
+			selectedBrands.length +
+			(minRating !== null ? 1 : 0) +
+			(inStockOnly ? 1 : 0) +
+			(onSaleOnly ? 1 : 0)
 	);
 
 	const chips = $derived<FilterChip[]>([
@@ -86,8 +130,25 @@
 						})
 					}
 				]
-			: [])
+			: []),
+		...selectedBrands.map((brand) => ({ id: `brand:${brand}`, label: brand })),
+		...(minRating !== null
+			? [
+					{
+						id: 'rating',
+						label: minRating === 4 ? t.filters.ratingFourPlus : t.filters.ratingThreePlus
+					}
+				]
+			: []),
+		...(inStockOnly ? [{ id: 'instock', label: t.filters.inStockOnly }] : []),
+		...(onSaleOnly ? [{ id: 'onsale', label: t.filters.onSaleOnly }] : [])
 	]);
+
+	function toggleBrand(brand: string): void {
+		selectedBrands = selectedBrands.includes(brand)
+			? selectedBrands.filter((candidate) => candidate !== brand)
+			: [...selectedBrands, brand];
+	}
 
 	function onSortChange(value: string): void {
 		sort = ['featured', 'price-asc', 'price-desc', 'rating'].includes(value)
@@ -98,12 +159,23 @@
 	function removeChip(id: string): void {
 		if (id === 'q') query = '';
 		if (id === 'maxPrice') sliderValue = SLIDER_MAX;
+		if (id === 'rating') minRating = null;
+		if (id === 'instock') inStockOnly = false;
+		if (id === 'onsale') onSaleOnly = false;
+		if (id.startsWith('brand:')) {
+			const removed = id.slice('brand:'.length);
+			selectedBrands = selectedBrands.filter((candidate) => candidate !== removed);
+		}
 	}
 
 	function clearAllFilters(): void {
 		query = '';
 		sliderValue = SLIDER_MAX;
 		sort = 'featured';
+		selectedBrands = [];
+		minRating = null;
+		inStockOnly = false;
+		onSaleOnly = false;
 	}
 
 	// Mobile drawer owns DRAFT filter state: opening syncs the drafts from
@@ -111,6 +183,10 @@
 	let drawerOpen = $state(false);
 	let draftQuery = $state('');
 	let draftSliderValue = $state(SLIDER_MAX);
+	let draftBrands = $state<string[]>([]);
+	let draftMinRating = $state<number | null>(null);
+	let draftInStock = $state(false);
+	let draftOnSale = $state(false);
 
 	const draftMaxPrice = $derived(
 		draftSliderValue >= SLIDER_MAX ? null : draftSliderValue
@@ -118,7 +194,14 @@
 	const draftResultCount = $derived(
 		filterProducts(
 			categoryProducts,
-			{ query: draftQuery, maxPrice: draftMaxPrice },
+			{
+				query: draftQuery,
+				maxPrice: draftMaxPrice,
+				brands: draftBrands.length > 0 ? draftBrands : undefined,
+				minRating: draftMinRating,
+				inStockOnly: draftInStock,
+				onSaleOnly: draftOnSale
+			},
 			lang
 		).length
 	);
@@ -133,18 +216,36 @@
 	function openDrawer(): void {
 		draftQuery = query;
 		draftSliderValue = sliderValue;
+		draftBrands = [...selectedBrands];
+		draftMinRating = minRating;
+		draftInStock = inStockOnly;
+		draftOnSale = onSaleOnly;
 		drawerOpen = true;
+	}
+
+	function toggleDraftBrand(brand: string): void {
+		draftBrands = draftBrands.includes(brand)
+			? draftBrands.filter((candidate) => candidate !== brand)
+			: [...draftBrands, brand];
 	}
 
 	function applyDraft(): void {
 		query = draftQuery;
 		sliderValue = draftSliderValue;
+		selectedBrands = [...draftBrands];
+		minRating = draftMinRating;
+		inStockOnly = draftInStock;
+		onSaleOnly = draftOnSale;
 		drawerOpen = false;
 	}
 
 	function clearDraft(): void {
 		draftQuery = '';
 		draftSliderValue = SLIDER_MAX;
+		draftBrands = [];
+		draftMinRating = null;
+		draftInStock = false;
+		draftOnSale = false;
 	}
 
 	const breadcrumbJsonLd = $derived({
@@ -203,10 +304,10 @@
 			class="h-28 w-28 shrink-0 rounded-3xl bg-brand-50 object-cover sm:h-40 sm:w-40 lg:h-48 lg:w-48"
 		/>
 		<div class="min-w-0">
-			<h1 class="text-[1.75rem] font-bold tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl">
+			<h1 class="text-[1.75rem] font-bold tracking-tight text-ink sm:text-3xl lg:text-4xl">
 				{name}
 			</h1>
-			<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{description}</p>
+			<p class="mt-2 max-w-2xl leading-relaxed text-muted">{description}</p>
 		</div>
 	</div>
 
@@ -214,7 +315,7 @@
 	<div class="relative mt-6 lg:hidden">
 		<label class="sr-only" for="category-search-mobile">{t.shop.searchLabel}</label>
 		<Search
-			class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500"
+			class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
 			aria-hidden="true"
 		/>
 		<input
@@ -222,7 +323,7 @@
 			type="search"
 			bind:value={query}
 			placeholder={t.shop.searchPlaceholder}
-			class="h-11 w-full rounded-full bg-neutral-100 pl-10 pr-4 text-sm text-neutral-900 placeholder:text-neutral-500 focus:bg-white"
+			class="h-11 w-full rounded-full bg-surface-soft pl-10 pr-4 text-sm text-ink placeholder:text-muted focus:bg-surface"
 		/>
 	</div>
 
@@ -246,7 +347,7 @@
 				<div class="relative w-52 shrink-0 xl:w-64">
 					<label class="sr-only" for="category-search">{t.shop.searchLabel}</label>
 					<Search
-						class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500"
+						class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
 						aria-hidden="true"
 					/>
 					<input
@@ -254,7 +355,7 @@
 						type="search"
 						bind:value={query}
 						placeholder={t.shop.searchPlaceholder}
-						class="h-11 w-full rounded-full bg-neutral-100 pl-10 pr-4 text-sm text-neutral-900 placeholder:text-neutral-500 focus:bg-white"
+						class="h-11 w-full rounded-full bg-surface-soft pl-10 pr-4 text-sm text-ink placeholder:text-muted focus:bg-surface"
 					/>
 				</div>
 				<div class="flex shrink-0 items-center gap-2">
@@ -268,9 +369,112 @@
 						bind:value={sliderValue}
 						class="h-11 w-24 accent-brand-700 xl:w-32"
 					/>
-					<span class="whitespace-nowrap text-sm font-semibold text-neutral-900" aria-live="polite">
+					<span class="whitespace-nowrap text-sm font-semibold text-ink" aria-live="polite">
 						{priceDisplay}
 					</span>
+				</div>
+			</div>
+		{/snippet}
+		{#snippet facets()}
+			<div
+				class="mt-4 hidden flex-wrap items-end gap-x-6 gap-y-4 border-t border-line pt-4 lg:flex"
+			>
+				<h2 class="sr-only">{t.filters.facetsHeading}</h2>
+				<fieldset class="min-w-0">
+					<legend class="text-sm font-semibold text-ink">{t.filters.brandsLabel}</legend>
+					<div class="mt-2 flex flex-wrap gap-2">
+						{#each brandOptions as brand (brand)}
+							<label
+								class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-3 text-sm font-medium ring-1 {selectedBrands.includes(brand)
+									? 'bg-brand-50 text-brand-800 ring-brand-700 dark:bg-surface-soft'
+									: 'text-ink-soft ring-line hover:bg-surface-soft'}"
+							>
+								<input
+									type="checkbox"
+									checked={selectedBrands.includes(brand)}
+									onchange={() => toggleBrand(brand)}
+									class="h-4 w-4 shrink-0 accent-brand-700"
+								/>
+								{brand}
+							</label>
+						{/each}
+					</div>
+				</fieldset>
+				<fieldset class="min-w-0">
+					<legend class="text-sm font-semibold text-ink">{t.filters.ratingLabel}</legend>
+					<div class="mt-2 flex flex-wrap gap-2">
+						<button
+							type="button"
+							aria-pressed={minRating === null}
+							onclick={() => {
+								minRating = null;
+							}}
+							class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium ring-1 {minRating ===
+							null
+								? 'bg-brand-700 text-white ring-brand-700'
+								: 'text-ink-soft ring-line hover:bg-surface-soft'}"
+						>
+							{t.filters.ratingAny}
+						</button>
+						<button
+							type="button"
+							aria-pressed={minRating === 4}
+							onclick={() => {
+								minRating = 4;
+							}}
+							class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium ring-1 {minRating ===
+							4
+								? 'bg-brand-700 text-white ring-brand-700'
+								: 'text-ink-soft ring-line hover:bg-surface-soft'}"
+						>
+							{t.filters.ratingFourPlus}
+						</button>
+						<button
+							type="button"
+							aria-pressed={minRating === 3}
+							onclick={() => {
+								minRating = 3;
+							}}
+							class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium ring-1 {minRating ===
+							3
+								? 'bg-brand-700 text-white ring-brand-700'
+								: 'text-ink-soft ring-line hover:bg-surface-soft'}"
+						>
+							{t.filters.ratingThreePlus}
+						</button>
+					</div>
+				</fieldset>
+				<div class="flex flex-wrap gap-2">
+					<label
+						class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-3 text-sm font-medium ring-1 {inStockOnly
+							? 'bg-brand-50 text-brand-800 ring-brand-700 dark:bg-surface-soft'
+							: 'text-ink-soft ring-line hover:bg-surface-soft'}"
+					>
+						<input
+							type="checkbox"
+							checked={inStockOnly}
+							onchange={() => {
+								inStockOnly = !inStockOnly;
+							}}
+							class="h-4 w-4 shrink-0 accent-brand-700"
+						/>
+						{t.filters.inStockOnly}
+					</label>
+					<label
+						class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-3 text-sm font-medium ring-1 {onSaleOnly
+							? 'bg-brand-50 text-brand-800 ring-brand-700 dark:bg-surface-soft'
+							: 'text-ink-soft ring-line hover:bg-surface-soft'}"
+					>
+						<input
+							type="checkbox"
+							checked={onSaleOnly}
+							onchange={() => {
+								onSaleOnly = !onSaleOnly;
+							}}
+							class="h-4 w-4 shrink-0 accent-brand-700"
+						/>
+						{t.filters.onSaleOnly}
+					</label>
 				</div>
 			</div>
 		{/snippet}
@@ -287,14 +491,114 @@
 		resultCount={draftResultCount}
 		id="category-filter-drawer"
 	>
+		{#snippet facets()}
+			<div class="space-y-6">
+				<fieldset>
+					<legend class="text-sm font-semibold text-ink">{t.filters.brandsLabel}</legend>
+					<div class="mt-3 flex flex-wrap gap-2">
+						{#each brandOptions as brand (brand)}
+							<label
+								class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-3 text-sm font-medium ring-1 {draftBrands.includes(brand)
+									? 'bg-brand-50 text-brand-800 ring-brand-700 dark:bg-surface-soft'
+									: 'text-ink-soft ring-line hover:bg-surface-soft'}"
+							>
+								<input
+									type="checkbox"
+									checked={draftBrands.includes(brand)}
+									onchange={() => toggleDraftBrand(brand)}
+									class="h-4 w-4 shrink-0 accent-brand-700"
+								/>
+								{brand}
+							</label>
+						{/each}
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend class="text-sm font-semibold text-ink">{t.filters.ratingLabel}</legend>
+					<div class="mt-3 flex flex-wrap gap-2">
+						<button
+							type="button"
+							aria-pressed={draftMinRating === null}
+							onclick={() => {
+								draftMinRating = null;
+							}}
+							class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium ring-1 {draftMinRating ===
+							null
+								? 'bg-brand-700 text-white ring-brand-700'
+								: 'text-ink-soft ring-line hover:bg-surface-soft'}"
+						>
+							{t.filters.ratingAny}
+						</button>
+						<button
+							type="button"
+							aria-pressed={draftMinRating === 4}
+							onclick={() => {
+								draftMinRating = 4;
+							}}
+							class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium ring-1 {draftMinRating ===
+							4
+								? 'bg-brand-700 text-white ring-brand-700'
+								: 'text-ink-soft ring-line hover:bg-surface-soft'}"
+						>
+							{t.filters.ratingFourPlus}
+						</button>
+						<button
+							type="button"
+							aria-pressed={draftMinRating === 3}
+							onclick={() => {
+								draftMinRating = 3;
+							}}
+							class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium ring-1 {draftMinRating ===
+							3
+								? 'bg-brand-700 text-white ring-brand-700'
+								: 'text-ink-soft ring-line hover:bg-surface-soft'}"
+						>
+							{t.filters.ratingThreePlus}
+						</button>
+					</div>
+				</fieldset>
+				<div class="flex flex-wrap gap-2">
+					<label
+						class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-3 text-sm font-medium ring-1 {draftInStock
+							? 'bg-brand-50 text-brand-800 ring-brand-700 dark:bg-surface-soft'
+							: 'text-ink-soft ring-line hover:bg-surface-soft'}"
+					>
+						<input
+							type="checkbox"
+							checked={draftInStock}
+							onchange={() => {
+								draftInStock = !draftInStock;
+							}}
+							class="h-4 w-4 shrink-0 accent-brand-700"
+						/>
+						{t.filters.inStockOnly}
+					</label>
+					<label
+						class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-3 text-sm font-medium ring-1 {draftOnSale
+							? 'bg-brand-50 text-brand-800 ring-brand-700 dark:bg-surface-soft'
+							: 'text-ink-soft ring-line hover:bg-surface-soft'}"
+					>
+						<input
+							type="checkbox"
+							checked={draftOnSale}
+							onchange={() => {
+								draftOnSale = !draftOnSale;
+							}}
+							class="h-4 w-4 shrink-0 accent-brand-700"
+						/>
+						{t.filters.onSaleOnly}
+					</label>
+				</div>
+			</div>
+		{/snippet}
 		<div class="space-y-6">
 			<div>
-				<label for="category-drawer-search" class="mb-1 block text-sm font-medium text-neutral-700">
+				<label for="category-drawer-search" class="mb-1 block text-sm font-medium text-ink-soft">
 					{t.shop.searchLabel}
 				</label>
 				<div class="relative">
 					<Search
-						class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500"
+						class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
 						aria-hidden="true"
 					/>
 					<input
@@ -302,7 +606,7 @@
 						type="search"
 						bind:value={draftQuery}
 						placeholder={t.shop.searchPlaceholder}
-						class="h-11 w-full rounded-full bg-neutral-100 pl-10 pr-4 text-sm text-neutral-900 placeholder:text-neutral-500 focus:bg-white"
+						class="h-11 w-full rounded-full bg-surface-soft pl-10 pr-4 text-sm text-ink placeholder:text-muted focus:bg-surface"
 					/>
 				</div>
 			</div>
@@ -310,11 +614,11 @@
 				<div class="flex items-baseline justify-between gap-3">
 					<label
 						for="category-drawer-max-price"
-						class="text-sm font-medium text-neutral-700"
+						class="text-sm font-medium text-ink-soft"
 					>
 						{t.shop.priceLabel}
 					</label>
-					<span class="shrink-0 text-sm font-semibold text-neutral-900" aria-live="polite">
+					<span class="shrink-0 text-sm font-semibold text-ink" aria-live="polite">
 						{draftPriceDisplay}
 					</span>
 				</div>
@@ -332,10 +636,10 @@
 	</FilterDrawer>
 
 	{#if filtered.length === 0}
-		<div class="mt-6 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center">
-			<SearchX class="h-10 w-10 text-brand-700" aria-hidden="true" />
-			<h2 class="text-xl font-bold text-neutral-900">{t.shop.noResults}</h2>
-			<p class="max-w-sm text-neutral-600">{t.shop.noResultsHint}</p>
+		<div class="mt-6 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center dark:bg-surface-soft">
+			<SearchX class="h-10 w-10 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+			<h2 class="text-xl font-bold text-ink">{t.shop.noResults}</h2>
+			<p class="max-w-sm text-muted">{t.shop.noResultsHint}</p>
 			<button
 				type="button"
 				onclick={clearAllFilters}
@@ -345,20 +649,21 @@
 			</button>
 		</div>
 	{:else}
-		<div
-			class="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
-			use:reveal
-		>
-			{#each filtered as product (product.slug)}
-				<ProductCard {product} {lang} {t} />
-			{/each}
-		</div>
+		{#key filterSignature}
+			<div
+				class="mt-6 grid animate-grid-in grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
+			>
+				{#each filtered as product (product.slug)}
+					<ProductCard {product} {lang} {t} />
+				{/each}
+			</div>
+		{/key}
 	{/if}
 
 	<p class="mt-8">
 		<a
 			href={localizedPath(lang, '/shop')}
-			class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
+			class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold text-brand-800 dark:text-brand-200 dark:hover:text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
 		>
 			{t.categoryPage.backToShop}
 		</a>

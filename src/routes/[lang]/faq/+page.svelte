@@ -35,16 +35,16 @@
 			{ label: t.faq.title }
 		]}
 	/>
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>{t.faq.title}</h1>
-	<p class="mt-2 leading-relaxed text-neutral-600">{t.faq.intro}</p>
+	<h1 class="text-3xl font-bold tracking-tight text-ink sm:text-4xl" use:reveal>{t.faq.title}</h1>
+	<p class="mt-2 leading-relaxed text-muted">{t.faq.intro}</p>
 	<div class="mt-6" use:reveal>
 		<FaqAccordion items={t.faq.items} />
 	</div>
-	<p class="mt-8 leading-relaxed text-neutral-600" use:reveal>
+	<p class="mt-8 leading-relaxed text-muted" use:reveal>
 		{t.faq.contactPrompt}{' '}
 		<a
 			href={localizedPath(lang, '/contact')}
-			class="inline-flex min-h-11 items-center font-semibold text-brand-700 underline underline-offset-2 hover:text-brand-800"
+			class="inline-flex min-h-11 items-center font-semibold text-brand-700 dark:text-brand-300 underline underline-offset-2 hover:text-brand-800 dark:hover:text-brand-200"
 		>
 			{t.faq.contactLink}
 		</a>

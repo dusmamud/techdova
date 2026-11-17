@@ -32,7 +32,7 @@
 	<section aria-labelledby="recently-viewed-heading" use:reveal>
 		<h2
 			id="recently-viewed-heading"
-			class="text-[1.375rem] font-bold tracking-tight text-neutral-900 sm:text-2xl lg:text-3xl"
+			class="text-[1.375rem] font-bold tracking-tight text-ink sm:text-2xl lg:text-3xl"
 		>
 			{t.recentlyViewed.heading}
 		</h2>

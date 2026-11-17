@@ -24,7 +24,7 @@
 	const panelId = $derived(`faq-panel-${slug}`);
 </script>
 
-<div class="overflow-hidden rounded-3xl bg-white ring-1 ring-neutral-200">
+<div class="overflow-hidden rounded-3xl bg-surface ring-1 ring-line">
 	<h3>
 		<button
 			type="button"
@@ -34,11 +34,11 @@
 			onclick={() => {
 				isOpen = !isOpen;
 			}}
-			class="flex min-h-11 w-full items-center justify-between gap-4 px-5 py-4 text-left text-base font-semibold text-neutral-900 hover:text-brand-800"
+			class="flex min-h-11 w-full items-center justify-between gap-4 px-5 py-4 text-left text-base font-semibold text-ink hover:text-brand-800 dark:hover:text-brand-200"
 		>
 			<span>{question}</span>
 			<ChevronDown
-				class="h-5 w-5 shrink-0 text-brand-700 motion-safe:transition-transform motion-safe:duration-300 {isOpen
+				class="h-5 w-5 shrink-0 text-brand-700 dark:text-brand-300 motion-safe:transition-transform motion-safe:duration-300 {isOpen
 					? 'rotate-180'
 					: ''}"
 				aria-hidden="true"
@@ -56,7 +56,7 @@
 	>
 		<div class="min-h-0 overflow-hidden">
 			<p
-				class="px-5 pb-5 leading-relaxed text-neutral-600 motion-safe:transition-opacity motion-safe:duration-300 {isOpen
+				class="px-5 pb-5 leading-relaxed text-muted motion-safe:transition-opacity motion-safe:duration-300 {isOpen
 					? 'opacity-100'
 					: 'invisible opacity-0'}"
 			>

@@ -45,23 +45,23 @@
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<div use:reveal>
-		<h1 class="text-[1.75rem] font-bold tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl">
+		<h1 class="text-[1.75rem] font-bold tracking-tight text-ink sm:text-3xl lg:text-4xl">
 			{t.dealsPage.title}
 		</h1>
-		<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.dealsPage.description}</p>
+		<p class="mt-2 max-w-2xl leading-relaxed text-muted">{t.dealsPage.description}</p>
 	</div>
 
 	<div class="mt-6" use:reveal>
-		<p class="text-sm font-semibold text-neutral-900">{t.dealsPage.endsIn}</p>
+		<p class="text-sm font-semibold text-ink">{t.dealsPage.endsIn}</p>
 		<div class="mt-2">
 			<CountdownTimer targetIso={DEAL_END_ISO} labels={t.countdown} />
 		</div>
 	</div>
 
 	{#if deals.length === 0}
-		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center">
-			<h2 class="text-xl font-bold text-neutral-900">{t.dealsPage.empty}</h2>
-			<p class="max-w-sm text-neutral-600">{t.dealsPage.emptyHint}</p>
+		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center dark:bg-surface-soft">
+			<h2 class="text-xl font-bold text-ink">{t.dealsPage.empty}</h2>
+			<p class="max-w-sm text-muted">{t.dealsPage.emptyHint}</p>
 			<a
 				href={localizedPath(lang, '/shop')}
 				class="mt-2 inline-flex min-h-11 items-center rounded-full bg-brand-700 px-6 text-sm font-semibold text-white hover:bg-brand-800"
@@ -79,35 +79,36 @@
 			{sortOptions}
 			onSortChange={onSortChange}
 		/>
-		<div
-			class="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
-			use:reveal
-		>
-			{#each deals as product (product.slug)}
-				<ProductCard {product} {lang} {t} />
-			{/each}
-		</div>
+		{#key sort}
+			<div
+				class="mt-6 grid animate-grid-in grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
+			>
+				{#each deals as product (product.slug)}
+					<ProductCard {product} {lang} {t} />
+				{/each}
+			</div>
+		{/key}
 	{/if}
 
 	<section
 		aria-labelledby="deals-promo-heading"
-		class="mt-10 overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand-100 via-brand-50 to-white ring-1 ring-brand-100 sm:mt-12"
+		class="mt-10 overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand-100 via-brand-50 to-white ring-1 ring-brand-100 dark:from-surface-strong dark:via-surface-soft dark:to-surface sm:mt-12"
 		use:reveal
 	>
 		<div class="grid items-center gap-5 p-5 sm:gap-6 sm:p-8 lg:grid-cols-2 lg:gap-10 lg:p-10">
 			<div>
-				<p class="text-xs font-bold uppercase tracking-widest text-brand-700">{t.promo.eyebrow}</p>
+				<p class="text-xs font-bold uppercase tracking-widest text-brand-700 dark:text-brand-300">{t.promo.eyebrow}</p>
 				<h2
 					id="deals-promo-heading"
-					class="mt-3 text-[1.625rem] font-bold leading-tight tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl"
+					class="mt-3 text-[1.625rem] font-bold leading-tight tracking-tight text-ink sm:text-3xl lg:text-4xl"
 				>
 					{t.promo.titleA}
-					<span class="block text-lg font-semibold text-neutral-700 sm:text-xl lg:text-2xl">{t.promo.titleB}</span>
+					<span class="block text-lg font-semibold text-ink-soft sm:text-xl lg:text-2xl">{t.promo.titleB}</span>
 				</h2>
-				<p class="mt-3 max-w-md leading-relaxed text-neutral-600">{t.promo.subtitle}</p>
+				<p class="mt-3 max-w-md leading-relaxed text-muted">{t.promo.subtitle}</p>
 				<a
 					href={localizedPath(lang, '/shop')}
-					class="mt-6 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
+					class="mt-6 inline-flex min-h-12 items-center gap-2 rounded-full bg-surface px-6 text-sm font-semibold text-brand-800 dark:text-brand-200 dark:hover:text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
 				>
 					{t.promo.cta}
 					<ArrowRight class="h-4 w-4" aria-hidden="true" />

@@ -23,6 +23,8 @@
 		{ path: '/new-arrivals', label: t.sitemapPage.labels.newArrivals },
 		{ path: '/best-sellers', label: t.sitemapPage.labels.bestSellers },
 		{ path: '/gift-cards', label: t.sitemapPage.labels.giftCards },
+		{ path: '/brands', label: t.footer.brands },
+		{ path: '/rewards', label: t.footer.rewards },
 		{ path: '/search', label: t.sitemapPage.labels.search }
 	]);
 
@@ -46,7 +48,10 @@
 		{ path: '/shipping', label: t.sitemapPage.labels.shipping },
 		{ path: '/returns', label: t.sitemapPage.labels.returns },
 		{ path: '/payment', label: t.sitemapPage.labels.payment },
-		{ path: '/track-order', label: t.sitemapPage.labels.trackOrder }
+		{ path: '/track-order', label: t.sitemapPage.labels.trackOrder },
+		{ path: '/trade-in', label: t.footer.tradeIn },
+		{ path: '/financing', label: t.footer.financing },
+		{ path: '/warranty', label: t.footer.warranty }
 	]);
 
 	const companyEntries = $derived<Entry[]>([
@@ -67,6 +72,7 @@
 		{ path: '/contact', label: t.sitemapPage.labels.contact },
 		{ path: '/terms', label: t.sitemapPage.labels.terms },
 		{ path: '/privacy', label: t.sitemapPage.labels.privacy },
+		{ path: '/cookies', label: t.footer.cookies },
 		{ path: '/accessibility', label: t.sitemapPage.labels.accessibility },
 		{ path: '/sitemap', label: t.sitemapPage.labels.sitemap }
 	]);
@@ -84,13 +90,13 @@
 	<ul class="mt-3 space-y-1">
 		{#each entries as entry (entry.path)}
 			<li class="flex flex-wrap items-center gap-x-3 gap-y-1">
-				<span class="text-neutral-800">{entry.label}</span>
+				<span class="text-ink-soft">{entry.label}</span>
 				<span class="flex items-center gap-3 text-sm">
 					{#each locales as locale (locale)}
 						<a
 							href={localizedPath(locale, entry.path)}
 							aria-label="{getDictionary(locale).localeName} — {entry.label}"
-							class="inline-flex min-h-11 items-center font-semibold text-brand-700 underline underline-offset-2 hover:text-brand-800"
+							class="inline-flex min-h-11 items-center font-semibold text-brand-700 dark:text-brand-300 underline underline-offset-2 hover:text-brand-800 dark:hover:text-brand-200"
 						>
 							{getDictionary(locale).localeName}
 						</a>
@@ -111,30 +117,30 @@
 			{ label: t.sitemapPage.title }
 		]}
 	/>
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>
+	<h1 class="text-3xl font-bold tracking-tight text-ink sm:text-4xl" use:reveal>
 		{t.sitemapPage.title}
 	</h1>
-	<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.sitemapPage.description}</p>
+	<p class="mt-2 max-w-2xl leading-relaxed text-muted">{t.sitemapPage.description}</p>
 
 	<div class="mt-8 grid gap-10 sm:grid-cols-2">
 		<section use:reveal>
-			<h2 class="text-lg font-bold text-neutral-900">{t.sitemapPage.shopHeading}</h2>
+			<h2 class="text-lg font-bold text-ink">{t.sitemapPage.shopHeading}</h2>
 			{@render entryList(shopEntries)}
-			<h3 class="mt-6 font-semibold text-neutral-900">{t.sitemapPage.categoriesLabel}</h3>
+			<h3 class="mt-6 font-semibold text-ink">{t.sitemapPage.categoriesLabel}</h3>
 			{@render entryList(categoryEntries)}
-			<h3 class="mt-6 font-semibold text-neutral-900">{t.sitemapPage.productsLabel}</h3>
+			<h3 class="mt-6 font-semibold text-ink">{t.sitemapPage.productsLabel}</h3>
 			{@render entryList(productEntries)}
 		</section>
 
 		<section use:reveal={{ delay: 60 }}>
-			<h2 class="text-lg font-bold text-neutral-900">{t.sitemapPage.helpHeading}</h2>
+			<h2 class="text-lg font-bold text-ink">{t.sitemapPage.helpHeading}</h2>
 			{@render entryList(helpEntries)}
 		</section>
 
 		<section use:reveal={{ delay: 120 }}>
-			<h2 class="text-lg font-bold text-neutral-900">{t.sitemapPage.companyHeading}</h2>
+			<h2 class="text-lg font-bold text-ink">{t.sitemapPage.companyHeading}</h2>
 			{@render entryList(companyEntries)}
-			<h3 class="mt-6 font-semibold text-neutral-900">{t.sitemapPage.postsLabel}</h3>
+			<h3 class="mt-6 font-semibold text-ink">{t.sitemapPage.postsLabel}</h3>
 			{@render entryList(postEntries)}
 			<div class="mt-6">
 				{@render entryList(companyMoreEntries)}
@@ -142,7 +148,7 @@
 		</section>
 
 		<section use:reveal={{ delay: 180 }}>
-			<h2 class="text-lg font-bold text-neutral-900">{t.sitemapPage.accountHeading}</h2>
+			<h2 class="text-lg font-bold text-ink">{t.sitemapPage.accountHeading}</h2>
 			{@render entryList(accountEntries)}
 		</section>
 	</div>

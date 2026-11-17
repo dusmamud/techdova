@@ -15,6 +15,8 @@
 		{ label: t.footer.newArrivals, href: localizedPath(lang, '/new-arrivals') },
 		{ label: t.footer.bestSellers, href: localizedPath(lang, '/best-sellers') },
 		{ label: t.footer.giftCards, href: localizedPath(lang, '/gift-cards') },
+		{ label: t.footer.brands, href: localizedPath(lang, '/brands') },
+		{ label: t.footer.rewards, href: localizedPath(lang, '/rewards') },
 		{ label: t.footer.wishlist, href: localizedPath(lang, '/wishlist') },
 		{ label: t.footer.compare, href: localizedPath(lang, '/compare') }
 	]);
@@ -25,7 +27,10 @@
 		{ label: t.footer.returns, href: localizedPath(lang, '/returns') },
 		{ label: t.footer.payment, href: localizedPath(lang, '/payment') },
 		{ label: t.footer.faq, href: localizedPath(lang, '/faq') },
-		{ label: t.footer.trackOrder, href: localizedPath(lang, '/track-order') }
+		{ label: t.footer.trackOrder, href: localizedPath(lang, '/track-order') },
+		{ label: t.footer.tradeIn, href: localizedPath(lang, '/trade-in') },
+		{ label: t.footer.financing, href: localizedPath(lang, '/financing') },
+		{ label: t.footer.warranty, href: localizedPath(lang, '/warranty') }
 	]);
 
 	const companyLinks = $derived([
@@ -39,9 +44,36 @@
 	]);
 </script>
 
-<footer class="bg-brand-950 text-white">
-	<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
-		<div class="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1.4fr]">
+<footer class="relative">
+	<!-- Curved top edge: the arch is filled with the footer colour and the
+		area above it stays transparent, so the page surface shows through
+		in both light and dark mode. -->
+	<div aria-hidden="true" class="pointer-events-none block h-8 w-full text-brand-950 sm:h-12">
+		<svg
+			class="block h-full w-full"
+			viewBox="0 0 1440 48"
+			preserveAspectRatio="none"
+			fill="currentColor"
+			focusable="false"
+		>
+			<path d="M0 48 L0 32 C240 8 480 0 720 0 C960 0 1200 8 1440 32 L1440 48 Z" />
+		</svg>
+	</div>
+	<div class="relative overflow-hidden bg-brand-950 text-white">
+		<!-- Decorative leaf motif, echoing the reference footer. Pure
+			decoration: hidden from assistive tech and clipped to the footer. -->
+		<svg
+			aria-hidden="true"
+			focusable="false"
+			class="pointer-events-none absolute -bottom-4 -right-2 hidden h-44 w-44 text-white/[0.07] sm:block lg:h-56 lg:w-56"
+			viewBox="0 0 200 200"
+			fill="currentColor"
+		>
+			<path d="M100 190 C100 120 130 60 195 20 C195 100 160 165 100 190 Z" />
+			<path d="M100 190 C70 150 50 100 45 40 C100 60 125 120 100 190 Z" opacity="0.7" />
+		</svg>
+		<div class="relative mx-auto max-w-7xl px-4 pb-10 pt-2 sm:px-6 lg:px-8 lg:pb-12 lg:pt-4">
+			<div class="grid grid-cols-2 gap-x-4 gap-y-7 sm:gap-x-6 sm:gap-y-8 lg:grid-cols-[1.35fr_0.85fr_0.85fr_0.95fr_1.25fr]">
 			<div class="col-span-2 lg:col-span-1">
 				<a
 					href={localizedPath(lang, '/')}
@@ -56,7 +88,7 @@
 					</span>
 				</a>
 				<p class="mt-3 text-sm text-white/70">{t.footer.tagline}</p>
-				<h2 class="mt-6 text-base font-semibold">{t.footer.followUs}</h2>
+				<h2 class="mt-5 text-base font-semibold">{t.footer.followUs}</h2>
 				<ul class="mt-3 flex gap-2">
 					{#each SOCIAL_LINKS as social (social.network)}
 						<li>
@@ -132,7 +164,7 @@
 		</div>
 
 		<div
-			class="mt-10 flex flex-col gap-2 border-t border-white/10 pt-5 text-sm text-white/60 sm:flex-row sm:items-center sm:justify-between lg:mt-12"
+			class="mt-8 flex flex-col gap-2 border-t border-white/10 pt-5 text-sm text-white/60 sm:flex-row sm:items-center sm:justify-between lg:mt-10"
 		>
 			<p>© {SITE_YEAR} {SITE_NAME}. {t.footer.rights}</p>
 			<div class="flex flex-wrap gap-x-5 gap-y-1">
@@ -148,7 +180,21 @@
 				>
 					{t.footer.privacy}
 				</a>
+				<a
+					href={localizedPath(lang, '/cookies')}
+					class="inline-flex min-h-11 items-center hover:text-white"
+				>
+					{t.footer.cookies}
+				</a>
+				<button
+					type="button"
+					onclick={() => window.dispatchEvent(new CustomEvent('techdova:open-cookie-settings'))}
+					class="inline-flex min-h-11 items-center hover:text-white"
+				>
+					{t.footer.cookieSettings}
+				</button>
 			</div>
+		</div>
 		</div>
 	</div>
 </footer>

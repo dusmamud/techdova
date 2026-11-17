@@ -8,9 +8,11 @@
 	} from '#lib/components/FilterBar.svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import { categories, getCategory, type CategorySlug } from '#lib/data/categories';
 	import { filterProducts, products, sortProducts, type SortKey } from '#lib/data/products';
+	import { getSynonymCategories } from '#lib/data/search-synonyms';
 	import { interpolate } from '#lib/format';
-	import { getDictionary } from '#lib/i18n/index';
+	import { getDictionary, localize } from '#lib/i18n/index';
 	import { localizedPath } from '#lib/paths';
 	import type { PageProps } from './$types';
 
@@ -30,9 +32,23 @@
 
 	const trimmed = $derived(query.trim());
 	let sort = $state<SortKey>('featured');
+	let selectedCategory = $state<CategorySlug | null>(null);
 	const results = $derived(
-		sortProducts(filterProducts(products, { query: trimmed }, lang), sort)
+		sortProducts(
+			filterProducts(products, { query: trimmed, category: selectedCategory }, lang),
+			sort
+		)
 	);
+	// True when any query word maps to a category via the synonym map (same
+	// word-splitting `filterProducts` uses), so the note only shows when a
+	// synonym actually widened the search.
+	const hasSynonymMatch = $derived(
+		trimmed
+			.toLowerCase()
+			.split(/\s+/)
+			.some((word) => getSynonymCategories(word).length > 0)
+	);
+	const filterSignature = $derived(`${trimmed}|${selectedCategory ?? ''}|${sort}`);
 
 	const sortOptions = $derived<SortOption[]>([
 		{ value: 'featured', label: t.shop.sortFeatured },
@@ -41,9 +57,12 @@
 		{ value: 'rating', label: t.shop.sortRating }
 	]);
 
-	const chips = $derived<FilterChip[]>(
-		trimmed !== '' ? [{ id: 'q', label: trimmed }] : []
-	);
+	const chips = $derived<FilterChip[]>([
+		...(trimmed !== '' ? [{ id: 'q', label: trimmed }] : []),
+		...(selectedCategory !== null
+			? [{ id: 'category', label: localize(getCategory(selectedCategory).name, lang) }]
+			: [])
+	]);
 
 	function onSortChange(value: string): void {
 		sort = ['featured', 'price-asc', 'price-desc', 'rating'].includes(value)
@@ -51,8 +70,14 @@
 			: 'featured';
 	}
 
-	function clearQuery(): void {
+	function removeChip(id: string): void {
+		if (id === 'q') query = '';
+		if (id === 'category') selectedCategory = null;
+	}
+
+	function clearAll(): void {
 		query = '';
+		selectedCategory = null;
 	}
 
 	const resultsText = $derived(
@@ -62,6 +87,9 @@
 	);
 
 	function searchTerm(term: string): void {
+		// A popular search starts fresh: any category picked for a previous
+		// query would otherwise silently narrow the new search.
+		selectedCategory = null;
 		query = term;
 	}
 </script>
@@ -70,16 +98,16 @@
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<div use:reveal>
-		<h1 class="text-[1.75rem] font-bold tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl">
+		<h1 class="text-[1.75rem] font-bold tracking-tight text-ink sm:text-3xl lg:text-4xl">
 			{t.searchPage.title}
 		</h1>
-		<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.searchPage.hint}</p>
+		<p class="mt-2 max-w-2xl leading-relaxed text-muted">{t.searchPage.hint}</p>
 	</div>
 
 	<div class="relative mt-6 max-w-xl">
 		<label class="sr-only" for="search-page-input">{t.searchPage.searchLabel}</label>
 		<Search
-			class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500"
+			class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
 			aria-hidden="true"
 		/>
 		<input
@@ -87,13 +115,48 @@
 			type="search"
 			bind:value={query}
 			placeholder={t.searchPage.searchPlaceholder}
-			class="h-11 w-full rounded-full bg-neutral-100 pl-10 pr-4 text-sm text-neutral-900 placeholder:text-neutral-500 focus:bg-white"
+			class="h-11 w-full rounded-full bg-surface-soft pl-10 pr-4 text-sm text-ink placeholder:text-muted focus:bg-surface"
 		/>
 	</div>
 
+	{#if trimmed !== ''}
+		<div
+			class="mt-6 flex flex-wrap items-center gap-2"
+			role="group"
+			aria-label={t.searchPage.categoryFilterLabel}
+		>
+			<span class="text-sm font-semibold text-ink">{t.searchPage.categoryFilterLabel}</span>
+			<button
+				type="button"
+				aria-pressed={selectedCategory === null}
+				onclick={() => {
+					selectedCategory = null;
+				}}
+				class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft aria-[pressed=true]:bg-brand-700 aria-[pressed=true]:text-white aria-[pressed=true]:ring-brand-700"
+			>
+				{t.searchPage.allCategories}
+			</button>
+			{#each categories as item (item.slug)}
+				<button
+					type="button"
+					aria-pressed={selectedCategory === item.slug}
+					onclick={() => {
+						selectedCategory = item.slug;
+					}}
+					class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft aria-[pressed=true]:bg-brand-700 aria-[pressed=true]:text-white aria-[pressed=true]:ring-brand-700"
+				>
+					{localize(item.name, lang)}
+				</button>
+			{/each}
+		</div>
+		{#if hasSynonymMatch}
+			<p class="mt-3 text-sm text-muted">{t.searchPage.synonymsNote}</p>
+		{/if}
+	{/if}
+
 	{#if trimmed === ''}
 		<section aria-labelledby="popular-heading" class="mt-8">
-			<h2 id="popular-heading" class="text-sm font-semibold text-neutral-900">
+			<h2 id="popular-heading" class="text-sm font-semibold text-ink">
 				{t.searchPage.popularLabel}
 			</h2>
 			<div class="mt-3 flex flex-wrap gap-2">
@@ -101,7 +164,7 @@
 					<button
 						type="button"
 						onclick={() => searchTerm(term)}
-						class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium text-neutral-800 ring-1 ring-neutral-300 hover:bg-brand-50"
+						class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium text-ink-soft ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft"
 					>
 						{term}
 					</button>
@@ -109,18 +172,18 @@
 			</div>
 		</section>
 	{:else if results.length === 0}
-		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center">
-			<SearchX class="h-10 w-10 text-brand-700" aria-hidden="true" />
-			<h2 class="text-xl font-bold text-neutral-900">
+		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center dark:bg-surface-soft">
+			<SearchX class="h-10 w-10 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+			<h2 class="text-xl font-bold text-ink">
 				{interpolate(t.searchPage.noResults, { query: trimmed })}
 			</h2>
-			<p class="max-w-sm text-neutral-600">{t.searchPage.noResultsHint}</p>
-			<ul class="max-w-sm list-disc space-y-1 pl-5 text-left text-sm text-neutral-600">
+			<p class="max-w-sm text-muted">{t.searchPage.noResultsHint}</p>
+			<ul class="max-w-sm list-disc space-y-1 pl-5 text-left text-sm text-muted">
 				{#each t.searchPage.noResultsTips as tip (tip)}
 					<li>{tip}</li>
 				{/each}
 			</ul>
-			<p class="mt-2 text-sm font-semibold text-neutral-900">{t.searchPage.suggestionsLabel}</p>
+			<p class="mt-2 text-sm font-semibold text-ink">{t.searchPage.suggestionsLabel}</p>
 			<div class="flex flex-wrap justify-center gap-2">
 				{#each t.searchPage.popularSearches as term (term)}
 					<!-- Full reload: the ?q= reader runs in onMount, so a
@@ -129,7 +192,7 @@
 					<a
 						href="{localizedPath(lang, '/search')}?q={encodeURIComponent(term)}"
 						data-sveltekit-reload
-						class="inline-flex min-h-11 items-center rounded-full bg-white px-4 text-sm font-medium text-neutral-800 ring-1 ring-neutral-300 hover:bg-brand-50"
+						class="inline-flex min-h-11 items-center rounded-full bg-surface px-4 text-sm font-medium text-ink-soft ring-1 ring-line hover:bg-brand-50 dark:hover:bg-surface-soft"
 					>
 						{term}
 					</a>
@@ -152,16 +215,17 @@
 			{sortOptions}
 			onSortChange={onSortChange}
 			{chips}
-			onRemoveChip={clearQuery}
-			onClearAll={clearQuery}
+			onRemoveChip={removeChip}
+			onClearAll={clearAll}
 		/>
-		<div
-			class="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
-			use:reveal
-		>
-			{#each results as product (product.slug)}
-				<ProductCard {product} {lang} {t} />
-			{/each}
-		</div>
+		{#key filterSignature}
+			<div
+				class="mt-6 grid animate-grid-in grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
+			>
+				{#each results as product (product.slug)}
+					<ProductCard {product} {lang} {t} />
+				{/each}
+			</div>
+		{/key}
 	{/if}
 </div>

@@ -18,6 +18,8 @@ export const SOCIAL_LINKS = [
 ] as const;
 
 export const LOCALE_STORAGE_KEY = 'techdova-locale';
+export const THEME_STORAGE_KEY = 'techdova-theme';
+export const PROMO_STORAGE_KEY = 'techdova-promo';
 export const CART_STORAGE_KEY = 'techdova-cart';
 export const WISHLIST_STORAGE_KEY = 'techdova-wishlist';
 export const COMPARE_STORAGE_KEY = 'techdova-compare';

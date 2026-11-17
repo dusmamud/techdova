@@ -30,6 +30,12 @@ on the site are placeholders.
 - New arrivals: https://techdova.pages.dev/en/new-arrivals
 - Best sellers: https://techdova.pages.dev/en/best-sellers
 - Gift cards (demo): https://techdova.pages.dev/en/gift-cards
+- Brands: https://techdova.pages.dev/en/brands
+- Rewards programme (demo): https://techdova.pages.dev/en/rewards
+- Trade-in estimator (demo): https://techdova.pages.dev/en/trade-in
+- Financing and instalments (demo): https://techdova.pages.dev/en/financing
+- Extended warranty (demo): https://techdova.pages.dev/en/warranty
+- Cookie and storage policy: https://techdova.pages.dev/en/cookies
 - Our stores (fictional demo stores): https://techdova.pages.dev/en/stores
 - Help centre: https://techdova.pages.dev/en/help
 - Search results: https://techdova.pages.dev/en/search
@@ -65,5 +71,5 @@ French equivalents use the /fr prefix, e.g. https://techdova.pages.dev/fr/shop.
 
 ## Machine-readable files
 
-- Sitemap: https://techdova.pages.dev/sitemap.xml (48 paths x 2 locales, with hreflang alternates)
+- Sitemap: https://techdova.pages.dev/sitemap.xml (57 paths x 2 locales, with hreflang alternates)
 - Robots: https://techdova.pages.dev/robots.txt

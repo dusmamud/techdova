@@ -3,7 +3,7 @@
 	import { Check, PackageSearch } from '@lucide/svelte';
 	import { reveal } from '#lib/actions/reveal';
 	import Seo from '#lib/components/Seo.svelte';
-	import { getProduct } from '#lib/data/products';
+	import { getProduct, getVariant } from '#lib/data/products';
 	import { formatDate, formatPrice, interpolate } from '#lib/format';
 	import { getDictionary, localize } from '#lib/i18n/index';
 	import {
@@ -48,6 +48,12 @@
 	function lineName(slug: string): string {
 		const product = getProduct(slug);
 		return product ? localize(product.name, lang) : slug;
+	}
+
+	function lineVariantLabel(slug: string, variantId: string | undefined): string | undefined {
+		const product = getProduct(slug);
+		const variant = product ? getVariant(product, variantId) : undefined;
+		return variant ? localize(variant.label, lang) : undefined;
 	}
 
 	async function lookup(): Promise<void> {
@@ -97,19 +103,19 @@
 	}
 
 	const inputClass =
-		'w-full rounded-xl border border-neutral-300 bg-white px-3 py-3 text-sm text-neutral-900 placeholder:text-neutral-500';
+		'w-full rounded-xl border border-line bg-surface px-3 py-3 text-sm text-ink placeholder:text-muted';
 </script>
 
 <Seo {lang} title={t.meta.trackOrderTitle} description={t.meta.trackOrderDescription} path="/track-order" />
 
 <div class="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-	<h1 class="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl" use:reveal>{t.trackOrder.title}</h1>
-	<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">{t.trackOrder.description}</p>
+	<h1 class="text-3xl font-bold tracking-tight text-ink sm:text-4xl" use:reveal>{t.trackOrder.title}</h1>
+	<p class="mt-2 max-w-2xl leading-relaxed text-muted">{t.trackOrder.description}</p>
 
 	{#if !result}
-		<form onsubmit={submit} novalidate class="mt-8 space-y-4 rounded-3xl bg-white p-6 ring-1 ring-neutral-200" use:reveal>
+		<form onsubmit={submit} novalidate class="mt-8 space-y-4 rounded-3xl bg-surface p-6 ring-1 ring-line" use:reveal>
 			<div>
-				<label for="track-code" class="mb-1 block text-sm font-medium text-neutral-700">
+				<label for="track-code" class="mb-1 block text-sm font-medium text-ink-soft">
 					{t.trackOrder.orderCodeLabel}
 				</label>
 				<input
@@ -128,13 +134,13 @@
 					aria-describedby={codeError ? 'track-code-error track-code-hint' : 'track-code-hint'}
 					class="{inputClass} min-h-12"
 				/>
-				<p id="track-code-hint" class="mt-1 text-sm text-neutral-500">{t.trackOrder.codeHint}</p>
+				<p id="track-code-hint" class="mt-1 text-sm text-muted">{t.trackOrder.codeHint}</p>
 				{#if codeError}
-					<p id="track-code-error" class="mt-1 text-sm text-red-600">{codeError}</p>
+					<p id="track-code-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{codeError}</p>
 				{/if}
 			</div>
 			<div>
-				<label for="track-email" class="mb-1 block text-sm font-medium text-neutral-700">
+				<label for="track-email" class="mb-1 block text-sm font-medium text-ink-soft">
 					{t.trackOrder.emailLabel}
 				</label>
 				<input
@@ -152,7 +158,7 @@
 					class="{inputClass} min-h-12"
 				/>
 				{#if emailError}
-					<p id="track-email-error" class="mt-1 text-sm text-red-600">{emailError}</p>
+					<p id="track-email-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{emailError}</p>
 				{/if}
 			</div>
 			<button
@@ -164,21 +170,21 @@
 			</button>
 		</form>
 	{:else}
-		<div class="mt-8 rounded-3xl bg-white p-6 ring-1 ring-neutral-200" use:reveal>
-			<h2 bind:this={resultHeading} tabindex="-1" class="text-xl font-bold text-neutral-900 focus:outline-none">
+		<div class="mt-8 rounded-3xl bg-surface p-6 ring-1 ring-line" use:reveal>
+			<h2 bind:this={resultHeading} tabindex="-1" class="text-xl font-bold text-ink focus:outline-none">
 				{interpolate(t.trackOrder.orderHeading, { orderId: result.code })}
 			</h2>
 			{#if result.order}
-				<p class="mt-1 text-sm text-neutral-500">
+				<p class="mt-1 text-sm text-muted">
 					{interpolate(t.trackOrder.placedOn, {
 						date: formatDate(new Date(result.order.placedAtISO), intlLocale)
 					})}
 				</p>
 			{:else}
-				<p class="mt-2 rounded-2xl bg-brand-50 p-4 text-sm text-neutral-600">{t.trackOrder.demoNote}</p>
+				<p class="mt-2 rounded-2xl bg-brand-50 p-4 text-sm text-muted dark:bg-surface-soft">{t.trackOrder.demoNote}</p>
 			{/if}
-			<p class="mt-4 text-sm text-neutral-600">
-				<span class="font-semibold text-neutral-900">{t.trackOrder.statusLabel}:</span>
+			<p class="mt-4 text-sm text-muted">
+				<span class="font-semibold text-ink">{t.trackOrder.statusLabel}:</span>
 				{' '}{statusLabels[result.status]}
 			</p>
 
@@ -192,14 +198,14 @@
 								aria-hidden="true"
 								class="absolute left-[19px] top-10 h-[calc(100%-2.5rem)] w-0.5 {i < currentIndex
 									? 'bg-brand-700'
-									: 'bg-neutral-200'}"
+									: 'bg-line'}"
 							></span>
 						{/if}
 						<span
 							aria-hidden="true"
 							class="grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-bold {done || isCurrent
 								? 'bg-brand-700 text-white'
-								: 'bg-neutral-100 text-neutral-500 ring-1 ring-neutral-200'}"
+								: 'bg-surface-soft text-muted ring-1 ring-line'}"
 						>
 							{#if done}
 								<Check class="h-5 w-5" aria-hidden="true" />
@@ -208,7 +214,7 @@
 							{/if}
 						</span>
 						<span class="flex min-h-10 flex-col justify-center">
-							<span class="font-semibold {isCurrent ? 'text-neutral-900' : 'text-neutral-500'}">
+							<span class="font-semibold {isCurrent ? 'text-ink' : 'text-muted'}">
 								{statusLabels[stepStatus]}
 							</span>
 							<span class="sr-only">{stepState(i)}</span>
@@ -218,26 +224,30 @@
 			</ol>
 
 			{#if result.order}
-				<section aria-labelledby="track-items-heading" class="mt-6 border-t border-neutral-200 pt-6">
-					<h3 id="track-items-heading" class="text-base font-bold text-neutral-900">
+				<section aria-labelledby="track-items-heading" class="mt-6 border-t border-line pt-6">
+					<h3 id="track-items-heading" class="text-base font-bold text-ink">
 						{t.trackOrder.itemsTitle}
 					</h3>
-					<ul class="mt-3 divide-y divide-neutral-100">
-						{#each result.order.lines as line (line.slug)}
+					<ul class="mt-3 divide-y divide-line">
+						{#each result.order.lines as line (line.slug + ':' + (line.variantId ?? ''))}
+							{@const variantLabel = lineVariantLabel(line.slug, line.variantId)}
 							<li class="flex items-baseline justify-between gap-3 py-3 text-sm first:pt-0 last:pb-0">
-								<span class="min-w-0 text-neutral-600">
-									<span class="font-medium text-neutral-900">{lineName(line.slug)}</span>
+								<span class="min-w-0 text-muted">
+									<span class="font-medium text-ink">{lineName(line.slug)}</span>
+									{#if variantLabel}
+										{' '}({variantLabel})
+									{/if}
 									{' '}{interpolate(t.trackOrder.lineQty, { qty: line.qty })}
 								</span>
-								<span class="shrink-0 font-semibold text-neutral-900">
+								<span class="shrink-0 font-semibold text-ink">
 									{formatPrice(line.unitPrice * line.qty, intlLocale)}
 								</span>
 							</li>
 						{/each}
 					</ul>
-					<p class="mt-4 flex items-baseline justify-between border-t border-neutral-200 pt-4 text-base">
-						<span class="font-bold text-neutral-900">{t.cart.total}</span>
-						<span class="font-bold text-neutral-900">
+					<p class="mt-4 flex items-baseline justify-between border-t border-line pt-4 text-base">
+						<span class="font-bold text-ink">{t.cart.total}</span>
+						<span class="font-bold text-ink">
 							{formatPrice(result.order.total, intlLocale)}
 						</span>
 					</p>
@@ -254,7 +264,7 @@
 				</button>
 				<a
 					href={localizedPath(lang, '/shop')}
-					class="inline-flex min-h-11 items-center justify-center rounded-full px-6 text-sm font-semibold text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
+					class="inline-flex min-h-11 items-center justify-center rounded-full px-6 text-sm font-semibold text-brand-800 dark:text-brand-200 dark:hover:text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
 				>
 					{t.cart.continueShopping}
 				</a>

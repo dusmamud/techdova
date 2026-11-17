@@ -140,6 +140,129 @@ export const blogPosts: BlogPost[] = [
 			fr: 'Casque noir'
 		},
 		category: { en: 'Health & wearables', fr: 'Santé et objets connectés' }
+	},
+	{
+		slug: 'mechanical-vs-membrane-keyboards',
+		title: {
+			en: 'Mechanical vs membrane keyboards: which should you choose?',
+			fr: 'Claviers mécaniques ou à membrane : lequel choisir ?'
+		},
+		excerpt: {
+			en: 'Clicky switches, quiet membranes, layouts and price — a plain-language guide to picking a keyboard you will enjoy typing on.',
+			fr: 'Switches cliquants, membranes silencieuses, dispositions et prix — un guide en langage clair pour choisir un clavier agréable à utiliser.'
+		},
+		body: [
+			{
+				en: 'Keyboards are easy to overlook, yet they are the part of your setup your fingers touch for hours every day. The two main families — mechanical and membrane — feel completely different, and the right choice depends on how you type, where you work and how much noise you can make.',
+				fr: 'Les claviers sont faciles à négliger, pourtant ce sont eux que vos doigts touchent pendant des heures chaque jour. Les deux grandes familles — mécanique et à membrane — offrent des sensations très différentes, et le bon choix dépend de votre façon de taper, de votre lieu de travail et du bruit que vous pouvez faire.'
+			},
+			{
+				en: 'A mechanical keyboard gives every key its own switch: a small spring-loaded mechanism that registers the press partway down. That is why mechanical boards feel crisp and responsive, and why enthusiasts collect different switch types — clicky, tactile or smooth and linear. The trade-off is noise and price: most mechanical keyboards are louder and cost more than membrane models.',
+				fr: 'Un clavier mécanique attribue à chaque touche son propre switch : un petit mécanisme à ressort qui enregistre la frappe à mi-course. C’est pourquoi les claviers mécaniques sont si nets et réactifs, et pourquoi les passionnés collectionnent les types de switches — cliquants, tactiles ou lisses et linéaires. La contrepartie est le bruit et le prix : la plupart des claviers mécaniques sont plus bruyants et plus chers que les modèles à membrane.'
+			},
+			{
+				en: 'A membrane keyboard uses a rubber dome under each key that collapses when pressed. The feel is softer and quieter, the design is slimmer, and the price is usually much lower. For shared offices, late-night typing or a first keyboard, a good membrane board is often the sensible choice — modern ones are far better than the mushy keyboards of a decade ago.',
+				fr: 'Un clavier à membrane utilise un dôme en caoutchouc sous chaque touche, qui s’écrase quand on appuie. La sensation est plus douce et plus silencieuse, le design plus fin, et le prix généralement bien inférieur. Pour un bureau partagé, des frappes nocturnes ou un premier clavier, un bon modèle à membrane est souvent le choix raisonnable — les modèles modernes sont bien meilleurs que les claviers mous d’il y a dix ans.'
+			},
+			{
+				en: 'Layout matters as much as the switch type. A full-size board includes a number pad, which is handy for spreadsheets; a tenkeyless board drops it to save desk space; compact 65% and 75% boards go further, keeping arrows and a few extras. Think about which keys you actually reach for before deciding how much board you need.',
+				fr: 'La disposition compte autant que le type de switch. Un clavier complet inclut un pavé numérique, pratique pour les tableurs ; un modèle tenkeyless s’en passe pour gagner de la place ; les formats compacts 65 % et 75 % vont plus loin en gardant les flèches et quelques touches supplémentaires. Réfléchissez aux touches que vous utilisez vraiment avant de décider de la taille.'
+			},
+			{
+				en: 'Whichever family you pick, try the keyboard before you commit if you can — feel is personal, and no review can tell you how a switch will feel under your fingers. And remember that a keyboard is a long-term companion: spending a little more on the one you type on all day is one of the best upgrades you can buy.',
+				fr: 'Quelle que soit la famille choisie, essayez le clavier avant de vous engager si possible — la sensation est personnelle, et aucun test ne peut vous dire ce qu’un switch donnera sous vos doigts. Et souvenez-vous qu’un clavier est un compagnon de longue durée : investir un peu plus dans celui que vous utilisez toute la journée est l’une des meilleures améliorations possibles.'
+			}
+		],
+		dateISO: '2026-10-21',
+		readingMinutes: 4,
+		image: '/images/category-computers',
+		imageAlt: {
+			en: 'Open laptop keyboard seen from above',
+			fr: 'Clavier d’ordinateur portable ouvert, vu de dessus'
+		},
+		category: { en: 'Buying guides', fr: 'Guides d’achat' }
+	},
+	{
+		slug: 'getting-started-with-sleep-tracking',
+		title: {
+			en: 'Getting started with sleep tracking',
+			fr: 'Débuter avec le suivi du sommeil'
+		},
+		excerpt: {
+			en: 'Sleep stages, bedtime consistency and what the numbers mean — how to turn a week of sleep data into better rest.',
+			fr: 'Phases du sommeil, régularité du coucher et signification des chiffres — comment transformer une semaine de données en meilleur repos.'
+		},
+		body: [
+			{
+				en: 'Sleep tracking is one of the most useful things a smartwatch does, and one of the easiest to misunderstand. The watch cannot read your brain: it estimates sleep stages from movement and heart-rate patterns. Used as a trend-spotter rather than a medical instrument, it can genuinely help you sleep better.',
+				fr: 'Le suivi du sommeil est l’une des fonctions les plus utiles d’une montre connectée, et l’une des plus faciles à mal interpréter. La montre ne lit pas votre cerveau : elle estime les phases du sommeil à partir des mouvements et de la fréquence cardiaque. Utilisée comme un outil de tendances plutôt que comme un instrument médical, elle peut vraiment vous aider à mieux dormir.'
+			},
+			{
+				en: 'Start by wearing the watch for a full week without changing anything. That baseline shows your real pattern: what time you actually fall asleep, how often you wake, and whether weekends shift everything later. Most people are surprised by at least one of those numbers.',
+				fr: 'Commencez par porter la montre pendant une semaine complète sans rien changer. Cette référence révèle votre vrai rythme : l’heure à laquelle vous vous endormez réellement, la fréquence de vos réveils, et le décalage du week-end. La plupart des gens sont surpris par au moins l’un de ces chiffres.'
+			},
+			{
+				en: 'The single most powerful change is consistency. Going to bed and waking up at similar times every day — including weekends — stabilises your body clock more reliably than any gadget setting. Your watch can help here: set a bedtime reminder and a gentle wake alarm, and let the trend lines show you the effect over two or three weeks.',
+				fr: 'Le changement le plus efficace est la régularité. Se coucher et se lever à des heures similaires chaque jour — week-ends compris — stabilise votre horloge biologique plus sûrement que n’importe quel réglage. Votre montre peut vous aider : définissez un rappel de coucher et un réveil doux, et laissez les courbes de tendance vous montrer l’effet sur deux ou trois semaines.'
+			},
+			{
+				en: 'Do not chase perfect stage percentages. Night-to-night variation in deep and REM sleep is normal, and the estimates are approximate. What matters is the direction of travel: total sleep creeping up, wake-ups creeping down, and a bedtime that stops drifting later. If the numbers consistently look worrying — very short nights, loud snoring flags, or restless sleep most nights — that is a prompt to talk to a doctor, not a diagnosis.',
+				fr: 'Ne courez pas après des pourcentages de phases parfaits. Les variations d’une nuit à l’autre du sommeil profond et paradoxal sont normales, et les estimations sont approximatives. Ce qui compte, c’est la direction : un temps de sommeil total qui augmente, des réveils qui diminuent, et un coucher qui cesse de dériver. Si les chiffres sont régulièrement inquiétants — nuits très courtes, ronflements signalés ou sommeil agité la plupart des nuits — c’est une invitation à consulter un médecin, pas un diagnostic.'
+			},
+			{
+				en: 'Finally, protect the hour before bed. Dim the lights, put the phone on charge outside the bedroom if you can, and keep the room cool and dark. Sleep tracking works best as a mirror for good habits, not as a replacement for them — the watch shows you the pattern, but only the routine changes it.',
+				fr: 'Enfin, protégez l’heure avant le coucher. Tamisez les lumières, mettez le téléphone en charge hors de la chambre si possible, et gardez la pièce fraîche et sombre. Le suivi du sommeil fonctionne mieux comme un miroir des bonnes habitudes que comme leur remplacement — la montre vous montre le rythme, mais seule la routine le change.'
+			}
+		],
+		dateISO: '2026-10-14',
+		readingMinutes: 4,
+		image: '/images/category-smartwatches',
+		imageAlt: {
+			en: 'Smartwatch on a wrist showing the time',
+			fr: 'Montre connectée au poignet affichant l’heure'
+		},
+		category: { en: 'Health & wearables', fr: 'Santé et objets connectés' }
+	},
+	{
+		slug: 'what-to-look-for-in-wireless-earbuds',
+		title: {
+			en: 'What to look for in wireless earbuds',
+			fr: 'Que rechercher dans des écouteurs sans fil'
+		},
+		excerpt: {
+			en: 'Fit, sound, battery, microphones and water resistance — the five things that separate earbuds you love from earbuds you lose.',
+			fr: 'Ajustement, son, batterie, microphones et résistance à l’eau — les cinq critères qui distinguent les écouteurs que l’on adore de ceux que l’on perd.'
+		},
+		body: [
+			{
+				en: 'Wireless earbuds live in your ears, your pocket and your gym bag, so the details that matter are practical ones. Great sound means little if the buds fall out on a run, and the longest battery is useless if the case is too big to carry. Here is what to weigh before you buy.',
+				fr: 'Les écouteurs sans fil vivent dans vos oreilles, votre poche et votre sac de sport : les détails qui comptent sont donc pratiques. Un excellent son ne sert à rien si les écouteurs tombent en courant, et la plus longue batterie est inutile si le boîtier est trop gros à transporter. Voici ce qu’il faut peser avant d’acheter.'
+			},
+			{
+				en: 'Fit comes first, because it affects everything else. A good seal keeps bass full, blocks outside noise and stops the buds working loose. Most earbuds ship with three or four tip sizes — try them all, and try both silicone and foam if both are included. If a bud hurts after twenty minutes, no feature list will fix it.',
+				fr: 'L’ajustement passe en premier, car il influence tout le reste. Une bonne étanchéité garde les basses pleines, bloque le bruit extérieur et empêche les écouteurs de se desserrer. La plupart des écouteurs sont livrés avec trois ou quatre tailles d’embouts — essayez-les toutes, ainsi que la silicone et la mousse si les deux sont fournies. Si un écouteur fait mal après vingt minutes, aucune liste de fonctions ne réglera le problème.'
+			},
+			{
+				en: 'Sound quality is the next question, and it is more personal than the spec sheets suggest. Some earbuds emphasise bass for workouts, others aim for a balanced, detailed sound for long listening. An app with an equalizer lets you tune either style to your taste, so treat the app as part of the purchase — and remember that a good seal does more for sound than any driver size.',
+				fr: 'La qualité sonore est la question suivante, et elle est plus personnelle que ne le suggèrent les fiches techniques. Certains écouteurs accentuent les basses pour le sport, d’autres visent un son équilibré et détaillé pour les longues écoutes. Une application avec égaliseur permet d’adapter chaque style à vos goûts : considérez donc l’application comme partie de l’achat — et souvenez-vous qu’une bonne étanchéité fait plus pour le son que n’importe quelle taille de transducteur.'
+			},
+			{
+				en: 'Battery life has two numbers: hours per charge, and total hours with the case. Five to six hours per charge covers most days, with the case adding another three or four top-ups. Fast charging matters more than the headline figure for many people: ten minutes in the case often buys an hour or more of listening.',
+				fr: 'L’autonomie comporte deux chiffres : les heures par charge, et les heures totales avec le boîtier. Cinq à six heures par charge couvrent la plupart des journées, le boîtier ajoutant trois ou quatre recharges supplémentaires. La charge rapide compte souvent plus que le chiffre principal : dix minutes dans le boîtier offrent souvent une heure d’écoute ou plus.'
+			},
+			{
+				en: 'Finally, check the microphones and the water rating if you take calls or exercise with your earbuds. Multiple microphones with wind-noise reduction make a real difference outdoors, and an IPX4 rating or better handles sweat and rain. With fit, sound, battery, mics and sealing all covered, you have earbuds you will actually keep using — which is the only review that matters.',
+				fr: 'Enfin, vérifiez les microphones et l’indice de résistance à l’eau si vous passez des appels ou faites du sport avec vos écouteurs. Plusieurs microphones avec réduction du bruit du vent font une vraie différence en extérieur, et un indice IPX4 ou supérieur résiste à la transpiration et à la pluie. Avec l’ajustement, le son, la batterie, les micros et l’étanchéité couverts, vous avez des écouteurs que vous utiliserez vraiment — et c’est le seul avis qui compte.'
+			}
+		],
+		dateISO: '2026-10-07',
+		readingMinutes: 4,
+		image: '/images/hero-audio',
+		imageAlt: {
+			en: 'Black over-ear headphones and white wireless earbuds on a green gradient background',
+			fr: 'Casque noir et écouteurs sans fil blancs sur fond vert dégradé'
+		},
+		category: { en: 'Buying guides', fr: 'Guides d’achat' }
 	}
 ];
 

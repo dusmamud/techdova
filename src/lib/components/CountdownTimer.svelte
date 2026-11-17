@@ -37,17 +37,19 @@
 
 {#if mounted}
 	{#if remaining.expired}
-		<p class="text-sm font-semibold text-neutral-700">{labels.expired}</p>
+		<p class="text-sm font-semibold text-ink-soft">{labels.expired}</p>
 	{:else}
 		<div class="flex items-start gap-2 sm:gap-3" role="timer">
 			{#each units as unit, i (unit.label)}
 				<div class="flex flex-col items-center gap-1">
 					<span
-						class="grid min-h-11 min-w-11 place-items-center rounded-2xl bg-neutral-900 px-2 text-lg font-bold tabular-nums text-white"
+						class="grid min-h-11 min-w-11 place-items-center overflow-hidden rounded-2xl bg-neutral-900 px-2 text-lg font-bold tabular-nums text-white"
 					>
-						{unit.value}
+						{#key unit.value}
+							<span class="animate-digit-tick">{unit.value}</span>
+						{/key}
 					</span>
-					<span class="text-xs font-medium text-neutral-600">{unit.label}</span>
+					<span class="text-xs font-medium text-muted">{unit.label}</span>
 				</div>
 				{#if i < units.length - 1}
 					<span aria-hidden="true" class="pt-2 text-lg font-bold text-neutral-400">:</span>

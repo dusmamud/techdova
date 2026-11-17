@@ -3,8 +3,32 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="theme-color" content="#062a1f" />
+		<meta name="theme-color" content="#ffffff" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.svg" type="image/svg+xml" />
+		<link rel="manifest" href="%sveltekit.assets%/manifest.webmanifest" />
+		<link rel="apple-touch-icon" href="%sveltekit.assets%/icons/apple-touch-icon.png" />
+		<script>
+			// Set the theme before first paint so dark mode never flashes
+			// light. Stored choice wins; otherwise the OS preference; else
+			// light. The storage key and dark hex must match the theme
+			// store (src/lib/stores/theme.svelte.ts) and the .dark surface
+			// token in src/app.css.
+			(function () {
+				try {
+					var stored = localStorage.getItem('techdova-theme');
+					var dark =
+						stored === 'dark' ||
+						(stored !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+					if (dark) {
+						document.documentElement.classList.add('dark');
+						var meta = document.querySelector('meta[name="theme-color"]');
+						if (meta) meta.setAttribute('content', '#0e1712');
+					}
+				} catch (e) {
+					/* storage unavailable: stay on the light default */
+				}
+			})();
+		</script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

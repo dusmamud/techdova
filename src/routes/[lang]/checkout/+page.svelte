@@ -9,7 +9,8 @@
 	import { CHECKOUT_STORAGE_KEY } from '#lib/config';
 	import { formatPrice, interpolate } from '#lib/format';
 	import { getDictionary, localize } from '#lib/i18n/index';
-	import { generateOrderId, orderTotal, saveDemoOrder } from '#lib/orders';
+	import { variantPrice } from '#lib/data/products';
+	import { generateOrderId, saveDemoOrder } from '#lib/orders';
 	import { localizedPath } from '#lib/paths';
 	import { account } from '#lib/stores/account.svelte';
 	import { cart } from '#lib/stores/cart.svelte';
@@ -274,16 +275,24 @@
 		}
 		const lines = cart.detailed.map((line) => ({
 			slug: line.product.slug,
+			variantId: line.variant?.id,
 			qty: line.qty,
-			unitPrice: line.product.price
+			unitPrice: variantPrice(line.product, line.variant)
 		}));
+		// The snapshot total is what the shopper saw: cart.totals.total is
+		// already post-promo-discount. Promo fields are recorded only when a
+		// promo is applied; read them before cart.clear() below.
+		const promoDiscount = cart.totals.promoDiscount ?? 0;
 		saveDemoOrder({
 			id: generateOrderId(),
 			placedAtISO: new Date().toISOString(),
 			name: name.trim(),
 			email: email.trim(),
 			lines,
-			total: orderTotal(lines)
+			total: cart.totals.total,
+			...(cart.appliedPromo
+				? { promoCode: cart.appliedPromo.code, promoDiscount }
+				: {})
 		});
 		cart.clear();
 		try {
@@ -306,23 +315,23 @@
 	}
 
 	const inputClass =
-		'w-full rounded-xl border border-neutral-300 bg-white px-3 py-3 text-sm text-neutral-900 placeholder:text-neutral-500';
+		'w-full rounded-xl border border-line bg-surface px-3 py-3 text-sm text-ink placeholder:text-muted';
 </script>
 
 <Seo {lang} title={t.meta.checkoutTitle} description={t.meta.checkoutDescription} path="/checkout" />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<div use:reveal>
-		<h1 class="text-[1.75rem] font-bold tracking-tight text-neutral-900 sm:text-3xl lg:text-4xl">
+		<h1 class="text-[1.75rem] font-bold tracking-tight text-ink sm:text-3xl lg:text-4xl">
 			{t.checkout.title}
 		</h1>
 	</div>
 
 	{#if cart.detailed.length === 0}
-		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center">
-			<ShoppingCart class="h-12 w-12 text-brand-700" aria-hidden="true" />
-			<h2 class="text-xl font-bold text-neutral-900">{t.cart.empty}</h2>
-			<p class="max-w-sm text-neutral-600">{t.cart.emptyHint}</p>
+		<div class="mt-8 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center dark:bg-surface-soft">
+			<ShoppingCart class="h-12 w-12 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+			<h2 class="text-xl font-bold text-ink">{t.cart.empty}</h2>
+			<p class="max-w-sm text-muted">{t.cart.emptyHint}</p>
 			<a
 				href={localizedPath(lang, '/shop')}
 				class="mt-2 inline-flex min-h-11 items-center rounded-full bg-brand-700 px-6 text-sm font-semibold text-white hover:bg-brand-800"
@@ -331,9 +340,9 @@
 			</a>
 		</div>
 	{:else}
-		<div class="mt-6 rounded-3xl bg-brand-50 p-4 sm:p-5">
-			<p class="text-sm font-semibold text-neutral-900">{t.checkout.guestNote}</p>
-			<p class="mt-1 text-sm text-neutral-600">{t.checkout.demoNote}</p>
+		<div class="mt-6 rounded-3xl bg-brand-50 p-4 sm:p-5 dark:bg-surface-soft">
+			<p class="text-sm font-semibold text-ink">{t.checkout.guestNote}</p>
+			<p class="mt-1 text-sm text-muted">{t.checkout.demoNote}</p>
 		</div>
 
 		<div class="mt-6 sm:mt-8">
@@ -347,9 +356,9 @@
 						bind:this={summaryEl}
 						tabindex="-1"
 						role="alert"
-						class="rounded-2xl bg-red-50 p-4 ring-1 ring-red-200 focus:outline-2 focus:outline-offset-2 focus:outline-red-600"
+						class="rounded-2xl bg-red-50 dark:bg-red-950/60 p-4 ring-1 ring-red-200 dark:ring-red-900 focus:outline-2 focus:outline-offset-2 focus:outline-red-600"
 					>
-						<p class="text-sm font-semibold text-red-800">{t.checkout.errorSummary}</p>
+						<p class="text-sm font-semibold text-red-800 dark:text-red-200">{t.checkout.errorSummary}</p>
 						<ul class="mt-2 list-disc space-y-1 pl-5 text-sm">
 							{#each errorEntries as entry (entry.field)}
 								<li>
@@ -359,7 +368,7 @@
 											event.preventDefault();
 											focusField(entry.id);
 										}}
-										class="text-red-700 underline hover:text-red-800"
+										class="text-red-700 dark:text-red-300 underline hover:text-red-800 dark:hover:text-red-200"
 									>
 										{entry.label}
 									</a>
@@ -370,11 +379,11 @@
 				{/if}
 
 				{#if step === 1}
-					<h2 bind:this={stepHeading} tabindex="-1" class="text-xl font-bold text-neutral-900 focus:outline-none">
+					<h2 bind:this={stepHeading} tabindex="-1" class="text-xl font-bold text-ink focus:outline-none">
 						{t.checkoutSteps.contact}
 					</h2>
 					<div>
-						<label for="checkout-name" class="mb-1 block text-sm font-medium text-neutral-700">
+						<label for="checkout-name" class="mb-1 block text-sm font-medium text-ink-soft">
 							{t.checkout.nameLabel}
 						</label>
 						<input
@@ -391,11 +400,11 @@
 							class="{inputClass} min-h-12"
 						/>
 						{#if errors.name}
-							<p id="checkout-name-error" class="mt-1 text-sm text-red-600">{errors.name}</p>
+							<p id="checkout-name-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{errors.name}</p>
 						{/if}
 					</div>
 					<div>
-						<label for="checkout-email" class="mb-1 block text-sm font-medium text-neutral-700">
+						<label for="checkout-email" class="mb-1 block text-sm font-medium text-ink-soft">
 							{t.checkout.emailLabel}
 						</label>
 						<input
@@ -412,15 +421,15 @@
 							class="{inputClass} min-h-12"
 						/>
 						{#if errors.email}
-							<p id="checkout-email-error" class="mt-1 text-sm text-red-600">{errors.email}</p>
+							<p id="checkout-email-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{errors.email}</p>
 						{/if}
 					</div>
 				{:else if step === 2}
-					<h2 bind:this={stepHeading} tabindex="-1" class="text-xl font-bold text-neutral-900 focus:outline-none">
+					<h2 bind:this={stepHeading} tabindex="-1" class="text-xl font-bold text-ink focus:outline-none">
 						{t.checkoutSteps.shipping}
 					</h2>
 					<div>
-						<label for="checkout-address" class="mb-1 block text-sm font-medium text-neutral-700">
+						<label for="checkout-address" class="mb-1 block text-sm font-medium text-ink-soft">
 							{t.checkout.addressLabel}
 						</label>
 						<input
@@ -437,12 +446,12 @@
 							class="{inputClass} min-h-12"
 						/>
 						{#if errors.address}
-							<p id="checkout-address-error" class="mt-1 text-sm text-red-600">{errors.address}</p>
+							<p id="checkout-address-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{errors.address}</p>
 						{/if}
 					</div>
 					<div class="grid gap-4 sm:grid-cols-2">
 						<div>
-							<label for="checkout-city" class="mb-1 block text-sm font-medium text-neutral-700">
+							<label for="checkout-city" class="mb-1 block text-sm font-medium text-ink-soft">
 								{t.checkout.cityLabel}
 							</label>
 							<input
@@ -459,11 +468,11 @@
 								class="{inputClass} min-h-12"
 							/>
 							{#if errors.city}
-								<p id="checkout-city-error" class="mt-1 text-sm text-red-600">{errors.city}</p>
+								<p id="checkout-city-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{errors.city}</p>
 							{/if}
 						</div>
 						<div>
-							<label for="checkout-postal" class="mb-1 block text-sm font-medium text-neutral-700">
+							<label for="checkout-postal" class="mb-1 block text-sm font-medium text-ink-soft">
 								{t.checkout.postalLabel}
 							</label>
 							<input
@@ -481,12 +490,12 @@
 								class="{inputClass} min-h-12"
 							/>
 							{#if errors.postal}
-								<p id="checkout-postal-error" class="mt-1 text-sm text-red-600">{errors.postal}</p>
+								<p id="checkout-postal-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{errors.postal}</p>
 							{/if}
 						</div>
 					</div>
 					<div>
-						<label for="checkout-country" class="mb-1 block text-sm font-medium text-neutral-700">
+						<label for="checkout-country" class="mb-1 block text-sm font-medium text-ink-soft">
 							{t.checkout.countryLabel}
 						</label>
 						<select
@@ -502,12 +511,12 @@
 						</select>
 					</div>
 					<fieldset>
-						<legend class="mb-2 text-sm font-medium text-neutral-700">{t.checkout.deliveryLegend}</legend>
+						<legend class="mb-2 text-sm font-medium text-ink-soft">{t.checkout.deliveryLegend}</legend>
 						<div class="space-y-2">
 							{#each deliveryOptions as option (option.value)}
 								<label
 									for="delivery-{option.value}"
-									class="flex cursor-pointer items-start gap-3 rounded-2xl p-4 ring-1 ring-neutral-200 hover:ring-brand-300 has-[input:checked]:bg-brand-50 has-[input:checked]:ring-2 has-[input:checked]:ring-brand-700"
+									class="flex cursor-pointer items-start gap-3 rounded-2xl p-4 ring-1 ring-line hover:ring-brand-300 has-[input:checked]:bg-brand-50 dark:has-[input:checked]:bg-surface-soft has-[input:checked]:ring-2 has-[input:checked]:ring-brand-700"
 								>
 									<input
 										id="delivery-{option.value}"
@@ -518,24 +527,24 @@
 										class="mt-0.5 h-5 w-5 shrink-0 accent-brand-700"
 									/>
 									<span>
-										<span class="block text-sm font-semibold text-neutral-900">{option.label}</span>
-										<span class="mt-0.5 block text-sm text-neutral-600">{option.hint}</span>
+										<span class="block text-sm font-semibold text-ink">{option.label}</span>
+										<span class="mt-0.5 block text-sm text-muted">{option.hint}</span>
 									</span>
 								</label>
 							{/each}
 						</div>
 					</fieldset>
 				{:else}
-					<h2 bind:this={stepHeading} tabindex="-1" class="text-xl font-bold text-neutral-900 focus:outline-none">
+					<h2 bind:this={stepHeading} tabindex="-1" class="text-xl font-bold text-ink focus:outline-none">
 						{t.checkoutSteps.payment}
 					</h2>
 					<fieldset>
-						<legend class="mb-2 text-sm font-medium text-neutral-700">{t.checkout.paymentLegend}</legend>
+						<legend class="mb-2 text-sm font-medium text-ink-soft">{t.checkout.paymentLegend}</legend>
 						<div class="space-y-2">
 							{#each paymentOptions as option (option.value)}
 								<label
 									for="payment-{option.value}"
-									class="flex cursor-pointer items-start gap-3 rounded-2xl p-4 ring-1 ring-neutral-200 hover:ring-brand-300 has-[input:checked]:bg-brand-50 has-[input:checked]:ring-2 has-[input:checked]:ring-brand-700"
+									class="flex cursor-pointer items-start gap-3 rounded-2xl p-4 ring-1 ring-line hover:ring-brand-300 has-[input:checked]:bg-brand-50 dark:has-[input:checked]:bg-surface-soft has-[input:checked]:ring-2 has-[input:checked]:ring-brand-700"
 								>
 									<input
 										id="payment-{option.value}"
@@ -547,17 +556,17 @@
 										class="mt-0.5 h-5 w-5 shrink-0 accent-brand-700"
 									/>
 									<span>
-										<span class="block text-sm font-semibold text-neutral-900">{option.label}</span>
-										<span class="mt-0.5 block text-sm text-neutral-600">{option.hint}</span>
+										<span class="block text-sm font-semibold text-ink">{option.label}</span>
+										<span class="mt-0.5 block text-sm text-muted">{option.hint}</span>
 									</span>
 								</label>
 							{/each}
 						</div>
 					</fieldset>
 					{#if payment === 'card'}
-						<p class="rounded-2xl bg-brand-50 p-4 text-sm text-neutral-600">{t.checkout.cardDemoNote}</p>
+						<p class="rounded-2xl bg-brand-50 p-4 text-sm text-muted dark:bg-surface-soft">{t.checkout.cardDemoNote}</p>
 						<div>
-							<label for="checkout-card-number" class="mb-1 block text-sm font-medium text-neutral-700">
+							<label for="checkout-card-number" class="mb-1 block text-sm font-medium text-ink-soft">
 								{t.checkout.cardNumberLabel}
 							</label>
 							<input
@@ -575,12 +584,12 @@
 								class="{inputClass} min-h-12"
 							/>
 							{#if errors.cardNumber}
-								<p id="checkout-card-number-error" class="mt-1 text-sm text-red-600">{errors.cardNumber}</p>
+								<p id="checkout-card-number-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{errors.cardNumber}</p>
 							{/if}
 						</div>
 						<div class="grid gap-4 sm:grid-cols-2">
 							<div>
-								<label for="checkout-expiry" class="mb-1 block text-sm font-medium text-neutral-700">
+								<label for="checkout-expiry" class="mb-1 block text-sm font-medium text-ink-soft">
 									{t.checkout.expiryLabel}
 								</label>
 								<input
@@ -598,11 +607,11 @@
 									class="{inputClass} min-h-12"
 								/>
 								{#if errors.expiry}
-									<p id="checkout-expiry-error" class="mt-1 text-sm text-red-600">{errors.expiry}</p>
+									<p id="checkout-expiry-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{errors.expiry}</p>
 								{/if}
 							</div>
 							<div>
-								<label for="checkout-cvc" class="mb-1 block text-sm font-medium text-neutral-700">
+								<label for="checkout-cvc" class="mb-1 block text-sm font-medium text-ink-soft">
 									{t.checkout.cvcLabel}
 								</label>
 								<input
@@ -620,7 +629,7 @@
 									class="{inputClass} min-h-12"
 								/>
 								{#if errors.cvc}
-									<p id="checkout-cvc-error" class="mt-1 text-sm text-red-600">{errors.cvc}</p>
+									<p id="checkout-cvc-error" class="mt-1 text-sm text-red-600 dark:text-red-400">{errors.cvc}</p>
 								{/if}
 							</div>
 						</div>
@@ -632,7 +641,7 @@
 						<button
 							type="button"
 							onclick={goBack}
-							class="inline-flex min-h-12 items-center justify-center rounded-full px-6 text-sm font-semibold text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
+							class="inline-flex min-h-12 items-center justify-center rounded-full px-6 text-sm font-semibold text-brand-800 dark:text-brand-200 dark:hover:text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
 						>
 							{t.checkout.back}
 						</button>
@@ -650,7 +659,7 @@
 
 			<aside
 				aria-label={t.checkout.summaryTitle}
-				class="order-first h-fit rounded-3xl bg-white ring-1 ring-neutral-200 max-lg:sticky max-lg:top-28 max-lg:z-30 max-lg:max-h-[calc(100dvh-7.5rem)] max-lg:overflow-y-auto lg:order-none lg:sticky lg:top-[7.5rem] lg:self-start"
+				class="order-first h-fit rounded-3xl bg-surface ring-1 ring-line max-lg:sticky max-lg:top-28 max-lg:z-30 max-lg:max-h-[calc(100dvh-7.5rem)] max-lg:overflow-y-auto lg:order-none lg:sticky lg:top-[7.5rem] lg:self-start"
 			>
 				<button
 					type="button"
@@ -661,15 +670,15 @@
 					}}
 					class="flex min-h-12 w-full items-center justify-between gap-3 px-4 py-2 text-left sm:px-5 lg:hidden"
 				>
-					<span class="min-w-0 truncate text-base font-bold text-neutral-900">
+					<span class="min-w-0 truncate text-base font-bold text-ink">
 						{t.checkout.summaryTitle}
 					</span>
 					<span class="flex shrink-0 items-center gap-2">
-						<span class="text-base font-bold text-neutral-900">
+						<span class="text-base font-bold text-ink">
 							{formatPrice(cart.totals.total, intlLocale)}
 						</span>
 						<ChevronDown
-							class="h-5 w-5 shrink-0 text-neutral-500 transition-transform duration-200 {responsiveOrderSummaryOpen
+							class="h-5 w-5 shrink-0 text-muted transition-transform duration-200 {responsiveOrderSummaryOpen
 								? 'rotate-180'
 								: ''}"
 							aria-hidden="true"
@@ -682,47 +691,60 @@
 						? ''
 						: 'max-lg:hidden'}"
 				>
-					<h2 class="hidden text-lg font-bold text-neutral-900 lg:block">
+					<h2 class="hidden text-lg font-bold text-ink lg:block">
 						{t.checkout.summaryTitle}
 					</h2>
-					<ul class="space-y-3 border-b border-neutral-200 pb-4 lg:mt-4">
-						{#each cart.detailed as line (line.product.slug)}
+					<ul class="space-y-3 border-b border-line pb-4 lg:mt-4">
+						{#each cart.detailed as line (line.product.slug + ':' + (line.variant?.id ?? ''))}
 							<li class="flex items-baseline justify-between gap-3 text-sm">
-								<span class="min-w-0 text-neutral-600">
-									<span class="font-medium text-neutral-900">{localize(line.product.name, lang)}</span>
+								<span class="min-w-0 text-muted">
+									<span class="font-medium text-ink">{localize(line.product.name, lang)}</span>
+									{#if line.variant}
+										{' '}({localize(line.variant.label, lang)})
+									{/if}
 									{' '}{interpolate(t.checkout.lineQty, { qty: line.qty })}
 								</span>
-								<span class="shrink-0 font-semibold text-neutral-900">
-									{formatPrice(line.product.price * line.qty, intlLocale)}
+								<span class="shrink-0 font-semibold text-ink">
+									{formatPrice(variantPrice(line.product, line.variant) * line.qty, intlLocale)}
 								</span>
 							</li>
 						{/each}
 					</ul>
 					<dl class="mt-4 space-y-3 text-sm">
 						<div class="flex items-baseline justify-between">
-							<dt class="text-neutral-600">{t.cart.subtotal}</dt>
-							<dd class="font-semibold text-neutral-900">
+							<dt class="text-muted">{t.cart.subtotal}</dt>
+							<dd class="font-semibold text-ink">
 								{formatPrice(cart.totals.subtotal, intlLocale)}
 							</dd>
 						</div>
 						{#if cart.totals.savings > 0}
 							<div class="flex items-baseline justify-between">
-								<dt class="text-neutral-600">{t.cart.savings}</dt>
-								<dd class="font-semibold text-brand-700">
+								<dt class="text-muted">{t.cart.savings}</dt>
+								<dd class="font-semibold text-brand-700 dark:text-brand-300">
 									{formatPrice(cart.totals.savings, intlLocale)}
 								</dd>
 							</div>
 						{/if}
+						{#if cart.appliedPromo && (cart.totals.promoDiscount ?? 0) > 0}
+							<div class="flex items-baseline justify-between">
+								<dt class="text-muted">
+									{interpolate(t.cart.promoDiscount, { code: cart.appliedPromo.code })}
+								</dt>
+								<dd class="font-semibold text-brand-700 dark:text-brand-300">
+									−{formatPrice(cart.totals.promoDiscount ?? 0, intlLocale)}
+								</dd>
+							</div>
+						{/if}
 						<div class="flex items-baseline justify-between">
-							<dt class="text-neutral-600">{t.cart.shipping}</dt>
-							<dd class="font-semibold text-neutral-900">{t.cart.shippingFree}</dd>
+							<dt class="text-muted">{t.cart.shipping}</dt>
+							<dd class="font-semibold text-ink">{t.cart.shippingFree}</dd>
 						</div>
-						<div class="flex items-baseline justify-between border-t border-neutral-200 pt-3 text-base">
-							<dt class="font-bold text-neutral-900">{t.cart.total}</dt>
-							<dd class="font-bold text-neutral-900">{formatPrice(cart.totals.total, intlLocale)}</dd>
+						<div class="flex items-baseline justify-between border-t border-line pt-3 text-base">
+							<dt class="font-bold text-ink">{t.cart.total}</dt>
+							<dd class="font-bold text-ink">{formatPrice(cart.totals.total, intlLocale)}</dd>
 						</div>
 					</dl>
-					<p class="mt-4 text-xs text-neutral-500">{t.checkout.demoNote}</p>
+					<p class="mt-4 text-xs text-muted">{t.checkout.demoNote}</p>
 				</div>
 			</aside>
 		</div>

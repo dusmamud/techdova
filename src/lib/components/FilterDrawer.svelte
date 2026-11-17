@@ -17,6 +17,10 @@
 	 * closes the drawer — the parent's handler decides (typically: apply
 	 * the draft filters, then close).
 	 *
+	 * Optional `facets` snippet: facet controls (brand checkboxes, rating
+	 * radios, toggles, …) rendered above `children` in the scroll area.
+	 * Pages that omit it keep the current layout.
+	 *
 	 * @example
 	 * ```svelte
 	 * <FilterDrawer
@@ -43,7 +47,8 @@
 		resultCount,
 		id = 'filter-drawer',
 		children,
-		footer
+		footer,
+		facets
 	}: {
 		open: boolean;
 		onClose: () => void;
@@ -55,6 +60,8 @@
 		id?: string;
 		children: Snippet;
 		footer?: Snippet;
+		/** Facet controls rendered above `children`. Omit to keep the current layout. */
+		facets?: Snippet;
 	} = $props();
 
 	const titleId = $derived(`${id}-title`);
@@ -129,37 +136,42 @@
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby={titleId}
-			class="absolute left-0 top-0 flex h-full w-full max-w-sm flex-col bg-white shadow-2xl"
+			class="absolute left-0 top-0 flex h-full w-full max-w-sm flex-col bg-surface shadow-2xl"
 			transition:fly={{ x: -320, duration: reduceMotion ? 0 : 300 }}
 		>
-			<div class="flex items-center justify-between border-b border-neutral-200 px-5 py-4">
-				<h2 id={titleId} class="text-lg font-bold text-neutral-900">{heading}</h2>
+			<div class="flex items-center justify-between border-b border-line px-5 py-4">
+				<h2 id={titleId} class="text-lg font-bold text-ink">{heading}</h2>
 				<button
 					type="button"
 					bind:this={closeButton}
 					onclick={onClose}
 					aria-label={t.nav.close}
-					class="grid h-11 w-11 place-items-center rounded-full text-neutral-700 hover:bg-neutral-100"
+					class="grid h-11 w-11 place-items-center rounded-full text-ink-soft hover:bg-surface-soft"
 				>
 					<X class="h-5 w-5" aria-hidden="true" />
 				</button>
 			</div>
 
 			<div class="flex-1 overflow-y-auto px-5 py-5">
+				{#if facets}
+					<div class="mb-6">
+						{@render facets()}
+					</div>
+				{/if}
 				{@render children()}
 			</div>
 
 			{#if footer}
-				<div class="border-t border-neutral-200 px-5 py-4">
+				<div class="border-t border-line px-5 py-4">
 					{@render footer()}
 				</div>
 			{:else if showDefaultFooter}
-				<div class="flex gap-2 border-t border-neutral-200 px-5 py-4">
+				<div class="flex gap-2 border-t border-line px-5 py-4">
 					{#if onClear}
 						<button
 							type="button"
 							onclick={onClear}
-							class="inline-flex min-h-11 flex-1 items-center justify-center rounded-full px-4 text-sm font-semibold text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
+							class="inline-flex min-h-11 flex-1 items-center justify-center rounded-full px-4 text-sm font-semibold text-brand-800 dark:text-brand-200 dark:hover:text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
 						>
 							{t.filters.clearAll}
 						</button>

@@ -6,7 +6,7 @@
 	let { items, label }: { items: BreadcrumbItem[]; label: string } = $props();
 </script>
 
-<nav aria-label={label} class="text-sm text-neutral-500">
+<nav aria-label={label} class="text-sm text-muted">
 	<ol class="flex flex-wrap items-center gap-1">
 		{#each items as item, i (i)}
 			{#if i > 0}
@@ -15,7 +15,7 @@
 			{#if i === items.length - 1 || !item.href}
 				<li
 					aria-current={i === items.length - 1 ? 'page' : undefined}
-					class="inline-flex min-h-11 items-center font-medium text-neutral-800"
+					class="inline-flex min-h-11 items-center font-medium text-ink-soft"
 				>
 					{item.label}
 				</li>
@@ -23,7 +23,7 @@
 				<li>
 					<a
 						href={item.href}
-						class="inline-flex min-h-11 items-center hover:text-brand-800"
+						class="inline-flex min-h-11 items-center hover:text-brand-800 dark:hover:text-brand-200"
 					>
 						{item.label}
 					</a>

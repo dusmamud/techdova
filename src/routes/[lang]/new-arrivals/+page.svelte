@@ -38,6 +38,9 @@
 		sortProducts(filterProducts(baseProducts, { category, maxPrice }, lang), sort)
 	);
 
+	// Grid re-render animation key: every filter dimension.
+	const filterSignature = $derived(`${category ?? ''}|${maxPrice ?? ''}|${sort}`);
+
 	const sortOptions = $derived([
 		{ value: 'featured', label: t.shop.sortFeatured },
 		{ value: 'price-asc', label: t.shop.sortPriceAsc },
@@ -144,10 +147,10 @@
 				{ label: t.newArrivalsPage.title }
 			]}
 		/>
-		<h1 class="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+		<h1 class="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
 			{t.newArrivalsPage.title}
 		</h1>
-		<p class="mt-2 max-w-2xl leading-relaxed text-neutral-600">
+		<p class="mt-2 max-w-2xl leading-relaxed text-muted">
 			{t.newArrivalsPage.description}
 		</p>
 	</div>
@@ -170,12 +173,12 @@
 
 	{#if filtered.length === 0}
 		<div
-			class="mt-6 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center"
+			class="mt-6 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center dark:bg-surface-soft"
 			use:reveal
 		>
-			<SearchX class="h-10 w-10 text-brand-700" aria-hidden="true" />
-			<h2 class="text-xl font-bold text-neutral-900">{t.newArrivalsPage.empty}</h2>
-			<p class="max-w-sm text-neutral-600">{t.newArrivalsPage.emptyHint}</p>
+			<SearchX class="h-10 w-10 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+			<h2 class="text-xl font-bold text-ink">{t.newArrivalsPage.empty}</h2>
+			<p class="max-w-sm text-muted">{t.newArrivalsPage.emptyHint}</p>
 			<a
 				href={localizedPath(lang, '/shop')}
 				class="mt-2 inline-flex min-h-11 items-center rounded-full bg-brand-700 px-5 text-sm font-semibold text-white hover:bg-brand-800"
@@ -184,13 +187,15 @@
 			</a>
 		</div>
 	{:else}
-		<div class="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
-			{#each filtered as product, i (product.slug)}
-				<div use:reveal={{ delay: Math.min(i * 60, 300) }}>
-					<ProductCard {product} {lang} {t} />
-				</div>
-			{/each}
-		</div>
+		{#key filterSignature}
+			<div class="mt-6 grid animate-grid-in grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+				{#each filtered as product, i (product.slug)}
+					<div use:reveal={{ delay: Math.min(i * 60, 300) }}>
+						<ProductCard {product} {lang} {t} />
+					</div>
+				{/each}
+			</div>
+		{/key}
 	{/if}
 </div>
 
@@ -207,11 +212,11 @@
 >
 	<div class="space-y-6">
 		<fieldset>
-			<legend class="text-sm font-semibold text-neutral-900">
+			<legend class="text-sm font-semibold text-ink">
 				{t.newArrivalsPage.categoryLabel}
 			</legend>
 			<div class="mt-3 space-y-1">
-				<label class="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-neutral-700">
+				<label class="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-ink-soft">
 					<input
 						type="radio"
 						name="new-arrivals-category"
@@ -224,7 +229,7 @@
 					{t.newArrivalsPage.allCategories}
 				</label>
 				{#each categories as item (item.slug)}
-					<label class="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-neutral-700">
+					<label class="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-ink-soft">
 						<input
 							type="radio"
 							name="new-arrivals-category"
@@ -243,7 +248,7 @@
 		<div>
 			<label
 				for="new-arrivals-max-price"
-				class="text-sm font-semibold text-neutral-900"
+				class="text-sm font-semibold text-ink"
 			>
 				{t.newArrivalsPage.maxPriceLabel}
 			</label>
@@ -257,7 +262,7 @@
 					bind:value={draftSlider}
 					class="h-11 min-w-0 flex-1 accent-brand-700"
 				/>
-				<span class="shrink-0 text-sm font-semibold text-neutral-900" aria-live="polite">
+				<span class="shrink-0 text-sm font-semibold text-ink" aria-live="polite">
 					{draftPriceDisplay}
 				</span>
 			</div>

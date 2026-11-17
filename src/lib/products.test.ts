@@ -2,14 +2,19 @@ import { describe, expect, it } from 'vitest';
 import { categories, getCategory, isCategorySlug } from '#lib/data/categories';
 import {
 	filterProducts,
+	getBrands,
+	getDefaultVariant,
 	getDiscountedProducts,
 	getFeaturedProducts,
 	getNewProducts,
 	getPairsWellWith,
 	getProduct,
+	getProductsByBrand,
 	getRelatedProducts,
+	getVariant,
 	products,
-	sortProducts
+	sortProducts,
+	variantPrice
 } from '#lib/data/products';
 import { locales, type LocalizedString } from '#lib/i18n/index';
 
@@ -100,6 +105,121 @@ describe('products', () => {
 		expect(related).toHaveLength(4);
 		expect(related.map((p) => p.slug)).not.toContain('iphone-15-pro');
 		expect(related[0].category).toBe('smartphones');
+	});
+
+	it('carries a brand, a stable SKU and a primary-first images list on every product', () => {
+		const expected: Record<string, { brand: string; sku: string }> = {
+			'iphone-15-pro': { brand: 'Apple', sku: 'TD-IP15P-256' },
+			'galaxy-s24': { brand: 'Samsung', sku: 'TD-GS24-256' },
+			'macbook-air-m2': { brand: 'Apple', sku: 'TD-MBA-M2-256' },
+			'dell-xps-13': { brand: 'Dell', sku: 'TD-XPS13-I7' },
+			'airpods-pro': { brand: 'Apple', sku: 'TD-APP-USBC' },
+			'sony-wh1000xm5': { brand: 'Sony', sku: 'TD-WH1000XM5' },
+			'galaxy-watch-6': { brand: 'Samsung', sku: 'TD-GWATCH6' },
+			'apple-watch-9': { brand: 'Apple', sku: 'TD-AW9' },
+			'dualsense-controller': { brand: 'PlayStation', sku: 'TD-DUALSENSE' },
+			'nintendo-switch': { brand: 'Nintendo', sku: 'TD-NSW-32GB' },
+			'magsafe-charger': { brand: 'Apple', sku: 'TD-MAGSAFE-15W' },
+			'usb-c-hub': { brand: 'TechDova', sku: 'TD-HUB-7IN1' }
+		};
+		const skus = new Set<string>();
+		for (const product of products) {
+			expect(product.brand, `${product.slug} brand`).toBe(expected[product.slug].brand);
+			expect(product.sku, `${product.slug} sku`).toBe(expected[product.slug].sku);
+			expect(product.sku).toMatch(/^TD-[A-Z0-9-]+$/);
+			skus.add(product.sku);
+			// Gallery: primary-first, 2–3 extensionless angles, all unique.
+			expect(product.images.length, `${product.slug} images`).toBeGreaterThanOrEqual(2);
+			expect(product.images.length, `${product.slug} images`).toBeLessThanOrEqual(3);
+			expect(product.images[0], `${product.slug} images[0]`).toBe(product.image);
+			expect(new Set(product.images).size, `${product.slug} images unique`).toBe(
+				product.images.length
+			);
+			for (const base of product.images) {
+				expect(base, `${product.slug} image base`).toMatch(/^\/images\/product-[a-z0-9-]+$/);
+			}
+			// Variants: a non-empty array, one dimension per product, unique
+			// ids, localized labels, sane priceDelta/stock, swatches on colours.
+			expect(Array.isArray(product.variants), `${product.slug} variants array`).toBe(true);
+			expect(product.variants!.length, `${product.slug} variants`).toBeGreaterThanOrEqual(2);
+			const kinds = new Set(product.variants!.map((v) => v.kind));
+			expect(kinds.size, `${product.slug} single variant dimension`).toBe(1);
+			expect(new Set(product.variants!.map((v) => v.id)).size).toBe(product.variants!.length);
+			for (const variant of product.variants!) {
+				expectLocalized(variant.label, `${product.slug} variant ${variant.id} label`);
+				expect(Number.isInteger(variant.priceDelta)).toBe(true);
+				expect(variantPrice(product, variant), `${product.slug} ${variant.id} price`).toBeGreaterThan(0);
+				expect(Number.isInteger(variant.stock)).toBe(true);
+				expect(variant.stock, `${product.slug} ${variant.id} stock`).toBeGreaterThanOrEqual(0);
+				if (variant.kind === 'color') {
+					expect(variant.swatch, `${product.slug} ${variant.id} swatch`).toMatch(/^#[0-9a-f]{6}$/i);
+				}
+			}
+			// In-the-box: a non-empty localized list.
+			expect(Array.isArray(product.inTheBox), `${product.slug} inTheBox array`).toBe(true);
+			expect(product.inTheBox!.length, `${product.slug} inTheBox`).toBeGreaterThanOrEqual(3);
+			for (const item of product.inTheBox!) {
+				expectLocalized(item, `${product.slug} inTheBox item`);
+			}
+			// Pairs-well-with: an array of real, other-product slugs, no dupes.
+			expect(Array.isArray(product.pairsWellWith), `${product.slug} pairsWellWith array`).toBe(true);
+			expect(product.pairsWellWith!.length, `${product.slug} pairsWellWith`).toBeGreaterThanOrEqual(2);
+			expect(product.pairsWellWith, `${product.slug} pairsWellWith not self`).not.toContain(product.slug);
+			expect(new Set(product.pairsWellWith).size).toBe(product.pairsWellWith!.length);
+			for (const slug of product.pairsWellWith!) {
+				expect(getProduct(slug), `${product.slug} pairsWellWith ${slug} exists`).toBeDefined();
+			}
+		}
+		expect(skus.size).toBe(12);
+	});
+
+	it('lists unique brands and filters by brand', () => {
+		expect(getBrands()).toEqual(['Apple', 'Samsung', 'Dell', 'Sony', 'PlayStation', 'Nintendo', 'TechDova']);
+		expect(getProductsByBrand('Apple').map((p) => p.slug).sort()).toEqual([
+			'airpods-pro',
+			'apple-watch-9',
+			'iphone-15-pro',
+			'macbook-air-m2',
+			'magsafe-charger'
+		]);
+		expect(getProductsByBrand('Nintendo').map((p) => p.slug)).toEqual(['nintendo-switch']);
+		expect(getProductsByBrand('Nope')).toEqual([]);
+	});
+
+	it('resolves variants and variant prices, defaulting to the base price', () => {
+		const base = getProduct('iphone-15-pro')!;
+		expect(getVariant(base, undefined)).toBeUndefined();
+		expect(getVariant(base, 'missing')).toBeUndefined();
+		expect(variantPrice(base, undefined)).toBe(999);
+		const withVariant = {
+			...base,
+			variants: [
+				{
+					id: 'storage-512',
+					kind: 'storage' as const,
+					label: { en: '512 GB', fr: '512 Go' },
+					priceDelta: 200,
+					stock: 4
+				}
+			]
+		};
+		expect(getVariant(withVariant, 'storage-512')?.priceDelta).toBe(200);
+		expect(variantPrice(withVariant, getVariant(withVariant, 'storage-512'))).toBe(1199);
+	});
+
+	it('defaults every product to its base-priced variant', () => {
+		for (const product of products) {
+			const def = getDefaultVariant(product);
+			expect(def, `${product.slug} default variant`).toBeDefined();
+			expect(def!.priceDelta, `${product.slug} default priceDelta`).toBe(0);
+			expect(variantPrice(product, def), `${product.slug} default price`).toBe(product.price);
+			expect(def!.stock, `${product.slug} default stock`).toBeGreaterThanOrEqual(0);
+		}
+		// The phones list the cheaper 128 GB option first: the default must
+		// still be the 256 GB base-priced variant, not variants[0].
+		expect(getDefaultVariant(getProduct('iphone-15-pro')!)?.id).toBe('storage-256');
+		expect(getDefaultVariant(getProduct('galaxy-s24')!)?.id).toBe('storage-256');
+		expect(getDefaultVariant({ ...getProduct('iphone-15-pro')!, variants: [] })).toBeUndefined();
 	});
 
 	it('marks exactly four products as new', () => {
