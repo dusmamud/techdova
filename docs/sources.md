@@ -313,3 +313,88 @@ open verification items where the build itself could settle them:
   taken from Google's Product intro/snippet/Organization pages plus two
   agreeing secondary summaries); W3C normative WCAG text (figures
   consistent across four checklists plus the retrieved H101 page).
+
+---
+
+## Fix round (2026-11-18) — audit-fix research sources
+
+Research gathered for the 2026-11-18 audit-fix round (audit report:
+`~/workspace/goals/techdova-tech-e-commerce-website/files/techdova-audit-report-2026-11-18.md`).
+Each pattern was cross-verified against at least two sources; authoritative
+sources (Google Search Central, web.dev, MDN, schema.org, Cloudflare) are
+listed first per group. Secondary sources were used only where they agreed
+with, or quoted, the authoritative docs.
+
+### Responsive images (Scope A — P-3, S-7)
+
+- https://web.dev/learn/design/responsive-images/
+- https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/picture
+- https://developers.google.com/search/docs/appearance/google-images
+
+### Structured data (Scope B — R-1, R-2, R-4, R-5, R-6)
+
+- https://developers.google.com/search/docs/appearance/structured-data/product-variants
+- https://developers.google.com/search/docs/appearance/structured-data/merchant-listing
+- https://developers.google.com/search/docs/appearance/structured-data/search-gallery
+- https://developers.google.com/search/docs/appearance/establish-business-details
+- https://patrickstox.com/technical-seo/on-page/structured-data/commerce/offershippingdetails-schema/
+- https://patrickstox.com/technical-seo/on-page/structured-data/commerce/productgroup-schema/
+- https://xeorank.com/blog/product-schema-markup
+- https://www.creahive.com/guides/product-structured-data/
+- https://www.andromed.ai/ecommerce-structured-data
+- https://www.garrettdigital.com/blog/product-page-seo/
+- https://www.countrydevs.com/tools/schema-markup-generator
+- https://www.valtariq.com/blog/structured-data-exporter-websites/
+- https://tonaily.com/guides/schema-markup-guide/
+- https://www.proof48.com/en/blog/schema-markup-types-for-small-business
+- https://anobee.com/seo/structured-data-guide-for-bloggers
+- https://adamarant.com/en/blog/the-7-schema-markup-types-every-blog-needs-in-2026
+- https://www.contentify.ai/blog/structured-data-beyond-faq/
+- https://seeberger-solutions.com/faq-rich-results-gone-structured-data-2026/
+
+### Head / SEO / sitemap / robots (Scope C — P-1, P-2, S-1, S-4, S-5, S-6, S-9)
+
+- https://developers.google.com/search/docs/crawling-indexing/block-indexing
+- https://support.google.com/webmasters/answer/35624
+- https://github.com/GoogleChrome/lighthouse/blob/main/core/audits/seo/link-text.js
+- https://developer.chrome.com/docs/lighthouse/seo/link-text/
+- https://github.com/GoogleChrome/lighthouse/issues/14845
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/preload
+- https://web.developers.google.cn/learn/performance/resource-hints
+- https://www.creahive.com/guides/noindex-tag/
+- https://www.creahive.com/guides/title-tags/
+- https://www.a11yflow.dev/blog/read-more-link-accessibility
+- https://kathypcarr.com/articles/xml-sitemaps-what-google-says-you-need
+- https://claude-seo.md/blog/xml-sitemap-guide
+- https://www.guangsuan.com/en/post/sitemap-update-frequency-settings-guide-blog-news-site/
+- https://www.ogscope.pk/guides/open-graph-tags
+- https://myog.social/articles/og-meta-tags-guide
+- https://www.knowledgegraphnavigator.com/languages/open-graph-protocol/
+- https://audra.greta.sh/fix/heading-order/
+- https://freebiefy.com/tools/heading-structure-checker/
+
+### Headers + manifest (Scope D — S-2, S-3, S-8)
+
+- https://developers.cloudflare.com/pages/configuration/headers/
+- https://developer.mozilla.org/en/docs/Web/Security/HTTP_Strict_Transport_Security
+- https://web.dev/learn/pwa/web-app-manifest
+- https://test.developer.allizom.org/en-US/docs/Web/Progressive_web_apps/How_to/Define_app_icons
+- https://www.openpwa.net/reference/manifest/screenshots/
+- https://www.ssg-production.com/production-ready-deployment-cicd-workflows/cloudflare-pages-edge-caching-setup/
+- https://patrickstox.com/technical-seo/https/hsts/
+- https://pewterkit.com/guides/hsts-header-missing
+- https://stacksiren.com/blog/x-frame-options-vs-frame-ancestors
+- https://www.kumaraman.in/blog/web-security-headers-complete-guide
+- https://scaplet.com/glossary/x-frame-options
+- https://www.securityheaders.tools/blog/permissions-policy-header
+- https://centralcsp.com/en/blog/permissions-policy-explained
+- https://www.acuityscan.com/blog/permissions-policy-referrer-policy-what-your-site-gives-away
+- https://built2winweb.com/blog/security-headers-small-business/
+- https://angelforce.eu/blog/security-headers-that-matter/
+- https://www.softwaresecurity.com/domains/appsec/browser-security/security-headers/
+- https://dropto.run/blog/old-version-after-deploy
+- https://lud.icro.us/cache-control-for-a-content-site-explained-by-what-breaks/
+- https://www.globalwebsitespeedtest.com/blog/browser-caching
+- https://tips.ojapp.app/en/pwa-manifest-screenshots-install-ui-2/
+- https://whatpwacando.today/installation/

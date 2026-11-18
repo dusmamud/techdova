@@ -2,8 +2,10 @@
 	import { ArrowRight } from '@lucide/svelte';
 	import { reveal } from '#lib/actions/reveal';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Picture from '#lib/components/Picture.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import { SITE_URL } from '#lib/config';
 	import { blogPosts } from '#lib/data/blog';
 	import { formatDate, interpolate } from '#lib/format';
 	import { getDictionary, localize } from '#lib/i18n/index';
@@ -31,9 +33,40 @@
 			? t.blogPage.resultOne
 			: interpolate(t.blogPage.results, { count: visiblePosts.length })
 	);
+
+	const blogJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'Blog',
+		'@id': `${SITE_URL}/${lang}/blog`,
+		url: `${SITE_URL}/${lang}/blog`,
+		name: t.blogPage.title,
+		description: t.meta.blogDescription,
+		inLanguage: lang
+	});
+
+	const breadcrumbJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				position: 1,
+				name: t.nav.home,
+				item: `${SITE_URL}/${lang}`
+			},
+			{
+				'@type': 'ListItem',
+				position: 2,
+				name: t.blogPage.breadcrumbBlog,
+				item: `${SITE_URL}/${lang}/blog`
+			}
+		]
+	});
 </script>
 
 <Seo {lang} title={t.meta.blogTitle} description={t.meta.blogDescription} path="/blog" />
+<JsonLd json={blogJsonLd} />
+<JsonLd json={breadcrumbJsonLd} />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<Breadcrumbs
@@ -100,6 +133,7 @@
 						alt={localize(post.imageAlt, lang)}
 						loading="lazy"
 						decoding="async"
+						sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 420px"
 						class="h-full w-full object-cover"
 					/>
 				</a>

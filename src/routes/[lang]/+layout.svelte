@@ -2,6 +2,11 @@
 	import { browser } from '$app/env';
 	import { page } from '$app/state';
 	import { fade } from 'svelte/transition';
+	// Font preload (S-9): the Latin subset of Inter Variable is the only
+	// subset preloaded. The `?url` import resolves to the same hashed
+	// asset the bundled @font-face rule uses, so the preload URL always
+	// matches the file the CSS requests. See the <svelte:head> block below.
+	import latinFontUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 	import BackToTop from '#lib/components/BackToTop.svelte';
 	import CartDrawer from '#lib/components/CartDrawer.svelte';
 	import CartReturnNudge from '#lib/components/CartReturnNudge.svelte';
@@ -41,6 +46,14 @@
 		}
 	});
 </script>
+
+<svelte:head>
+	<!-- Preload the Latin Inter subset only: it covers the EN/FR text on
+		every page, and preloading more subsets would bypass the
+		unicode-range splitting. `crossorigin` is required for fonts even
+		same-origin, or the browser fetches the file twice. -->
+	<link rel="preload" href={latinFontUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+</svelte:head>
 
 <a
 	href="#main-content"

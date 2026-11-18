@@ -106,7 +106,7 @@
 		'w-full rounded-xl border border-line bg-surface px-3 py-3 text-sm text-ink placeholder:text-muted';
 </script>
 
-<Seo {lang} title={t.meta.trackOrderTitle} description={t.meta.trackOrderDescription} path="/track-order" />
+<Seo {lang} title={t.meta.trackOrderTitle} description={t.meta.trackOrderDescription} path="/track-order" noindex />
 
 <div class="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<h1 class="text-3xl font-bold tracking-tight text-ink sm:text-4xl" use:reveal>{t.trackOrder.title}</h1>

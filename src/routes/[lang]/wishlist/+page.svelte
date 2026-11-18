@@ -50,6 +50,7 @@
 	title={t.meta.wishlistTitle}
 	description={t.meta.wishlistDescription}
 	path="/wishlist"
+	noindex
 />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
@@ -73,6 +74,7 @@
 			</a>
 		</div>
 	{:else}
+		<h2 class="sr-only">{t.wishlistPage.savedHeading}</h2>
 		<p class="mt-4 text-sm font-medium text-muted" role="status">{countText}</p>
 		{#key gridSignature}
 			<div class="mt-6 grid animate-grid-in grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">

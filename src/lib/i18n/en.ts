@@ -11,39 +11,39 @@ export const en = {
 		homeTitle: 'TechDova — Your tech universe',
 		homeDescription:
 			'Discover the latest smartphones, computers and accessories with exceptional quality and unbeatable prices.',
-		shopTitle: 'Shop | TechDova',
+		shopTitle: 'Shop all tech products | TechDova',
 		shopDescription:
 			'Browse all our tech products: smartphones, computers, audio, smartwatches, gaming and accessories.',
-		categoryTitle: '{category} | TechDova',
+		categoryTitle: 'Shop {category} | TechDova',
 		categoryDescription:
 			'{category} at TechDova: original products, honest prices and fast delivery.',
-		searchTitle: 'Search | TechDova',
+		searchTitle: 'Search products | TechDova',
 		searchDescription:
 			'Search the TechDova catalogue: smartphones, computers, audio, smartwatches, gaming and accessories.',
-		wishlistTitle: 'Wishlist | TechDova',
+		wishlistTitle: 'Wishlist: your saved products | TechDova',
 		wishlistDescription: 'Your saved TechDova products, all in one place.',
 		compareTitle: 'Compare products | TechDova',
 		compareDescription:
 			'Compare TechDova products side by side: prices, ratings, availability and specifications.',
-		dealsTitle: 'Deals | TechDova',
+		dealsTitle: 'Deals and limited-time offers | TechDova',
 		dealsDescription:
 			'Save on a selection of TechDova products — limited-time offers on smartphones, computers, audio and more.',
-		aboutTitle: 'About | TechDova',
+		aboutTitle: 'About our tech store | TechDova',
 		aboutDescription:
 			'Discover TechDova, your tech universe: original products, fast delivery and customer service that listens.',
 		testimonialsTitle: 'Testimonials | TechDova',
 		testimonialsDescription:
 			'Read what TechDova customers say about our products, delivery and support — fictional demo testimonials.',
-		blogTitle: 'Blog | TechDova',
+		blogTitle: 'Tech blog: buying guides and advice | TechDova',
 		blogDescription:
 			'TechDova buying guides and plain-language advice: headphones, laptops, smartwatches and more.',
-		contactTitle: 'Contact | TechDova',
+		contactTitle: 'Contact us: questions and support | TechDova',
 		contactDescription:
 			'Contact the TechDova team with any question about our products, your orders or delivery.',
-		cartTitle: 'Cart | TechDova',
+		cartTitle: 'Your shopping cart | TechDova',
 		cartDescription:
 			'Review your TechDova cart, change quantities and check out (demo).',
-		checkoutTitle: 'Checkout | TechDova',
+		checkoutTitle: 'Checkout: complete your order | TechDova',
 		checkoutDescription:
 			'Complete your demo order: contact, delivery and payment — nothing is sent anywhere.',
 		orderConfirmationTitle: 'Order confirmed | TechDova',
@@ -52,7 +52,7 @@ export const en = {
 		trackOrderTitle: 'Track your order | TechDova',
 		trackOrderDescription:
 			'Track your demo order with its order code and see its delivery status.',
-		accountTitle: 'Account | TechDova',
+		accountTitle: 'Your account: orders and settings | TechDova',
 		accountDescription:
 			'Your demo TechDova account: sign in locally and view your demo orders.',
 		termsTitle: 'Terms and conditions | TechDova',
@@ -74,7 +74,7 @@ export const en = {
 		accessibilityTitle: 'Accessibility statement | TechDova',
 		accessibilityDescription:
 			'Accessibility statement for the TechDova demo storefront: WCAG 2.2 AA target, supported features and limitations.',
-		sitemapTitle: 'Sitemap | TechDova',
+		sitemapTitle: 'Sitemap: all pages | TechDova',
 		sitemapDescription:
 			'Human-readable sitemap of the TechDova demo storefront, in English and French.',
 		storesTitle: 'Our stores | TechDova',
@@ -478,6 +478,7 @@ export const en = {
 	wishlistPage: {
 		title: 'Your wishlist',
 		description: 'Your saved products, all in one place.',
+		savedHeading: 'Saved products',
 		count: '{count} saved products',
 		countOne: '1 saved product',
 		empty: 'Your wishlist is empty',
@@ -1287,6 +1288,8 @@ export const en = {
 		decline: 'Decline',
 		customize: 'Customise',
 		learnMore: 'Learn more',
+		learnMoreLabel: 'Learn more about our cookie policy',
+		learnMoreSuffix: 'about our cookie policy',
 		modalTitle: 'Cookie and storage settings',
 		modalIntro:
 			'This demo storefront sets no cookies at all — tracking or otherwise. Everything below is stored only in your own browser, using localStorage, and nothing is ever sent to a server.',

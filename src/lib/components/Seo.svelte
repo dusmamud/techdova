@@ -9,6 +9,7 @@
 		path,
 		image = '/images/og-image.png',
 		type = 'website',
+		publishedTime,
 		noindex = false
 	}: {
 		lang: Locale;
@@ -17,7 +18,9 @@
 		/** Locale-less path, e.g. '/' or '/shop' or '/product/iphone-15-pro'. */
 		path: string;
 		image?: string;
-		type?: 'website' | 'product';
+		type?: 'website' | 'product' | 'article';
+		/** ISO 8601 datetime with timezone for `article:published_time` (article pages only). */
+		publishedTime?: string;
 		noindex?: boolean;
 	} = $props();
 
@@ -47,7 +50,10 @@
 	<meta property="og:site_name" content={SITE_NAME} />
 	<meta property="og:title" content={title} />
 	<meta property="og:description" content={description} />
-	<meta property="og:type" content={type === 'product' ? 'product' : 'website'} />
+	<meta property="og:type" content={type} />
+	{#if publishedTime}
+		<meta property="article:published_time" content={publishedTime} />
+	{/if}
 	<meta property="og:url" content={canonical} />
 	<meta property="og:image" content={imageUrl} />
 	<meta property="og:locale" content={dict.meta.ogLocale} />

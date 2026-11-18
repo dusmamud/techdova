@@ -5,7 +5,9 @@
 	import FilterBar from '#lib/components/FilterBar.svelte';
 	import FilterDrawer from '#lib/components/FilterDrawer.svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import { SITE_URL } from '#lib/config';
 	import { categories, getCategory, type CategorySlug } from '#lib/data/categories';
 	import {
 		filterProducts,
@@ -22,6 +24,41 @@
 
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
+
+	const breadcrumbJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				position: 1,
+				name: t.product.breadcrumbHome,
+				item: `${SITE_URL}/${lang}`
+			},
+			{
+				'@type': 'ListItem',
+				position: 2,
+				name: t.nav.shop,
+				item: `${SITE_URL}/${lang}/shop`
+			},
+			{
+				'@type': 'ListItem',
+				position: 3,
+				name: t.bestSellersPage.title,
+				item: `${SITE_URL}/${lang}/best-sellers`
+			}
+		]
+	});
+
+	const webPageJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		'@id': `${SITE_URL}/${lang}/best-sellers`,
+		url: `${SITE_URL}/${lang}/best-sellers`,
+		name: t.bestSellersPage.title,
+		description: t.meta.bestSellersDescription,
+		inLanguage: lang
+	});
 
 	const SLIDER_MIN = 100;
 	const SLIDER_MAX = 1500;
@@ -136,6 +173,8 @@
 	description={t.meta.bestSellersDescription}
 	path="/best-sellers"
 />
+<JsonLd json={breadcrumbJsonLd} />
+<JsonLd json={webPageJsonLd} />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<div use:reveal>
@@ -156,6 +195,7 @@
 	</div>
 
 	<div class="mt-6">
+		<h2 class="sr-only">{t.filters.facetsHeading}</h2>
 		<FilterBar
 			{t}
 			resultCount={filtered.length}

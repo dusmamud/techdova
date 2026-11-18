@@ -11,39 +11,39 @@ export const fr: Dictionary = {
 		homeTitle: 'TechDova — Votre univers technologique',
 		homeDescription:
 			'Découvrez les derniers smartphones, ordinateurs et accessoires avec une qualité exceptionnelle et des prix imbattables.',
-		shopTitle: 'Boutique | TechDova',
+		shopTitle: 'Boutique : tous les produits tech | TechDova',
 		shopDescription:
 			'Parcourez tous nos produits technologiques : smartphones, ordinateurs, audio, montres connectées, gaming et accessoires.',
-		categoryTitle: '{category} | TechDova',
+		categoryTitle: '{category} : nos produits | TechDova',
 		categoryDescription:
 			'{category} chez TechDova : des produits originaux, des prix honnêtes et une livraison rapide.',
-		searchTitle: 'Recherche | TechDova',
+		searchTitle: 'Rechercher un produit | TechDova',
 		searchDescription:
 			'Recherchez dans le catalogue TechDova : smartphones, ordinateurs, audio, montres connectées, gaming et accessoires.',
-		wishlistTitle: 'Favoris | TechDova',
+		wishlistTitle: 'Favoris : vos produits enregistrés | TechDova',
 		wishlistDescription: 'Vos produits TechDova enregistrés, réunis au même endroit.',
 		compareTitle: 'Comparer les produits | TechDova',
 		compareDescription:
 			'Comparez les produits TechDova côte à côte : prix, notes, disponibilité et caractéristiques.',
-		dealsTitle: 'Promotions | TechDova',
+		dealsTitle: 'Promotions et offres limitées | TechDova',
 		dealsDescription:
 			'Économisez sur une sélection de produits TechDova — des offres à durée limitée sur les smartphones, les ordinateurs, l’audio et bien plus.',
-		aboutTitle: 'À propos | TechDova',
+		aboutTitle: 'À propos de notre boutique tech | TechDova',
 		aboutDescription:
 			'Découvrez TechDova, votre univers technologique : des produits originaux, une livraison rapide et un service client à votre écoute.',
 		testimonialsTitle: 'Témoignages | TechDova',
 		testimonialsDescription:
 			'Lisez ce que les clients de TechDova disent de nos produits, de la livraison et du support — des témoignages démo fictifs.',
-		blogTitle: 'Blog | TechDova',
+		blogTitle: 'Blog tech : guides d’achat et conseils | TechDova',
 		blogDescription:
 			'Guides d’achat et conseils TechDova en langage clair : casques, ordinateurs portables, montres connectées et plus encore.',
-		contactTitle: 'Contact | TechDova',
+		contactTitle: 'Contact : questions et assistance | TechDova',
 		contactDescription:
 			'Contactez l’équipe TechDova pour toute question sur nos produits, vos commandes ou la livraison.',
-		cartTitle: 'Panier | TechDova',
+		cartTitle: 'Votre panier d’achat | TechDova',
 		cartDescription:
 			'Consultez votre panier TechDova, modifiez les quantités et finalisez votre commande (démo).',
-		checkoutTitle: 'Commander | TechDova',
+		checkoutTitle: 'Finaliser votre commande | TechDova',
 		checkoutDescription:
 			'Finalisez votre commande démo : contact, livraison et paiement — rien n’est envoyé.',
 		orderConfirmationTitle: 'Commande confirmée | TechDova',
@@ -52,7 +52,7 @@ export const fr: Dictionary = {
 		trackOrderTitle: 'Suivre votre commande | TechDova',
 		trackOrderDescription:
 			'Suivez votre commande démo grâce à son code et consultez son statut de livraison.',
-		accountTitle: 'Compte | TechDova',
+		accountTitle: 'Votre compte : commandes et réglages | TechDova',
 		accountDescription:
 			'Votre compte démo TechDova : connectez-vous localement et consultez vos commandes démo.',
 		termsTitle: 'Conditions générales | TechDova',
@@ -74,7 +74,7 @@ export const fr: Dictionary = {
 		accessibilityTitle: 'Déclaration d’accessibilité | TechDova',
 		accessibilityDescription:
 			'Déclaration d’accessibilité de la boutique démo TechDova : objectif WCAG 2.2 AA, fonctionnalités prises en charge et limites.',
-		sitemapTitle: 'Plan du site | TechDova',
+		sitemapTitle: 'Plan du site : toutes les pages | TechDova',
 		sitemapDescription:
 			'Plan du site lisible de la boutique démo TechDova, en anglais et en français.',
 		storesTitle: 'Nos boutiques | TechDova',
@@ -105,13 +105,13 @@ export const fr: Dictionary = {
 			'Estimateur de reprise démo : estimez le crédit que votre ancien appareil pourrait valoir. Aucun appareil n’est collecté et aucun crédit n’est émis.',
 		financingTitle: 'Financement et versements | TechDova',
 		financingDescription:
-			'Explication du financement démo et calculateur de versements : divisez un achat en paiements mensuels à 0 % d’intérêt démo. Aucun contrat de crédit n’est proposé.',
+			'Financement démo et calculateur de versements : divisez un achat en paiements mensuels à 0 % d’intérêt démo. Aucun contrat de crédit proposé.',
 		warrantyTitle: 'Garantie étendue | TechDova',
 		warrantyDescription:
-			'Plans de garantie étendue et de protection démo : comparez les niveaux de couverture et les prix fictifs. Aucun plan n’est vendu et aucune réclamation ne peut être déposée.',
+			'Garantie étendue et protection démo : comparez les niveaux de couverture et les prix fictifs. Aucun plan vendu, aucune réclamation possible.',
 		cookiesTitle: 'Politique en matière de cookies et de stockage | TechDova',
 		cookiesDescription:
-			'Comment TechDova stocke les données honnêtement : aucun cookie de suivi, aucune analyse — uniquement le stockage local du navigateur pour votre panier, vos favoris, le thème et la langue.'
+			'Aucun cookie de suivi, aucune analyse : TechDova utilise uniquement le stockage local du navigateur pour votre panier, vos favoris, le thème et la langue.'
 	},
 	nav: {
 		home: 'Accueil',
@@ -479,6 +479,7 @@ export const fr: Dictionary = {
 	wishlistPage: {
 		title: 'Vos favoris',
 		description: 'Vos produits enregistrés, réunis au même endroit.',
+		savedHeading: 'Produits enregistrés',
 		count: '{count} produits enregistrés',
 		countOne: '1 produit enregistré',
 		empty: 'Votre liste de favoris est vide',
@@ -1295,6 +1296,8 @@ export const fr: Dictionary = {
 		decline: 'Refuser',
 		customize: 'Personnaliser',
 		learnMore: 'En savoir plus',
+		learnMoreLabel: 'En savoir plus sur notre politique de cookies',
+		learnMoreSuffix: 'sur notre politique de cookies',
 		modalTitle: 'Paramètres des cookies et du stockage',
 		modalIntro:
 			'Cette boutique démo ne définit aucun cookie — ni de suivi ni d’aucune autre sorte. Tout ce qui suit est stocké uniquement dans votre propre navigateur, via le stockage local, et n’est jamais envoyé à un serveur.',

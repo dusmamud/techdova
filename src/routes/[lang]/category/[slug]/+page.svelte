@@ -272,6 +272,16 @@
 			}
 		]
 	});
+
+	const webPageJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		'@id': `${SITE_URL}/${lang}/category/${category.slug}`,
+		url: `${SITE_URL}/${lang}/category/${category.slug}`,
+		name,
+		description: interpolate(t.meta.categoryDescription, { category: name }),
+		inLanguage: lang
+	});
 </script>
 
 <Seo
@@ -282,6 +292,7 @@
 	image={`${category.image}.jpg`}
 />
 <JsonLd json={breadcrumbJsonLd} />
+<JsonLd json={webPageJsonLd} />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<Breadcrumbs
@@ -301,6 +312,7 @@
 			height={1600}
 			decoding="async"
 			fetchPriority="high"
+			sizes="(max-width: 639px) 112px, (max-width: 1023px) 160px, 192px"
 			class="h-28 w-28 shrink-0 rounded-3xl bg-brand-50 object-cover sm:h-40 sm:w-40 lg:h-48 lg:w-48"
 		/>
 		<div class="min-w-0">
@@ -376,10 +388,10 @@
 			</div>
 		{/snippet}
 		{#snippet facets()}
+			<h2 class="sr-only">{t.filters.facetsHeading}</h2>
 			<div
 				class="mt-4 hidden flex-wrap items-end gap-x-6 gap-y-4 border-t border-line pt-4 lg:flex"
 			>
-				<h2 class="sr-only">{t.filters.facetsHeading}</h2>
 				<fieldset class="min-w-0">
 					<legend class="text-sm font-semibold text-ink">{t.filters.brandsLabel}</legend>
 					<div class="mt-2 flex flex-wrap gap-2">

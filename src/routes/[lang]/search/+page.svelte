@@ -94,7 +94,7 @@
 	}
 </script>
 
-<Seo {lang} title={t.meta.searchTitle} description={t.meta.searchDescription} path="/search" />
+<Seo {lang} title={t.meta.searchTitle} description={t.meta.searchDescription} path="/search" noindex />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<div use:reveal>
@@ -206,6 +206,7 @@
 			</a>
 		</div>
 	{:else}
+		<h2 class="sr-only">{t.filters.facetsHeading}</h2>
 		<FilterBar
 			{t}
 			id="search-filter-bar"

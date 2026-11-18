@@ -194,6 +194,7 @@
 							loading={i === 0 ? 'eager' : 'lazy'}
 							fetchPriority={i === 0 ? 'high' : undefined}
 							decoding="async"
+							sizes="(max-width: 1023px) 100vw, 680px"
 							class="absolute inset-0 h-full w-full object-cover {i === active
 								? 'animate-ken-burns'
 								: ''}"

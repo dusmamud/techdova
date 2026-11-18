@@ -85,6 +85,11 @@
 					height={tile.height}
 					loading="lazy"
 					decoding="async"
+					sizes={i === 3
+						? '(max-width: 1023px) 100vw, 840px'
+						: tile.large
+							? '(max-width: 1023px) 100vw, 420px'
+							: '(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 420px'}
 					class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
 				/>
 				<span

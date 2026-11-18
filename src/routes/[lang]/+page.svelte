@@ -68,26 +68,27 @@
 		scroller.scrollBy({ left: direction * step, behavior: 'smooth' });
 	}
 
+	// Organization logo is the 512x512 raster app icon (the TechDova
+	// bag mark, same artwork as the favicon) — Google asks for a raster
+	// logo of at least 112x112. The SearchAction block was removed: Google
+	// retired the sitelinks search box, so it earned nothing (audit R-4).
 	const structuredData = $derived({
 		'@context': 'https://schema.org',
 		'@graph': [
 			{
 				'@type': 'OnlineStore',
+				'@id': SITE_URL,
 				name: SITE_NAME,
 				url: SITE_URL,
-				logo: `${SITE_URL}/favicon.svg`,
+				description: t.meta.homeDescription,
+				logo: `${SITE_URL}/icons/icon-512.png`,
 				slogan: t.footer.tagline
 			},
 			{
 				'@type': 'WebSite',
 				name: SITE_NAME,
 				url: `${SITE_URL}/${lang}`,
-				inLanguage: lang,
-				potentialAction: {
-					'@type': 'SearchAction',
-					target: `${SITE_URL}/${lang}/search?q={query}`,
-					'query-input': 'required name=query'
-				}
+				inLanguage: lang
 			}
 		]
 	});
@@ -129,6 +130,7 @@
 							height={1600}
 							loading="lazy"
 							decoding="async"
+							sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 200px"
 							class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
 						/>
 					</span>
@@ -266,6 +268,7 @@
 								height={1760}
 								loading="lazy"
 								decoding="async"
+								sizes="(max-width: 639px) 80px, (max-width: 1023px) 96px, 112px"
 								class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
 							/>
 						</span>
@@ -338,6 +341,7 @@
 					height={1152}
 					loading="lazy"
 					decoding="async"
+					sizes="(max-width: 1023px) 100vw, 620px"
 					class="absolute inset-0 h-full w-full object-cover"
 				/>
 			</div>
@@ -356,6 +360,7 @@
 					height={1152}
 					loading="lazy"
 					decoding="async"
+					sizes="(max-width: 1023px) 100vw, 620px"
 					class="aspect-[16/9] w-full object-cover"
 				/>
 			</div>

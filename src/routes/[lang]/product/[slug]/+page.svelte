@@ -422,13 +422,27 @@
 		}, 1800);
 	}
 
+	// Merchant-listing fields (audit R-1): brand, url, @id and
+	// itemCondition. Deliberately omitted: priceValidUntil (no real price
+	// validity exists), shippingDetails and hasMerchantReturnPolicy (the
+	// visible shipping/returns/FAQ copy names no delivery/return country,
+	// and both types require a country code — see audit fix report).
+	// Single-Product markup is kept for all products (no ProductGroup):
+	// color variants have no unique sku and no variant-specific image, so
+	// Google's variant requirements cannot be met without inventing data.
 	const productJsonLd = $derived({
 		'@context': 'https://schema.org',
 		'@type': 'Product',
+		'@id': `${SITE_URL}/${lang}/product/${product.slug}`,
+		url: `${SITE_URL}/${lang}/product/${product.slug}`,
 		name,
 		image: product.images.map((image) => `${SITE_URL}${image}.jpg`),
 		description: localize(product.description, lang),
 		sku: displaySku,
+		brand: {
+			'@type': 'Brand',
+			name: product.brand
+		},
 		offers: {
 			'@type': 'Offer',
 			priceCurrency: 'DZD',
@@ -436,6 +450,7 @@
 			availability: outOfStock
 				? 'https://schema.org/OutOfStock'
 				: 'https://schema.org/InStock',
+			itemCondition: 'https://schema.org/NewCondition',
 			url: `${SITE_URL}/${lang}/product/${product.slug}`
 		},
 		aggregateRating: {
@@ -452,7 +467,7 @@
 			{
 				'@type': 'ListItem',
 				position: 1,
-				name: SITE_NAME,
+				name: t.product.breadcrumbHome,
 				item: `${SITE_URL}/${lang}`
 			},
 			{
@@ -476,7 +491,7 @@
 	title="{name} | {SITE_NAME}"
 	description={localize(product.shortDescription, lang)}
 	path="/product/{product.slug}"
-	image={`${product.image}.jpg`}
+	image={`/images/og-${product.slug}.jpg`}
 	type="product"
 />
 <JsonLd json={productJsonLd} />
@@ -546,6 +561,7 @@
 							height={1760}
 							decoding="async"
 							fetchPriority="high"
+							sizes="(max-width: 1023px) 448px, 800px"
 							class="h-full w-full object-cover"
 						/>
 					</div>
@@ -604,6 +620,7 @@
 								height={1760}
 								loading="lazy"
 								decoding="async"
+								sizes="80px"
 								class="h-full w-full object-cover"
 							/>
 						</button>
@@ -966,6 +983,7 @@
 								height={400}
 								loading="lazy"
 								decoding="async"
+								sizes="80px"
 								class="h-full w-full object-cover"
 							/>
 						</div>
@@ -993,6 +1011,7 @@
 									height={400}
 									loading="lazy"
 									decoding="async"
+									sizes="80px"
 									class="h-full w-full object-cover"
 								/>
 							</a>
@@ -1173,6 +1192,7 @@
 				width={1408}
 				height={1760}
 				decoding="async"
+				sizes="(max-width: 1023px) 100vw, 720px"
 				class="max-h-[90vh] w-full object-contain"
 			/>
 		</div>

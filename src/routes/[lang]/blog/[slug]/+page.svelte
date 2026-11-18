@@ -50,18 +50,56 @@
 		};
 	});
 
+	// datePublished is a full datetime with the site's +01:00 (Algiers)
+	// convention: the stored date is real, the midnight time is the neutral
+	// representation of that date. dateModified is deliberately omitted —
+	// no real modification date is known. Publisher logo is the 512x512
+	// raster TechDova mark, shared with the home Organization block.
 	const blogJsonLd = $derived({
 		'@context': 'https://schema.org',
 		'@type': 'BlogPosting',
 		headline: title,
 		description: excerpt,
 		image: `${SITE_URL}${post.image}.jpg`,
-		datePublished: post.dateISO,
+		datePublished: `${post.dateISO}T00:00:00+01:00`,
 		author: {
 			'@type': 'Organization',
 			name: SITE_NAME,
 			url: SITE_URL
-		}
+		},
+		publisher: {
+			'@type': 'Organization',
+			name: SITE_NAME,
+			url: SITE_URL,
+			logo: `${SITE_URL}/icons/icon-512.png`
+		},
+		mainEntityOfPage: `${SITE_URL}/${lang}/blog/${post.slug}`,
+		inLanguage: lang
+	});
+
+	const breadcrumbJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				position: 1,
+				name: t.product.breadcrumbHome,
+				item: `${SITE_URL}/${lang}`
+			},
+			{
+				'@type': 'ListItem',
+				position: 2,
+				name: t.blogPage.breadcrumbBlog,
+				item: `${SITE_URL}/${lang}/blog`
+			},
+			{
+				'@type': 'ListItem',
+				position: 3,
+				name: title,
+				item: `${SITE_URL}/${lang}/blog/${post.slug}`
+			}
+		]
 	});
 </script>
 
@@ -71,8 +109,11 @@
 	description={excerpt}
 	path="/blog/{post.slug}"
 	image={`${post.image}.jpg`}
+	type="article"
+	publishedTime={`${post.dateISO}T00:00:00+01:00`}
 />
 <JsonLd json={blogJsonLd} />
+<JsonLd json={breadcrumbJsonLd} />
 
 <div
 	role="progressbar"
@@ -117,6 +158,7 @@
 					alt={localize(post.imageAlt, lang)}
 					decoding="async"
 					fetchPriority="high"
+					sizes="(max-width: 767px) 100vw, 768px"
 					class="h-full w-full object-cover"
 				/>
 			</div>
@@ -197,6 +239,7 @@
 								alt={localize(related.imageAlt, lang)}
 								loading="lazy"
 								decoding="async"
+								sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 420px"
 								class="h-full w-full object-cover"
 							/>
 						</a>

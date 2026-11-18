@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { reveal } from '#lib/actions/reveal';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import { SITE_URL } from '#lib/config';
 	import { blogPosts } from '#lib/data/blog';
 	import { categories } from '#lib/data/categories';
 	import { products } from '#lib/data/products';
@@ -13,6 +15,35 @@
 
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
+
+	const breadcrumbJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				position: 1,
+				name: t.nav.home,
+				item: `${SITE_URL}/${lang}`
+			},
+			{
+				'@type': 'ListItem',
+				position: 2,
+				name: t.sitemapPage.title,
+				item: `${SITE_URL}/${lang}/sitemap`
+			}
+		]
+	});
+
+	const webPageJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		'@id': `${SITE_URL}/${lang}/sitemap`,
+		url: `${SITE_URL}/${lang}/sitemap`,
+		name: t.sitemapPage.title,
+		description: t.meta.sitemapDescription,
+		inLanguage: lang
+	});
 
 	type Entry = { path: string; label: string };
 
@@ -108,6 +139,8 @@
 {/snippet}
 
 <Seo {lang} title={t.meta.sitemapTitle} description={t.meta.sitemapDescription} path="/sitemap" />
+<JsonLd json={breadcrumbJsonLd} />
+<JsonLd json={webPageJsonLd} />
 
 <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:py-8">
 	<Breadcrumbs

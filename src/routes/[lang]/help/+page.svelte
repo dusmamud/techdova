@@ -2,7 +2,9 @@
 	import { ArrowRight, CircleHelp, CreditCard, MessageCircle, Package, Truck, Undo2 } from '@lucide/svelte';
 	import { reveal } from '#lib/actions/reveal';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import { SITE_URL } from '#lib/config';
 	import { getDictionary } from '#lib/i18n/index';
 	import { localizedPath } from '#lib/paths';
 	import type { PageProps } from './$types';
@@ -11,6 +13,35 @@
 
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
+
+	const breadcrumbJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				position: 1,
+				name: t.product.breadcrumbHome,
+				item: `${SITE_URL}/${lang}`
+			},
+			{
+				'@type': 'ListItem',
+				position: 2,
+				name: t.helpPage.title,
+				item: `${SITE_URL}/${lang}/help`
+			}
+		]
+	});
+
+	const webPageJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		'@id': `${SITE_URL}/${lang}/help`,
+		url: `${SITE_URL}/${lang}/help`,
+		name: t.helpPage.title,
+		description: t.meta.helpDescription,
+		inLanguage: lang
+	});
 
 	const topicPaths = ['/faq', '/shipping', '/returns', '/payment', '/track-order', '/contact'];
 	const topicIcons = [CircleHelp, Truck, Undo2, CreditCard, Package, MessageCircle];
@@ -25,6 +56,8 @@
 </script>
 
 <Seo {lang} title={t.meta.helpTitle} description={t.meta.helpDescription} path="/help" />
+<JsonLd json={breadcrumbJsonLd} />
+<JsonLd json={webPageJsonLd} />
 
 <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:py-8">
 	<div use:reveal>

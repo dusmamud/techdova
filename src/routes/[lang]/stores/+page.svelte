@@ -2,7 +2,9 @@
 	import { Clock, MapPin, Navigation, Phone, Store } from '@lucide/svelte';
 	import { reveal } from '#lib/actions/reveal';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import { SITE_URL } from '#lib/config';
 	import { getStoreCities, stores } from '#lib/data/stores';
 	import { interpolate } from '#lib/format';
 	import { getDictionary, localize } from '#lib/i18n/index';
@@ -13,6 +15,35 @@
 
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
+
+	const breadcrumbJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				position: 1,
+				name: t.product.breadcrumbHome,
+				item: `${SITE_URL}/${lang}`
+			},
+			{
+				'@type': 'ListItem',
+				position: 2,
+				name: t.storesPage.title,
+				item: `${SITE_URL}/${lang}/stores`
+			}
+		]
+	});
+
+	const webPageJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		'@id': `${SITE_URL}/${lang}/stores`,
+		url: `${SITE_URL}/${lang}/stores`,
+		name: t.storesPage.title,
+		description: t.meta.storesDescription,
+		inLanguage: lang
+	});
 	const cities = getStoreCities();
 
 	// Client-side city filter only — no query params, so prerendering is
@@ -35,6 +66,8 @@
 </script>
 
 <Seo {lang} title={t.meta.storesTitle} description={t.meta.storesDescription} path="/stores" />
+<JsonLd json={breadcrumbJsonLd} />
+<JsonLd json={webPageJsonLd} />
 
 <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:py-8">
 	<div use:reveal>

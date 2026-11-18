@@ -6,29 +6,22 @@ import { defaultLocale, locales } from '#lib/i18n/index';
 
 export const prerender = true;
 
-const LASTMOD = '2026-11-17';
-
 const staticPaths = [
 	'',
 	'/shop',
 	'/about',
 	'/contact',
-	'/cart',
 	'/terms',
 	'/privacy',
-	'/checkout',
-	// NOTE: /order-confirmation is deliberately excluded — it is noindex
-	// (session-specific) and noindex pages do not belong in a sitemap.
+	// NOTE: noindex pages are deliberately excluded — noindex pages do
+	// not belong in a sitemap. Excluded: /order-confirmation
+	// (session-specific) and the utility pages /cart, /checkout,
+	// /account, /search, /wishlist, /compare and /track-order.
 	'/faq',
 	'/shipping',
 	'/returns',
 	'/payment',
-	'/search',
-	'/wishlist',
 	'/testimonials',
-	'/account',
-	'/track-order',
-	'/compare',
 	'/deals',
 	'/blog',
 	'/sitemap',
@@ -68,7 +61,6 @@ export function GET(): Response {
 			return [
 				'  <url>',
 				`    <loc>${absoluteUrl(locale, path)}</loc>`,
-				`    <lastmod>${LASTMOD}</lastmod>`,
 				alternates,
 				`    <xhtml:link rel="alternate" hreflang="x-default" href="${absoluteUrl(defaultLocale, path)}" />`,
 				'  </url>'

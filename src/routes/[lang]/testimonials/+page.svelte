@@ -2,7 +2,9 @@
 	import { ArrowRight } from '@lucide/svelte';
 	import { reveal } from '#lib/actions/reveal';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import { SITE_URL } from '#lib/config';
 	import Stars from '#lib/components/Stars.svelte';
 	import { testimonials } from '#lib/data/testimonials';
 	import { formatCount, formatDecimal, interpolate } from '#lib/format';
@@ -14,6 +16,35 @@
 
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
+
+	const breadcrumbJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				position: 1,
+				name: t.nav.home,
+				item: `${SITE_URL}/${lang}`
+			},
+			{
+				'@type': 'ListItem',
+				position: 2,
+				name: t.testimonialsPage.title,
+				item: `${SITE_URL}/${lang}/testimonials`
+			}
+		]
+	});
+
+	const webPageJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		'@id': `${SITE_URL}/${lang}/testimonials`,
+		url: `${SITE_URL}/${lang}/testimonials`,
+		name: t.testimonialsPage.title,
+		description: t.meta.testimonialsDescription,
+		inLanguage: lang
+	});
 	const intlLocale = $derived(t.meta.intlLocale);
 	const average = $derived(
 		testimonials.reduce((sum, item) => sum + item.rating, 0) / testimonials.length
@@ -42,6 +73,8 @@
 	description={t.meta.testimonialsDescription}
 	path="/testimonials"
 />
+<JsonLd json={breadcrumbJsonLd} />
+<JsonLd json={webPageJsonLd} />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<Breadcrumbs

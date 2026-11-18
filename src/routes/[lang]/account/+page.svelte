@@ -292,7 +292,7 @@
 		'w-full rounded-xl border border-line bg-surface px-3 py-3 text-sm text-ink placeholder:text-muted';
 </script>
 
-<Seo {lang} title={t.meta.accountTitle} description={t.meta.accountDescription} path="/account" />
+<Seo {lang} title={t.meta.accountTitle} description={t.meta.accountDescription} path="/account" noindex />
 
 <div class="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<Breadcrumbs

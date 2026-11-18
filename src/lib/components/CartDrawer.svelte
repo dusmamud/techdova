@@ -116,6 +116,7 @@
 									height={1760}
 									loading="lazy"
 									decoding="async"
+									sizes="80px"
 									class="h-20 w-20 shrink-0 rounded-2xl bg-brand-50 object-cover"
 								/>
 							</a>

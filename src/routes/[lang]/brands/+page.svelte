@@ -3,7 +3,9 @@
 	import { reveal } from '#lib/actions/reveal';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import Picture from '#lib/components/Picture.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import { SITE_URL } from '#lib/config';
 	import { getBrands, getProductsByBrand } from '#lib/data/products';
 	import { formatPrice, interpolate } from '#lib/format';
 	import { getDictionary, localize } from '#lib/i18n/index';
@@ -14,6 +16,35 @@
 
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
+
+	const breadcrumbJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				position: 1,
+				name: t.product.breadcrumbHome,
+				item: `${SITE_URL}/${lang}`
+			},
+			{
+				'@type': 'ListItem',
+				position: 2,
+				name: t.brandsPage.title,
+				item: `${SITE_URL}/${lang}/brands`
+			}
+		]
+	});
+
+	const webPageJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		'@id': `${SITE_URL}/${lang}/brands`,
+		url: `${SITE_URL}/${lang}/brands`,
+		name: t.brandsPage.title,
+		description: t.meta.brandsDescription,
+		inLanguage: lang
+	});
 	const intlLocale = $derived(t.meta.intlLocale);
 	const brands = getBrands();
 
@@ -28,6 +59,8 @@
 </script>
 
 <Seo {lang} title={t.meta.brandsTitle} description={t.meta.brandsDescription} path="/brands" />
+<JsonLd json={breadcrumbJsonLd} />
+<JsonLd json={webPageJsonLd} />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<div use:reveal>
@@ -78,6 +111,7 @@
 										alt={localize(product.imageAlt, lang)}
 										loading="lazy"
 										decoding="async"
+										sizes="64px"
 										class="h-full w-full object-cover"
 									/>
 								</span>

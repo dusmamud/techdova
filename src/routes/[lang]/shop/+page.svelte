@@ -9,7 +9,9 @@
 	} from '#lib/components/FilterBar.svelte';
 	import FilterDrawer from '#lib/components/FilterDrawer.svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import { SITE_URL } from '#lib/config';
 	import { categories, getCategory, isCategorySlug, type CategorySlug } from '#lib/data/categories';
 	import {
 		filterProducts,
@@ -27,6 +29,18 @@
 
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
+
+	// WebPage only: the shop page has no visible breadcrumb trail, so no
+	// BreadcrumbList, and no ItemList (a product list earns no carousel).
+	const webPageJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		'@id': `${SITE_URL}/${lang}/shop`,
+		url: `${SITE_URL}/${lang}/shop`,
+		name: t.shop.title,
+		description: t.meta.shopDescription,
+		inLanguage: lang
+	});
 
 	const SLIDER_MIN = 100;
 	const SLIDER_MAX = 1500;
@@ -410,6 +424,7 @@
 </script>
 
 <Seo {lang} title={t.meta.shopTitle} description={t.meta.shopDescription} path="/shop" />
+<JsonLd json={webPageJsonLd} />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<div use:reveal>
@@ -509,10 +524,10 @@
 			</div>
 		{/snippet}
 		{#snippet facets()}
+			<h2 class="sr-only">{t.filters.facetsHeading}</h2>
 			<div
 				class="mt-4 hidden flex-wrap items-end gap-x-6 gap-y-4 border-t border-line pt-4 lg:flex"
 			>
-				<h2 class="sr-only">{t.filters.facetsHeading}</h2>
 				<fieldset class="min-w-0">
 					<legend class="text-sm font-semibold text-ink">{t.filters.brandsLabel}</legend>
 					<div class="mt-2 flex flex-wrap gap-2">

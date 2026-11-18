@@ -172,13 +172,14 @@ test('gallery switches image by thumbnail and by arrows', async ({ page }) => {
 	await suppressCookieBanner(page);
 	await page.goto('/en/product/iphone-15-pro');
 	const mainSource = page.locator('figure source[type="image/avif"]').first();
-	await expect(mainSource).toHaveAttribute('srcset', /product-iphone-15-pro\.avif$/);
+	// srcset is a width list (audit P-3); the full-resolution entry is last.
+	await expect(mainSource).toHaveAttribute('srcset', /product-iphone-15-pro\.avif 1408w/);
 	await page.getByRole('button', { name: 'View image 2' }).first().click();
-	await expect(mainSource).toHaveAttribute('srcset', /product-iphone-15-pro-2\.avif$/);
+	await expect(mainSource).toHaveAttribute('srcset', /product-iphone-15-pro-2\.avif 1408w/);
 	await page.getByRole('button', { name: 'Next image' }).click();
-	await expect(mainSource).toHaveAttribute('srcset', /product-iphone-15-pro-3\.avif$/);
+	await expect(mainSource).toHaveAttribute('srcset', /product-iphone-15-pro-3\.avif 1408w/);
 	await page.getByRole('button', { name: 'Previous image' }).click();
-	await expect(mainSource).toHaveAttribute('srcset', /product-iphone-15-pro-2\.avif$/);
+	await expect(mainSource).toHaveAttribute('srcset', /product-iphone-15-pro-2\.avif 1408w/);
 });
 
 test('promo code TECHDOVA10 takes 10% off the cart total, bad codes error, remove restores', async ({
@@ -535,9 +536,12 @@ test('product card hover swaps to the second gallery image', async ({ page }) =>
 	await page.setViewportSize({ width: 1280, height: 800 });
 	await page.goto('/en/shop');
 	const card = page.locator('article', { hasText: 'iPhone 15 Pro' }).first();
-	const alternate = card.locator('picture').nth(1).locator('img');
-	await expect(alternate).toHaveCSS('opacity', '0');
+	// Hover image is deferred (audit P-3): no second picture exists until
+	// hover intent on a fine-pointer device arms it.
+	await expect(card.locator('picture')).toHaveCount(1);
 	await card.hover();
+	await expect(card.locator('picture')).toHaveCount(2);
+	const alternate = card.locator('picture').nth(1).locator('img');
 	await expect
 		.poll(async () => alternate.evaluate((el) => getComputedStyle(el).opacity))
 		.toBe('1');

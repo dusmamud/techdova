@@ -45,6 +45,21 @@
 	const alternateImage = $derived(
 		product.images?.[1] && product.images[1] !== product.image ? product.images[1] : undefined
 	);
+	// Hover-swap deferral (audit finding P-3): the alternate (-2) image
+	// must not download on initial load for touch/coarse pointers, where
+	// hover never happens. It is rendered only after hover intent on a
+	// fine-pointer device: mouseenter/focusin on the card arms it, and
+	// the matchMedia guard stops touch taps (which also fire mouseenter)
+	// from arming it. Once armed the markup is identical to before —
+	// same classes, same opacity swap — so desktop hover behaviour is
+	// unchanged apart from the first hover fetching the file.
+	let hoverImageArmed = $state(false);
+
+	function armHoverImage(): void {
+		if (!hoverImageArmed && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+			hoverImageArmed = true;
+		}
+	}
 
 	const ratingLabel = $derived(
 		`${interpolate(t.productCard.ratingLabel, { rating: formatDecimal(product.rating, intlLocale) })} — ${interpolate(t.productCard.reviewsLabel, { count: formatCount(product.reviewCount, intlLocale) })}`
@@ -104,6 +119,8 @@
 
 <article
 	class="group flex h-full flex-col overflow-hidden bg-surface ring-1 ring-line motion-safe:transition-shadow motion-safe:duration-200 hover:shadow-lg {radius}"
+	onmouseenter={armHoverImage}
+	onfocusin={armHoverImage}
 >
 	<div class="relative bg-brand-50">
 		<a href={productPath(lang, product.slug)} tabindex="-1" aria-hidden="true" class="block">
@@ -115,9 +132,10 @@
 					height={1760}
 					loading="lazy"
 					decoding="async"
+					sizes="(max-width: 1023px) 50vw, (max-width: 1279px) 33vw, 320px"
 					class="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-enter motion-safe:group-hover:scale-[1.06]"
 				/>
-				{#if alternateImage}
+				{#if alternateImage && hoverImageArmed}
 					<Picture
 						base={alternateImage}
 						alt={localize(product.imageAlt, lang)}
@@ -125,6 +143,7 @@
 						height={1760}
 						loading="lazy"
 						decoding="async"
+						sizes="(max-width: 1023px) 50vw, (max-width: 1279px) 33vw, 320px"
 						class="absolute inset-0 h-full w-full object-cover opacity-0 motion-safe:transition-[opacity,transform] motion-safe:duration-300 motion-safe:ease-enter motion-safe:group-hover:scale-[1.06] group-hover:opacity-100 group-focus-within:opacity-100"
 					/>
 				{/if}

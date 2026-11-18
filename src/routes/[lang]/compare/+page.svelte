@@ -91,6 +91,7 @@
 	title={t.meta.compareTitle}
 	description={t.meta.compareDescription}
 	path="/compare"
+	noindex
 />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
@@ -174,6 +175,7 @@
 									height={1760}
 									loading="lazy"
 									decoding="async"
+									sizes="(max-width: 639px) 80px, 96px"
 									class="h-full w-full object-cover"
 								/>
 							</div>
@@ -302,6 +304,7 @@
 											height={1760}
 											loading="lazy"
 											decoding="async"
+											sizes="320px"
 											class="h-full w-full object-cover"
 										/>
 									</div>

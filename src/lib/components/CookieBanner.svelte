@@ -129,12 +129,18 @@
 				<div class="min-w-0">
 					<h2 class="font-bold text-ink">{t.cookieConsent.bannerTitle}</h2>
 					<p class="mt-0.5 text-sm leading-relaxed text-muted">{t.cookieConsent.bannerText}</p>
+					<!-- The link's visible text stays "Learn more": the aria-label
+						names it descriptively for assistive technology, and the
+						sr-only suffix makes the rendered text itself descriptive
+						— Lighthouse's link-text audit reads innerText, which
+						ignores aria-label. -->
 					<p class="mt-1 text-sm">
 						<a
 							href={localizedPath(lang, '/cookies')}
+							aria-label={t.cookieConsent.learnMoreLabel}
 							class="font-semibold text-brand-700 underline underline-offset-2 hover:text-brand-800 dark:text-brand-300 dark:hover:text-brand-200"
 						>
-							{t.cookieConsent.learnMore}
+							{t.cookieConsent.learnMore} <span class="sr-only">{t.cookieConsent.learnMoreSuffix}</span>
 						</a>
 					</p>
 				</div>

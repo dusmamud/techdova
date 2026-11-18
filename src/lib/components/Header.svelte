@@ -294,6 +294,7 @@
 															height={96}
 															loading="lazy"
 															decoding="async"
+															sizes="48px"
 															class="h-full w-full object-cover"
 														/>
 													</span>
@@ -332,6 +333,7 @@
 															height={120}
 															loading="lazy"
 															decoding="async"
+															sizes="40px"
 															class="h-full w-full object-cover"
 														/>
 													</span>

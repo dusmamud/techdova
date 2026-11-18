@@ -71,5 +71,5 @@ French equivalents use the /fr prefix, e.g. https://techdova.pages.dev/fr/shop.
 
 ## Machine-readable files
 
-- Sitemap: https://techdova.pages.dev/sitemap.xml (57 paths x 2 locales, with hreflang alternates)
+- Sitemap: https://techdova.pages.dev/sitemap.xml (50 paths x 2 locales, with hreflang alternates)
 - Robots: https://techdova.pages.dev/robots.txt

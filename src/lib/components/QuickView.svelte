@@ -117,6 +117,7 @@
 							height={1760}
 							loading="lazy"
 							decoding="async"
+							sizes="(max-width: 639px) 100vw, 360px"
 							class="h-full w-full object-cover"
 						/>
 					</div>

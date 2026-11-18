@@ -5,7 +5,9 @@
 	import FilterBar, { type SortOption } from '#lib/components/FilterBar.svelte';
 	import Picture from '#lib/components/Picture.svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import { SITE_URL } from '#lib/config';
 	import { DEAL_END_ISO } from '#lib/data/deal';
 	import { getDiscountedProducts, sortProducts, type SortKey } from '#lib/data/products';
 	import { interpolate } from '#lib/format';
@@ -17,6 +19,18 @@
 
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
+
+	// WebPage only: the deals page has no visible breadcrumb trail, so no
+	// BreadcrumbList, and no ItemList (a product list earns no carousel).
+	const webPageJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		'@id': `${SITE_URL}/${lang}/deals`,
+		url: `${SITE_URL}/${lang}/deals`,
+		name: t.dealsPage.title,
+		description: t.meta.dealsDescription,
+		inLanguage: lang
+	});
 	const allDeals = getDiscountedProducts();
 	let sort = $state<SortKey>('featured');
 	const deals = $derived(sortProducts(allDeals, sort));
@@ -42,6 +56,7 @@
 </script>
 
 <Seo {lang} title={t.meta.dealsTitle} description={t.meta.dealsDescription} path="/deals" />
+<JsonLd json={webPageJsonLd} />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<div use:reveal>
@@ -70,6 +85,7 @@
 			</a>
 		</div>
 	{:else}
+		<h2 class="sr-only">{t.filters.facetsHeading}</h2>
 		<FilterBar
 			{t}
 			id="deals-filter-bar"
@@ -122,6 +138,7 @@
 					height={1152}
 					loading="lazy"
 					decoding="async"
+					sizes="(max-width: 1023px) 100vw, 620px"
 					class="absolute inset-0 h-full w-full object-cover"
 				/>
 			</div>

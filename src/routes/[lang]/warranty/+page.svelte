@@ -2,7 +2,9 @@
 	import { ArrowRight, CheckCircle2, ShieldCheck, XCircle } from '@lucide/svelte';
 	import { reveal } from '#lib/actions/reveal';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import { SITE_URL } from '#lib/config';
 	import { formatPrice } from '#lib/format';
 	import { getDictionary } from '#lib/i18n/index';
 	import { localizedPath } from '#lib/paths';
@@ -12,6 +14,35 @@
 
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
+
+	const breadcrumbJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				position: 1,
+				name: t.product.breadcrumbHome,
+				item: `${SITE_URL}/${lang}`
+			},
+			{
+				'@type': 'ListItem',
+				position: 2,
+				name: t.warrantyPage.title,
+				item: `${SITE_URL}/${lang}/warranty`
+			}
+		]
+	});
+
+	const webPageJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		'@id': `${SITE_URL}/${lang}/warranty`,
+		url: `${SITE_URL}/${lang}/warranty`,
+		name: t.warrantyPage.title,
+		description: t.meta.warrantyDescription,
+		inLanguage: lang
+	});
 	const intlLocale = $derived(t.meta.intlLocale);
 
 	// Demo yearly prices per device, aligned by index with the dictionary
@@ -20,6 +51,8 @@
 </script>
 
 <Seo {lang} title={t.meta.warrantyTitle} description={t.meta.warrantyDescription} path="/warranty" />
+<JsonLd json={breadcrumbJsonLd} />
+<JsonLd json={webPageJsonLd} />
 
 <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:py-8">
 	<div use:reveal>

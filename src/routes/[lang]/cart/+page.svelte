@@ -31,7 +31,7 @@
 	}
 </script>
 
-<Seo {lang} title={t.meta.cartTitle} description={t.meta.cartDescription} path="/cart" />
+<Seo {lang} title={t.meta.cartTitle} description={t.meta.cartDescription} path="/cart" noindex />
 
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 	<div use:reveal>
@@ -77,6 +77,7 @@
 									height={1760}
 									loading="lazy"
 									decoding="async"
+									sizes="(max-width: 639px) 80px, 96px"
 									class="h-20 w-20 shrink-0 rounded-2xl bg-brand-50 object-cover sm:h-24 sm:w-24"
 								/>
 							</a>
