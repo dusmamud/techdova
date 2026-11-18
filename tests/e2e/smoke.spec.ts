@@ -38,6 +38,10 @@ test('shop category filter and search work', async ({ page }) => {
 	await expect(page.locator('main')).toContainText('AirPods Pro');
 	await expect(page.locator('main')).not.toContainText('iPhone 15 Pro');
 	await page.getByRole('link', { name: 'All categories' }).click();
+	// Wait for the unfiltered grid: the link navigation must settle before
+	// typing, or its completion re-syncs filter state from the clean URL
+	// and clobbers the search text (flaky in CI when navigation lags).
+	await expect(page.locator('main article')).toHaveCount(12);
 	await page.locator('#shop-search').fill('watch');
 	// Count the cards, not just the count line: '12 products' contains the
 	// substring '2 products', so a text-only assertion would pass vacuously.
