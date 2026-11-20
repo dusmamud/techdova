@@ -176,6 +176,15 @@
 						<Navigation class="h-4 w-4" aria-hidden="true" />
 						{t.storesPage.directions}
 					</a>
+					<a
+						href={localizedPath(lang, `/stores/${store.slug}`)}
+						aria-label={interpolate(t.storesPage.viewStoreLabel, {
+							name: localize(store.name, lang)
+						})}
+						class="mt-3 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800"
+					>
+						{t.storesPage.viewStore}
+					</a>
 				</li>
 			{/each}
 		</ul>

@@ -119,12 +119,12 @@ test('utility and order-confirmation pages carry noindex in both locales', async
 	}
 });
 
-test('sitemap has 100 URLs, no utility paths, no lastmod', async ({ request }) => {
+test('sitemap has 122 URLs, no utility paths, no lastmod', async ({ request }) => {
 	const response = await request.get('/sitemap.xml');
 	expect(response.ok()).toBe(true);
 	const xml = await response.text();
 	const urlCount = (xml.match(/<url>/g) ?? []).length;
-	expect(urlCount).toBe(100);
+	expect(urlCount).toBe(122);
 	expect(xml).not.toContain('lastmod');
 	expect(xml).not.toContain('order-confirmation');
 	for (const path of UTILITY_PATHS) {
@@ -202,7 +202,7 @@ test('every ld+json block in build output parses as valid JSON', () => {
 	const files = buildHtmlFiles().filter(
 		(f) => f.rel !== '404.html' && f.rel !== 'index.html'
 	);
-	expect(files.length).toBe(116);
+	expect(files.length).toBe(138);
 	let blocks = 0;
 	for (const { rel, html } of files) {
 		const matches = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
@@ -211,7 +211,7 @@ test('every ld+json block in build output parses as valid JSON', () => {
 			expect(() => JSON.parse(m[1]), `ld+json in ${rel}`).not.toThrow();
 		}
 	}
-	expect(blocks).toBe(192);
+	expect(blocks).toBe(236);
 });
 
 test('JSON-LD fields match the audit-fix rules on every page', () => {
@@ -278,7 +278,7 @@ test('JSON-LD fields match the audit-fix rules on every page', () => {
 	}
 	expect(products).toBe(24);
 	expect(blogPostings).toBe(12);
-	expect(withLd).toBe(100);
+	expect(withLd).toBe(122);
 	expect(withoutLd.sort()).toEqual(
 		['en', 'fr'].flatMap((locale) =>
 			UTILITY_PATHS.map((p) => `${locale}${p}.html`)

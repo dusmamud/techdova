@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowRight, BadgeCheck, Headphones, Tag, Truck } from '@lucide/svelte';
+	import { countUp } from '#lib/actions/count-up';
 	import { reveal } from '#lib/actions/reveal';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import Picture from '#lib/components/Picture.svelte';
@@ -14,6 +15,30 @@
 
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
+	const intlLocale = $derived(t.meta.intlLocale);
+
+	// Count-up params (elevation round 2, G-09): a stat counts up when
+	// its value is a plain number with an optional '/N' denominator
+	// ('12', '6', '4.8/5' / '4,8/5'). Ranges ('24–48h') have no single
+	// target and stay static — counting to 24 with a '–48h' suffix
+	// would read as a wrong number.
+	function statCount(stat: { value: string }): {
+		target: number;
+		decimals: number;
+		suffix: string;
+		locale: string;
+	} | null {
+		const match = stat.value.match(/^(\d+(?:[.,]\d+)?)((?:\/\d+)?[^0-9]*)$/);
+		if (!match) return null;
+		const target = Number(match[1].replace(',', '.'));
+		if (!Number.isFinite(target)) return null;
+		return {
+			target,
+			decimals: match[1].includes('.') || match[1].includes(',') ? 1 : 0,
+			suffix: match[2] ?? '',
+			locale: intlLocale
+		};
+	}
 
 	const breadcrumbJsonLd = $derived({
 		'@context': 'https://schema.org',
@@ -110,9 +135,16 @@
 	<section aria-label={t.about.stats.map((s) => s.label).join(', ')} class="mt-14" use:reveal>
 		<dl class="grid grid-cols-2 gap-6 rounded-3xl bg-brand-950 px-6 py-8 text-center text-white lg:grid-cols-4">
 			{#each t.about.stats as stat (stat.label)}
+				{@const params = statCount(stat)}
 				<div class="flex flex-col">
 					<dt class="order-2 mt-1 text-sm text-white/70">{stat.label}</dt>
-					<dd class="order-1 text-3xl font-bold">{stat.value}</dd>
+					{#if params}
+						<dd class="order-1 text-3xl font-bold" use:countUp={params}>
+							{stat.value}
+						</dd>
+					{:else}
+						<dd class="order-1 text-3xl font-bold">{stat.value}</dd>
+					{/if}
 				</div>
 			{/each}
 		</dl>

@@ -60,6 +60,7 @@
 		'/images/product-iphone-15-pro-3': 1408,
 		'/images/product-macbook-air-m2': 1408,
 		'/images/product-macbook-air-m2-2': 1408,
+		'/images/product-macbook-air-m2-3': 1070,
 		'/images/product-magsafe-charger': 1408,
 		'/images/product-magsafe-charger-2': 1408,
 		'/images/product-magsafe-charger-3': 1408,

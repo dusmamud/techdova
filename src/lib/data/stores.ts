@@ -9,6 +9,8 @@ import type { LocalizedString } from '#lib/i18n/index';
  */
 export type Store = {
 	id: string;
+	/** URL slug for the per-store detail page (/stores/[slug]). */
+	slug: string;
 	/** City slug, used as the client-side filter value. */
 	citySlug: string;
 	city: LocalizedString;
@@ -17,11 +19,14 @@ export type Store = {
 	hours: LocalizedString;
 	/** Demo phone number (placeholder style, never a real number). */
 	phone: string;
+	/** In-store services offered at this demo store. */
+	services: LocalizedString[];
 };
 
 export const stores: Store[] = [
 	{
 		id: 'algiers-centre',
+		slug: 'algiers-centre',
 		citySlug: 'algiers',
 		city: { en: 'Algiers', fr: 'Alger' },
 		name: { en: 'TechDova Algiers Centre', fr: 'TechDova Alger Centre' },
@@ -33,10 +38,17 @@ export const stores: Store[] = [
 			en: 'Saturday – Thursday: 9:00 – 19:00 · Friday: closed',
 			fr: 'Samedi – jeudi : 9h00 – 19h00 · Vendredi : fermé'
 		},
-		phone: '+213 21 00 00 01'
+		phone: '+213 21 00 00 01',
+		services: [
+			{ en: 'In-store pickup', fr: 'Retrait en magasin' },
+			{ en: 'Repairs drop-off', fr: 'Dépôt pour réparation' },
+			{ en: 'Trade-in desk', fr: 'Comptoir de reprise' },
+			{ en: 'Setup help', fr: 'Aide à la configuration' }
+		]
 	},
 	{
 		id: 'oran-front-de-mer',
+		slug: 'oran-front-de-mer',
 		citySlug: 'oran',
 		city: { en: 'Oran', fr: 'Oran' },
 		name: { en: 'TechDova Oran Front de Mer', fr: 'TechDova Oran Front de Mer' },
@@ -48,10 +60,17 @@ export const stores: Store[] = [
 			en: 'Saturday – Thursday: 9:00 – 20:00 · Friday: closed',
 			fr: 'Samedi – jeudi : 9h00 – 20h00 · Vendredi : fermé'
 		},
-		phone: '+213 41 00 00 02'
+		phone: '+213 41 00 00 02',
+		services: [
+			{ en: 'In-store pickup', fr: 'Retrait en magasin' },
+			{ en: 'Repairs drop-off', fr: 'Dépôt pour réparation' },
+			{ en: 'Gift cards', fr: 'Cartes cadeaux' },
+			{ en: 'Setup help', fr: 'Aide à la configuration' }
+		]
 	},
 	{
 		id: 'constantine-centre',
+		slug: 'constantine-centre',
 		citySlug: 'constantine',
 		city: { en: 'Constantine', fr: 'Constantine' },
 		name: { en: 'TechDova Constantine Centre', fr: 'TechDova Constantine Centre' },
@@ -63,9 +82,19 @@ export const stores: Store[] = [
 			en: 'Saturday – Thursday: 9:00 – 19:00 · Friday: closed',
 			fr: 'Samedi – jeudi : 9h00 – 19h00 · Vendredi : fermé'
 		},
-		phone: '+213 31 00 00 03'
+		phone: '+213 31 00 00 03',
+		services: [
+			{ en: 'In-store pickup', fr: 'Retrait en magasin' },
+			{ en: 'Trade-in desk', fr: 'Comptoir de reprise' },
+			{ en: 'Setup help', fr: 'Aide à la configuration' }
+		]
 	}
 ];
+
+/** Find a store by its detail-page slug. */
+export function getStore(slug: string): Store | undefined {
+	return stores.find((store) => store.slug === slug);
+}
 
 /** Cities in store order, for the city filter. */
 export function getStoreCities(): { slug: string; name: LocalizedString }[] {

@@ -6,6 +6,7 @@
 		ChevronLeft,
 		ChevronRight,
 		Copy,
+		Gift,
 		Heart,
 		Minus,
 		Package,
@@ -19,6 +20,7 @@
 		X,
 		ZoomIn
 	} from '@lucide/svelte';
+	import { pressSpring } from '#lib/actions/press';
 	import { reveal } from '#lib/actions/reveal';
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import FaqItem from '#lib/components/FaqItem.svelte';
@@ -28,7 +30,9 @@
 	import RecentlyViewed from '#lib/components/RecentlyViewed.svelte';
 	import ReviewsSection from '#lib/components/ReviewsSection.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import SkeletonGallery from '#lib/components/SkeletonGallery.svelte';
 	import Stars from '#lib/components/Stars.svelte';
+	import WarrantyUpsell from '#lib/components/WarrantyUpsell.svelte';
 	import { SITE_NAME, SITE_URL } from '#lib/config';
 	import { getCategory } from '#lib/data/categories';
 	import {
@@ -50,6 +54,8 @@
 	import { cart } from '#lib/stores/cart.svelte';
 	import { compare } from '#lib/stores/compare.svelte';
 	import { cookieBanner } from '#lib/stores/cookie-banner.svelte';
+	import { giftOptions } from '#lib/stores/gift-options.svelte';
+	import { priceAlerts } from '#lib/stores/price-alerts.svelte';
 	import { toasts } from '#lib/stores/toast.svelte';
 	import { wishlist } from '#lib/stores/wishlist.svelte';
 	import type { PageProps } from './$types';
@@ -107,6 +113,15 @@
 	let buyBox: HTMLDivElement | undefined = $state();
 	let zoomCloseButton: HTMLButtonElement | undefined = $state();
 	let zoomOpener: HTMLElement | null = null;
+	// Gallery loading state (G-07): the skeleton shows only after
+	// hydration until the first gallery image has loaded (or is already
+	// cached). Prerendered HTML never includes it.
+	let galleryFigure: HTMLElement | undefined = $state();
+	let galleryMounted = $state(false);
+	let galleryLoaded = $state(false);
+	// Price-alert form (M8): the input starts empty; submitting with an
+	// empty/invalid value falls back to 10% below the current price.
+	let alertTargetInput = $state('');
 	// Default selection is the base-priced variant (priceDelta 0), so the
 	// base price shows until the shopper picks another option — NOT
 	// variants[0], which for the phones is the cheaper 128 GB option.
@@ -134,6 +149,22 @@
 	);
 	const outOfStock = $derived(variantStock <= 0);
 	const lowStock = $derived(!outOfStock && variantStock <= 5);
+	// Price per GB (H4): derived from the selected storage variant's
+	// label ("256 GB", "1 TB") and the variant price. Color variants and
+	// unparseable labels show no line.
+	const storageGb = $derived.by(() => {
+		if (selectedVariant?.kind !== 'storage') return null;
+		const match = /([\d.,]+)\s*(TB|GB)/i.exec(localize(selectedVariant.label, 'en'));
+		if (!match) return null;
+		const value = parseFloat(match[1].replace(',', '.'));
+		if (!Number.isFinite(value) || value <= 0) return null;
+		return match[2].toUpperCase() === 'TB' ? value * 1024 : value;
+	});
+	const pricePerGb = $derived(storageGb ? displayPrice / storageGb : null);
+	// Price-alert state (M8): the alert for this product, if one is set,
+	// and the fallback target (10% below the current price).
+	const existingAlert = $derived(priceAlerts.getFor(product.slug));
+	const defaultAlertTarget = $derived(Math.max(1, Math.floor(displayPrice * 0.9)));
 	const bundleTotal = $derived(
 		displayPrice + bundleAvailable.reduce((sum, candidate) => sum + candidate.price, 0)
 	);
@@ -179,6 +210,26 @@
 		if (!browser) return;
 		finePointer = window.matchMedia('(pointer: fine)').matches;
 	});
+
+	// Gallery loading state: mark mounted after hydration, and treat the
+	// image as loaded when it is already cached (complete).
+	$effect(() => {
+		if (!browser) return;
+		galleryMounted = true;
+		const img = galleryFigure?.querySelector('img');
+		if (img?.complete) galleryLoaded = true;
+	});
+
+	function setPriceAlert(event: SubmitEvent): void {
+		event.preventDefault();
+		// bind:value on a type=number input yields a number at runtime,
+		// so coerce before parsing.
+		const parsed = Number(String(alertTargetInput).replace(',', '.'));
+		const target =
+			Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : defaultAlertTarget;
+		priceAlerts.set(product.slug, target);
+		alertTargetInput = '';
+	}
 
 	$effect(() => {
 		if (!browser) return;
@@ -397,12 +448,36 @@
 		return interpolate(t.product.deliveryCountdown, { time, date });
 	});
 
+	// Fly-to-cart (elevation round 2, G-02): fly from the gallery image,
+	// not the button, and open the cart drawer only after the flight
+	// lands + the badge pop — `flyToCart` resolves after both. When the
+	// sticky ATC bar fires this while the gallery is scrolled out of
+	// view, fall back to the button (an off-screen flight reads as a
+	// glitch). The cart update never depends on the flight.
+	function flyFromGallery(source: HTMLElement): Promise<void> {
+		const img = document.querySelector('figure img');
+		if (img instanceof HTMLImageElement) {
+			const rect = img.getBoundingClientRect();
+			// Fly from the image whenever a decent slice of it is on
+			// screen (the gallery is taller than most viewports, so
+			// "fully visible" would almost never hold); fall back to the
+			// button when it is scrolled away, e.g. the sticky ATC bar.
+			const visibleHeight =
+				Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+			if (rect.width > 0 && visibleHeight >= rect.height * 0.25) {
+				return flyToCart(img, galleryImages[selectedImage]);
+			}
+		}
+		return flyToCart(source, galleryImages[selectedImage]);
+	}
+
 	function addToCart(event: MouseEvent): void {
 		const source = event.currentTarget;
-		if (source instanceof HTMLElement) flyToCart(source, galleryImages[selectedImage]);
+		if (source instanceof HTMLElement) {
+			void flyFromGallery(source).then(() => cart.openDrawer());
+		}
 		cart.add(product.slug, qty, selectedVariant?.id);
 		added = true;
-		cart.openDrawer();
 		clearTimeout(timer);
 		timer = setTimeout(() => {
 			added = false;
@@ -411,11 +486,12 @@
 
 	function addBundle(event: MouseEvent): void {
 		const source = event.currentTarget;
-		if (source instanceof HTMLElement) flyToCart(source, galleryImages[selectedImage]);
+		if (source instanceof HTMLElement) {
+			void flyFromGallery(source).then(() => cart.openDrawer());
+		}
 		cart.add(product.slug, qty, selectedVariant?.id);
 		for (const partner of bundleAvailable) cart.add(partner.slug, 1);
 		bundleAdded = true;
-		cart.openDrawer();
 		clearTimeout(bundleTimer);
 		bundleTimer = setTimeout(() => {
 			bundleAdded = false;
@@ -526,11 +602,20 @@
 		<!-- svelte-ignore a11y_no_static_element_interactions: arrow-key gallery navigation delegates from the focusable thumbnail/arrow buttons inside -->
 		<div class="mx-auto w-full max-w-md lg:mx-0 lg:max-w-none" onkeydown={onGalleryKeydown}>
 			<figure
+				bind:this={galleryFigure}
 				aria-label={t.product.galleryLabel}
 				class="relative overflow-hidden rounded-3xl bg-brand-50"
 				ontouchstart={onTouchStart}
 				ontouchend={onTouchEnd}
+				onloadcapture={() => {
+					galleryLoaded = true;
+				}}
 			>
+				{#if galleryMounted && !galleryLoaded}
+					<div class="absolute inset-0 z-20">
+						<SkeletonGallery />
+					</div>
+				{/if}
 				<p class="sr-only" role="status">
 					{interpolate(t.product.galleryImageLabel, {
 						current: selectedImage + 1,
@@ -554,16 +639,20 @@
 							: ''}"
 						style="transform-origin: {magnifyOrigin}"
 					>
-						<Picture
-							base={galleryImages[selectedImage]}
-							alt={localize(product.imageAlt, lang)}
-							width={1408}
-							height={1760}
-							decoding="async"
-							fetchPriority="high"
-							sizes="(max-width: 1023px) 448px, 800px"
-							class="h-full w-full object-cover"
-						/>
+						{#key selectedImage}
+							<div class="h-full w-full animate-fade-in">
+								<Picture
+									base={galleryImages[selectedImage]}
+									alt={localize(product.imageAlt, lang)}
+									width={1408}
+									height={1760}
+									decoding="async"
+									fetchPriority="high"
+									sizes="(max-width: 1023px) 448px, 800px"
+									class="h-full w-full object-cover"
+								/>
+							</div>
+						{/key}
 					</div>
 				</button>
 				<span
@@ -602,7 +691,9 @@
 				{t.product.magnifierHint}
 			</p>
 			{#if galleryImages.length > 1}
-				<div class="mt-3 flex gap-3">
+				<!-- Thumbnails only at lg and up (G-04): below lg the dot row
+					is the single gallery navigation pattern. -->
+				<div class="mt-3 hidden gap-3 lg:flex">
 					{#each galleryImages as image, i (i)}
 						<button
 							type="button"
@@ -677,9 +768,11 @@
 				<span class="font-medium text-ink-soft">{displaySku}</span>
 			</p>
 			<p class="mt-4 flex flex-wrap items-baseline gap-3">
-				<span class="text-3xl font-bold text-ink">
-					{formatPrice(displayPrice, intlLocale)}
-				</span>
+				{#key selectedVariant?.id ?? 'base'}
+					<span class="inline-block text-3xl font-bold text-ink animate-digit-tick">
+						{formatPrice(displayPrice, intlLocale)}
+					</span>
+				{/key}
 				{#if product.oldPrice && displayPrice === product.price}
 					<s class="text-lg text-muted">{formatPrice(product.oldPrice, intlLocale)}</s>
 					<span class="rounded-full bg-brand-100 px-3 py-1 text-sm font-semibold text-brand-800">
@@ -729,6 +822,7 @@
 								type="button"
 								disabled={variantOutOfStock}
 								aria-pressed={isSelected}
+								use:pressSpring
 								onclick={() => selectVariant(variant)}
 								class="inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold ring-1 transition-colors disabled:cursor-not-allowed disabled:opacity-40 {isSelected
 									? 'bg-brand-700 text-white ring-brand-700'
@@ -756,6 +850,13 @@
 							</button>
 						{/each}
 					</div>
+					{#if pricePerGb !== null}
+						<p class="mt-2 text-sm text-muted" data-testid="price-per-gb">
+							{interpolate(t.product.pricePerGb, {
+								amount: formatPrice(pricePerGb, intlLocale)
+							})}
+						</p>
+					{/if}
 				</div>
 			{/if}
 
@@ -791,6 +892,7 @@
 				<button
 					type="button"
 					disabled={outOfStock}
+					use:pressSpring
 					onclick={addToCart}
 					class="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-brand-700 px-6 text-sm font-semibold text-white hover:bg-brand-800 disabled:cursor-not-allowed disabled:bg-line disabled:text-muted sm:flex-none sm:px-8"
 				>
@@ -841,6 +943,10 @@
 				</button>
 			</div>
 
+			<div class="mt-4">
+				<WarrantyUpsell {lang} {t} {product} unitPrice={displayPrice} />
+			</div>
+
 			<div class="mt-4 space-y-1.5 text-sm text-muted">
 				<p>
 					{interpolate(t.product.estimatedCost, {
@@ -884,6 +990,137 @@
 				</div>
 			{/if}
 
+			<!-- Gifting options (H5): order-level demo options stored on
+				this device; they show as a line in the cart and at checkout. -->
+			<section
+				aria-labelledby="gift-options-heading"
+				class="mt-6 rounded-3xl bg-surface p-5 ring-1 ring-line"
+				data-testid="gift-options"
+			>
+				<h2 id="gift-options-heading" class="flex items-center gap-2 text-base font-bold text-ink">
+					<Gift class="h-5 w-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+					{t.giftOptions.title}
+				</h2>
+				<p class="mt-1 text-sm leading-relaxed text-muted">{t.giftOptions.text}</p>
+				<div class="mt-4 space-y-3">
+					<label class="flex cursor-pointer items-start gap-3">
+						<input
+							type="checkbox"
+							checked={giftOptions.wrap}
+							onchange={(event) => giftOptions.setWrap(event.currentTarget.checked)}
+							class="mt-0.5 h-5 w-5 shrink-0 accent-brand-700"
+						/>
+						<span>
+							<span class="block text-sm font-semibold text-ink">{t.giftOptions.wrapLabel}</span>
+							<span class="block text-sm text-muted">{t.giftOptions.wrapHint}</span>
+						</span>
+					</label>
+					<label class="flex cursor-pointer items-start gap-3">
+						<input
+							type="checkbox"
+							checked={giftOptions.sendAsGift}
+							onchange={(event) => giftOptions.setSendAsGift(event.currentTarget.checked)}
+							class="mt-0.5 h-5 w-5 shrink-0 accent-brand-700"
+						/>
+						<span>
+							<span class="block text-sm font-semibold text-ink">
+								{t.giftOptions.sendAsGiftLabel}
+							</span>
+							<span class="block text-sm text-muted">{t.giftOptions.sendAsGiftHint}</span>
+						</span>
+					</label>
+					<div>
+						<label for="gift-message" class="mb-1 block text-sm font-semibold text-ink">
+							{t.giftOptions.messageLabel}
+						</label>
+						<textarea
+							id="gift-message"
+							name="giftMessage"
+							rows="3"
+							maxlength="200"
+							value={giftOptions.message}
+							oninput={(event) => giftOptions.setMessage(event.currentTarget.value)}
+							placeholder={t.giftOptions.messagePlaceholder}
+							class="w-full rounded-2xl bg-surface px-4 py-3 text-sm text-ink ring-1 ring-line placeholder:text-muted"
+						></textarea>
+						<p class="mt-1 text-xs text-muted">{t.giftOptions.messageHint}</p>
+					</div>
+				</div>
+				{#if giftOptions.active}
+					<p role="status" class="mt-3 text-sm font-medium text-brand-800 dark:text-brand-200">
+						{t.giftOptions.savedNote}
+					</p>
+					<button
+						type="button"
+						onclick={() => giftOptions.clear()}
+						class="mt-2 inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold text-ink-soft ring-1 ring-line hover:bg-surface-soft"
+					>
+						{t.giftOptions.clearLabel}
+					</button>
+				{/if}
+			</section>
+
+			<!-- Price-drop alert (M8): stored on this device only; no
+				email is ever sent. -->
+			<section
+				aria-labelledby="price-alert-heading"
+				class="mt-6 rounded-3xl bg-surface p-5 ring-1 ring-line"
+				data-testid="price-alert"
+			>
+				<h2 id="price-alert-heading" class="flex items-center gap-2 text-base font-bold text-ink">
+					<Bell class="h-5 w-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+					{t.priceAlerts.title}
+				</h2>
+				<p class="mt-1 text-sm leading-relaxed text-muted">{t.priceAlerts.text}</p>
+				{#if existingAlert}
+					<p role="status" class="mt-3 text-sm font-medium text-brand-800 dark:text-brand-200">
+						{interpolate(t.priceAlerts.alreadySet, {
+							price: formatPrice(existingAlert.targetPrice, intlLocale)
+						})}
+						{#if displayPrice <= existingAlert.targetPrice}
+							{' '}{t.priceAlerts.listBelowTarget}
+						{/if}
+					</p>
+					<button
+						type="button"
+						onclick={() => priceAlerts.remove(product.slug)}
+						class="mt-2 inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold text-ink-soft ring-1 ring-line hover:bg-surface-soft"
+					>
+						{t.priceAlerts.removeButton}
+					</button>
+				{:else}
+					<form onsubmit={setPriceAlert} novalidate class="mt-3 flex flex-wrap items-end gap-2">
+						<div class="min-w-0 flex-1">
+							<label for="price-alert-target" class="mb-1 block text-sm font-semibold text-ink">
+								{t.priceAlerts.targetLabel}
+							</label>
+							<input
+								id="price-alert-target"
+								name="priceAlertTarget"
+								type="number"
+								inputmode="decimal"
+								min="1"
+								bind:value={alertTargetInput}
+								placeholder={String(defaultAlertTarget)}
+								aria-describedby="price-alert-hint"
+								class="h-12 w-full rounded-2xl bg-surface px-4 text-sm text-ink ring-1 ring-line placeholder:text-muted"
+							/>
+						</div>
+						<button
+							type="submit"
+							class="inline-flex min-h-12 items-center justify-center rounded-full bg-brand-700 px-5 text-sm font-semibold text-white hover:bg-brand-800"
+						>
+							{t.priceAlerts.setButton}
+						</button>
+					</form>
+					<p id="price-alert-hint" class="mt-1 text-xs text-muted">
+						{interpolate(t.priceAlerts.targetHint, {
+							price: formatPrice(displayPrice, intlLocale)
+						})}
+					</p>
+				{/if}
+			</section>
+
 			<div class="mt-6 border-t border-line pt-5">
 				<h2 class="text-sm font-bold text-ink">{t.product.deliveryTitle}</h2>
 				<ul class="mt-2 space-y-2 text-sm text-muted">
@@ -916,6 +1153,15 @@
 						>
 							<RotateCcw class="h-4 w-4 shrink-0 text-brand-700 dark:text-brand-300" aria-hidden="true" />
 							{t.product.returns}
+						</a>
+					</li>
+					<li>
+						<a
+							href={localizedPath(lang, '/price-match')}
+							class="inline-flex min-h-11 items-center gap-2 hover:text-brand-800 dark:hover:text-brand-200"
+						>
+							<ShieldCheck class="h-4 w-4 shrink-0 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+							{t.product.priceMatchLink}
 						</a>
 					</li>
 				</ul>

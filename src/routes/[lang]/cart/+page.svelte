@@ -1,13 +1,16 @@
 <script lang="ts">
-	import { Minus, Plus, ShoppingCart, Trash2, X } from '@lucide/svelte';
+	import { Gift, Minus, Plus, ShoppingCart, Trash2, X } from '@lucide/svelte';
 	import { reveal } from '#lib/actions/reveal';
 	import Picture from '#lib/components/Picture.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import WarrantyUpsell from '#lib/components/WarrantyUpsell.svelte';
 	import { formatPrice, interpolate } from '#lib/format';
 	import { getDictionary, localize } from '#lib/i18n/index';
 	import { variantPrice } from '#lib/data/products';
 	import { localizedPath, productPath } from '#lib/paths';
 	import { cart } from '#lib/stores/cart.svelte';
+	import { giftOptions } from '#lib/stores/gift-options.svelte';
+	import { warranty, warrantyPrice, warrantyTotalFor } from '#lib/stores/warranty.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -15,6 +18,8 @@
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
 	const intlLocale = $derived(t.meta.intlLocale);
+	const warrantyTotal = $derived(warrantyTotalFor(cart.detailed));
+	const grandTotal = $derived(cart.totals.total + warrantyTotal);
 
 	let promoInput = $state('');
 	let promoError = $state(false);
@@ -126,6 +131,27 @@
 										<Trash2 class="h-4 w-4" aria-hidden="true" />
 									</button>
 								</div>
+								<div class="mt-3">
+									{#if warranty.has(line.product.slug)}
+										<p class="text-sm">
+											<span class="font-semibold text-brand-800 dark:text-brand-200">
+												{t.warrantyUpsell.inCart} — {formatPrice(
+													warrantyPrice(unitPrice) * line.qty,
+													intlLocale
+												)}
+											</span>
+											<button
+												type="button"
+												onclick={() => warranty.toggle(line.product.slug)}
+												class="ml-2 inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-ink-soft ring-1 ring-line hover:bg-surface-soft"
+											>
+												{t.warrantyUpsell.removeButton}
+											</button>
+										</p>
+									{:else}
+										<WarrantyUpsell {lang} {t} product={line.product} {unitPrice} compact />
+									{/if}
+								</div>
 							</div>
 							<p class="shrink-0 text-sm font-bold text-ink sm:text-base">
 								{formatPrice(unitPrice * line.qty, intlLocale)}
@@ -143,6 +169,25 @@
 			</div>
 
 			<aside aria-label={t.cart.total} class="h-fit rounded-3xl bg-surface p-4 ring-1 ring-line sm:p-6">
+				{#if giftOptions.active}
+					<div
+						class="mb-4 rounded-2xl bg-brand-50 p-4 dark:bg-surface-soft"
+						data-testid="gift-line"
+					>
+						<p class="flex items-center gap-2 text-sm font-semibold text-ink">
+							<Gift class="h-4 w-4 shrink-0 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+							{t.giftOptions.cartTitle} — {t.giftOptions.cartFree}
+						</p>
+						{#if giftOptions.message.trim()}
+							<p class="mt-1 text-sm text-muted">
+								{interpolate(t.giftOptions.cartMessage, { message: giftOptions.message.trim() })}
+							</p>
+						{/if}
+						{#if giftOptions.sendAsGift}
+							<p class="mt-1 text-sm text-muted">{t.giftOptions.cartSendAsGift}</p>
+						{/if}
+					</div>
+				{/if}
 				<dl class="space-y-3 text-sm">
 					<div class="flex items-baseline justify-between">
 						<dt class="text-muted">{t.cart.subtotal}</dt>
@@ -168,13 +213,21 @@
 							</dd>
 						</div>
 					{/if}
+					{#if warrantyTotal > 0}
+						<div class="flex items-baseline justify-between">
+							<dt class="text-muted">{t.cart.warrantyTotal}</dt>
+							<dd class="font-semibold text-ink">
+								{formatPrice(warrantyTotal, intlLocale)}
+							</dd>
+						</div>
+					{/if}
 					<div class="flex items-baseline justify-between">
 						<dt class="text-muted">{t.cart.shipping}</dt>
 						<dd class="font-semibold text-ink">{t.cart.shippingFree}</dd>
 					</div>
 					<div class="flex items-baseline justify-between border-t border-line pt-3 text-base">
 						<dt class="font-bold text-ink">{t.cart.total}</dt>
-						<dd class="font-bold text-ink">{formatPrice(cart.totals.total, intlLocale)}</dd>
+						<dd class="font-bold text-ink">{formatPrice(grandTotal, intlLocale)}</dd>
 					</div>
 				</dl>
 				{#if cart.appliedPromo}

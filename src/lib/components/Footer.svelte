@@ -14,6 +14,8 @@
 		{ label: t.footer.deals, href: localizedPath(lang, '/deals') },
 		{ label: t.footer.newArrivals, href: localizedPath(lang, '/new-arrivals') },
 		{ label: t.footer.bestSellers, href: localizedPath(lang, '/best-sellers') },
+		{ label: t.nav.outlet, href: localizedPath(lang, '/outlet') },
+		{ label: t.nav.giftFinder, href: localizedPath(lang, '/gift-finder') },
 		{ label: t.footer.giftCards, href: localizedPath(lang, '/gift-cards') },
 		{ label: t.footer.brands, href: localizedPath(lang, '/brands') },
 		{ label: t.footer.rewards, href: localizedPath(lang, '/rewards') },

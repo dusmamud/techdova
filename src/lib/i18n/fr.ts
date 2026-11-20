@@ -111,7 +111,34 @@ export const fr: Dictionary = {
 			'Garantie étendue et protection démo : comparez les niveaux de couverture et les prix fictifs. Aucun plan vendu, aucune réclamation possible.',
 		cookiesTitle: 'Politique en matière de cookies et de stockage | TechDova',
 		cookiesDescription:
-			'Aucun cookie de suivi, aucune analyse : TechDova utilise uniquement le stockage local du navigateur pour votre panier, vos favoris, le thème et la langue.'
+			'Aucun cookie de suivi, aucune analyse : TechDova utilise uniquement le stockage local du navigateur pour votre panier, vos favoris, le thème et la langue.',
+		categoriesTitle: 'Toutes les catégories | TechDova',
+		categoriesDescription:
+			'Parcourez toutes les catégories TechDova : smartphones, ordinateurs, audio, montres connectées, gaming et accessoires.',
+		outletTitle: 'Outlet : boîte ouverte, reconditionné et déstockage | TechDova',
+		outletDescription:
+			'Outlet démo : des produits tech en boîte ouverte, reconditionnés ou en déstockage à prix réduit, avec l’état de chaque article indiqué honnêtement.',
+		giftFinderTitle: 'Trouve-cadeau : trouvez le cadeau tech idéal | TechDova',
+		giftFinderDescription:
+			'Répondez à quelques questions et recevez des recommandations cadeaux démo du catalogue TechDova — tout reste dans votre navigateur.',
+		guidesTitle: 'Guides d’achat | TechDova',
+		guidesDescription:
+			'Guides d’achat TechDova : des conseils en langage simple sur les casques, les ordinateurs portables, les montres connectées et plus, liés aux produits concernés.',
+		priceMatchTitle: 'Promesse de meilleur prix | TechDova',
+		priceMatchDescription:
+			'Politique démo de meilleur prix : comment TechDova alignerait un prix annoncé plus bas, et les conditions applicables.',
+		studentTitle: 'Réduction étudiant | TechDova',
+		studentDescription:
+			'Réduction étudiant démo chez TechDova : 10 % de réduction pour les étudiants, avec des conditions d’éligibilité démo honnêtes.',
+		businessTitle: 'TechDova pour les entreprises | TechDova',
+		businessDescription:
+			'Ventes aux entreprises démo : tarifs de volume, facturation et accompagnement pour les petites équipes qui achètent de la tech chez TechDova.',
+		repairsTitle: 'Réparations et rendez-vous service | TechDova',
+		repairsDescription:
+			'Réservez un rendez-vous démo de réparation ou de service chez TechDova : choisissez un appareil, un service et un créneau. Rien n’est réservé pour de vrai.',
+		storeTitle: '{store} | TechDova',
+		storeDescription:
+			'Visitez {store} : horaires d’ouverture démo, services et retrait en magasin. Boutique fictive démo — aucun vrai magasin n’existe à cette adresse.'
 	},
 	nav: {
 		home: 'Accueil',
@@ -131,6 +158,8 @@ export const fr: Dictionary = {
 		skipToContent: 'Aller au contenu principal',
 		switchTo: 'Passer au {language}',
 		deals: 'Offres',
+		outlet: 'Outlet',
+		giftFinder: 'Trouve-cadeau',
 		wishlist: 'Favoris',
 		compare: 'Comparer'
 	},
@@ -295,7 +324,13 @@ export const fr: Dictionary = {
 		textError: 'Veuillez écrire au moins 10 caractères.',
 		ratingOption: '{n} étoiles sur 5',
 		sampleNote:
-			'Échantillon de 3 avis affiché, dont un avis critique. Les moyennes reflètent l’ensemble des {count} avis.'
+			'Échantillon de 3 avis affiché, dont un avis critique. Les moyennes reflètent l’ensemble des {count} avis.',
+		staffReplyLabel: 'Équipe TechDova',
+		staffReplyTitle: 'Réponse de TechDova',
+		reviewPhotosTitle: 'Photos de cet avis (démo)',
+		reviewPhotoNote: 'Les photos d’avis démo réutilisent des images produit à titre d’illustration.',
+		photoLabel: 'Photo d’avis {n}',
+		lightboxLabel: 'Photo d’avis {current} sur {total}'
 	},
 	promo: {
 		eyebrow: 'Offre spéciale',
@@ -474,7 +509,10 @@ export const fr: Dictionary = {
 		categoryFilterLabel: 'Filtrer par catégorie',
 		allCategories: 'Toutes les catégories',
 		synonymsNote:
-			'Les termes associés sont aussi reconnus : « ordinateur », « téléphone » et les mots similaires trouvent leur catégorie.'
+			'Les termes associés sont aussi reconnus : « ordinateur », « téléphone » et les mots similaires trouvent leur catégorie.',
+		didYouMean: 'Vouliez-vous dire « {suggestion} » ?',
+		didYouMeanButton: 'Rechercher « {suggestion} »',
+		loadingLabel: 'Chargement des résultats…'
 	},
 	wishlistPage: {
 		title: 'Vos favoris',
@@ -584,7 +622,9 @@ export const fr: Dictionary = {
 		bundleAdded: 'Ensemble ajouté au panier',
 		variantsNote: 'Disponible en {count} variantes, dès {price}',
 		variantsLabel: 'Variantes',
-		scrollProgressLabel: 'Progression de la page'
+		scrollProgressLabel: 'Progression de la page',
+		pricePerGb: '{amount}/Go',
+		priceMatchLink: 'Notre promesse d’alignement de prix'
 	},
 	cart: {
 		title: 'Votre panier',
@@ -620,7 +660,8 @@ export const fr: Dictionary = {
 		returnNudgeTitle: 'Bon retour',
 		returnNudgeText: 'Votre panier vous attend — {count} articles y sont toujours.',
 		returnNudgeTextOne: 'Votre panier vous attend — 1 article y est toujours.',
-		returnNudgeDismiss: 'Ignorer'
+		returnNudgeDismiss: 'Ignorer',
+		warrantyTotal: 'Garanties prolongées'
 	},
 	cartDrawer: {
 		title: 'Votre panier',
@@ -679,7 +720,9 @@ export const fr: Dictionary = {
 		cvcError: 'Veuillez saisir un CVC démo de 3 ou 4 chiffres.',
 		errorSummary: 'Veuillez corriger les erreurs suivantes :',
 		summaryTitle: 'Récapitulatif de la commande',
-		lineQty: '× {qty}'
+		lineQty: '× {qty}',
+		editStep: 'Modifier cette étape',
+		summaryEditLabel: 'Modifier {step}'
 	},
 	orderConfirmation: {
 		itemsTitle: 'Vos articles',
@@ -689,7 +732,21 @@ export const fr: Dictionary = {
 		emptyTitle: 'Aucune commande récente trouvée',
 		emptyText:
 			'Aucune commande démo n’a été trouvée sur cet appareil. Passez une commande depuis votre panier pour voir sa confirmation ici.',
-		lineQty: '× {qty}'
+		lineQty: '× {qty}',
+		createAccountTitle: 'Créer un compte (démo)',
+		createAccountText:
+			'Enregistrez vos coordonnées sur cet appareil avec un seul mot de passe, pour que votre prochaine commande démo soit préremplie.',
+		createAccountDemoNote:
+			'Démo uniquement : le compte vit dans ce navigateur seulement. Il n’y a pas de vrai serveur et aucun mot de passe n’est jamais envoyé.',
+		passwordLabel: 'Choisissez un mot de passe',
+		passwordPlaceholder: 'Au moins 8 caractères',
+		confirmPasswordLabel: 'Confirmez le mot de passe',
+		passwordError: 'Veuillez saisir un mot de passe d’au moins 8 caractères.',
+		passwordMismatch: 'Les mots de passe ne correspondent pas.',
+		createAccountButton: 'Créer un compte démo',
+		createAccountSuccess:
+			'Compte démo créé sur cet appareil — votre prochaine commande sera préremplie.',
+		alreadySignedIn: 'Vous êtes déjà connecté sur cet appareil en tant que {email}.'
 	},
 	trackOrder: {
 		title: 'Suivre votre commande',
@@ -1115,6 +1172,8 @@ export const fr: Dictionary = {
 		phoneLabel: 'Téléphone',
 		directions: 'Itinéraire',
 		directionsLabel: 'Itinéraire vers {name} (s’ouvre dans un nouvel onglet)',
+		viewStore: 'Voir la boutique',
+		viewStoreLabel: 'Voir les détails de {name}',
 		results: '{count} boutiques',
 		resultOne: '1 boutique',
 		noResults: 'Aucune boutique dans cette ville pour le moment',
@@ -1584,5 +1643,311 @@ export const fr: Dictionary = {
 		searchButton: 'Rechercher',
 		bestSellersTitle: 'Nos meilleures ventes',
 		popularTitle: 'Pages populaires'
+	},
+	// Elevation round 2 (2026-11-20) — sections réservées aux workers.
+	// B1 (nouvelles pages) : outletPage, giftFinderPage, guidesPage,
+	// priceMatchPage, studentPage, businessPage, repairsPage, categoriesPage,
+	// storePage. B2 (commerce) : giftOptions, priceAlerts, warrantyUpsell.
+	// B3 (motion/chrome) : loadingStates.
+	// Chaque section doit être remplie À L'IDENTIQUE dans en.ts et fr.ts.
+	categoriesPage: {
+		title: 'Toutes les catégories',
+		description: 'Parcourez le catalogue par rayon — toutes les catégories au même endroit.',
+		count: '{count} catégories',
+		productsCount: '{count} produits',
+		shopAll: 'Voir tous les produits',
+		viewCategory: 'Voir {category}'
+	},
+	outletPage: {
+		title: 'Outlet',
+		description:
+			'Des produits tech en boîte ouverte, reconditionnés ou en déstockage à prix démo réduits. Chaque article indique honnêtement son état — pas de surprise, pas de fausse rareté.',
+		demoNote:
+			'Outlet démo : ces prix sont fictifs. Un article de l’outlet renvoie vers sa page produit, et le panier démo utilise toujours le prix catalogue.',
+		conditionOpenBox: 'Boîte ouverte',
+		conditionRefurbished: 'Reconditionné',
+		conditionClearance: 'Déstockage',
+		filterAll: 'Tous les articles outlet',
+		results: '{count} articles outlet',
+		resultOne: '1 article outlet',
+		outletPriceLabel: 'Prix outlet',
+		cataloguePriceLabel: 'Prix catalogue',
+		saveLabel: 'Économisez {amount}',
+		viewProduct: 'Voir le produit',
+		whatIsTitle: 'Que signifient les états ?',
+		whatIsOpenBox:
+			'Boîte ouverte : retourné sous 14 jours, boîte ouverte, appareil comme neuf et entièrement vérifié.',
+		whatIsRefurbished:
+			'Reconditionné : vérifié, nettoyé et restauré par notre équipe de service, avec une garantie démo de 6 mois.',
+		whatIsClearance:
+			'Déstockage : dernières unités d’une gamme en cours de liquidation, vendues moins cher.'
+	},
+	giftFinderPage: {
+		title: 'Trouve-cadeau',
+		description:
+			'Répondez à 7 questions rapides et nous vous suggérerons 3 à 5 produits du catalogue, avec une raison pour chaque choix. Vos réponses ne quittent jamais votre navigateur.',
+		startTitle: 'Trouvez un cadeau en moins d’une minute',
+		startText:
+			'Dites-nous pour qui c’est, ce qu’ils aiment et votre budget. Pas de compte, pas d’e-mail — le quiz se déroule entièrement sur cette page.',
+		startButton: 'Commencer le quiz',
+		questionLabel: 'Question {current} sur {total}',
+		backButton: 'Retour',
+		nextButton: 'Suivant',
+		seeResultsButton: 'Voir mes idées cadeaux',
+		resultsTitle: 'Vos idées cadeaux',
+		resultsDescription:
+			'Choisies dans le catalogue TechDova selon vos réponses. Touchez un produit pour le voir en détail.',
+		resultsEmpty: 'Aucun produit ne correspond encore à ces réponses',
+		resultsEmptyHint:
+			'Essayez d’élargir le budget ou de choisir « Toutes marques » — le catalogue est petit, une combinaison trop étroite peut ne rien donner.',
+		whyLabel: 'Pourquoi ce choix',
+		viewProduct: 'Voir le produit',
+		retakeButton: 'Refaire le quiz',
+		questions: [
+			{
+				question: 'Pour qui est le cadeau ?',
+				options: ['Pour moi', 'Mon/ma partenaire', 'Un parent', 'Un adolescent', 'Un collègue', 'Un ami']
+			},
+			{
+				question: 'Quel est votre budget ?',
+				options: ['Moins de 200 DA', '200 – 500 DA', '500 – 1 000 DA', 'Plus de 1 000 DA']
+			},
+			{
+				question: 'Qu’est-ce qu’ils aiment le plus ?',
+				options: ['La musique', 'Le gaming', 'La forme et la santé', 'Le travail et les études', 'Les photos et vidéos', 'Les essentiels du quotidien']
+			},
+			{
+				question: 'À quel point sont-ils à l’aise avec la tech ?',
+				options: ['Débutant — restons simple', 'À l’aise', 'Expert — ils veulent les meilleures caractéristiques']
+			},
+			{
+				question: 'Quelle est l’occasion ?',
+				options: ['Anniversaire', 'Fêtes', 'Remise de diplôme', 'Sans raison particulière']
+			},
+			{
+				question: 'Une préférence de marque ?',
+				options: ['Apple', 'Samsung', 'Toutes marques']
+			},
+			{
+				question: 'Qu’est-ce qui compte le plus pour eux ?',
+				options: ['L’autonomie', 'L’appareil photo', 'La qualité du son', 'Un grand écran lumineux']
+			}
+		],
+		whyTemplates: {
+			interest: 'Correspond à leur goût pour {interest} — un excellent choix dans cette catégorie.',
+			budget: 'Respecte votre budget de {budget}, avec de la marge.',
+			brand: 'De la marque {brand}, celle que vous avez demandée.',
+			battery: 'Réputé pour sa longue autonomie — idéal pour toute la journée.',
+			camera: 'Un excellent appareil photo pour les photos et vidéos.',
+			sound: 'Un son excellent pour la musique et les appels.',
+			screen: 'Un grand écran lumineux, agréable à regarder.'
+		}
+	},
+	guidesPage: {
+		title: 'Guides d’achat',
+		description:
+			'Guides d’achat en langage simple du blog TechDova, liés aux catégories et aux produits qu’ils couvrent.',
+		guidesHeading: 'Tous les guides',
+		categoriesHeading: 'Parcourir les guides par catégorie',
+		readGuide: 'Lire le guide',
+		readingMinutes: '{minutes} min de lecture',
+		shopCategory: 'Voir {category}'
+	},
+	priceMatchPage: {
+		title: 'Promesse de meilleur prix',
+		description:
+			'Vous avez trouvé le même produit annoncé moins cher ailleurs ? Notre promesse démo de meilleur prix explique comment nous l’alignerions — et les conditions applicables.',
+		intro:
+			'Si vous trouvez le même produit, en stock, annoncé à un prix inférieur par un revendeur éligible, nous alignerons ce prix. Il s’agit d’une politique démo : aucun alignement de prix ne peut être réclamé sur ce site de démonstration.',
+		howTitle: 'Comment ça marche',
+		steps: [
+			{
+				title: 'Trouvez un prix inférieur',
+				text: 'Le même produit, même modèle et même état, annoncé en stock par un revendeur que nous pouvons vérifier.'
+			},
+			{
+				title: 'Montrez-le-nous avant d’acheter',
+				text: 'Partagez le prix annoncé avec notre équipe avant de finaliser votre achat, pour que nous puissions le vérifier tant qu’il est en ligne.'
+			},
+			{
+				title: 'Nous le vérifions',
+				text: 'Nous vérifions le prix, la disponibilité et que l’offre est actuelle — pas un déstockage, une enchère ou une annonce de place de marché.'
+			},
+			{
+				title: 'Nous l’alignons',
+				text: 'Si tout est confirmé, vous payez le prix aligné. Un seul prix aligné par produit et par commande.'
+			}
+		],
+		termsTitle: 'Conditions applicables',
+		terms: [
+			'Le produit doit être identique : même marque, même modèle, même stockage et même couleur, et dans le même état (neuf, pas en boîte ouverte ni reconditionné).',
+			'Le prix inférieur doit être annoncé par un revendeur, en stock, et vérifiable au moment de votre demande.',
+			'Les vendeurs de places de marché, les enchères, les articles d’occasion, les déstockages et les prix incluant une reprise ou un pack sont exclus.',
+			'Le prix aligné doit inclure les frais de livraison appliqués par l’autre revendeur.',
+			'L’alignement de prix ne peut pas être combiné avec d’autres offres, codes promo ou la réduction étudiant.',
+			'Cette page est une politique de démonstration. Aucun alignement de prix ne peut être réclamé, et aucun paiement n’est traité sur ce site.'
+		],
+		note: 'Une question sur un prix trouvé ? Contactez-nous en mentionnant le produit et le prix annoncé.'
+	},
+	studentPage: {
+		title: 'Réduction étudiant',
+		description:
+			'Les étudiants bénéficient de 10 % de réduction chez TechDova dans cette démo. Consultez les conditions d’éligibilité démo honnêtes et le fonctionnement de la vérification.',
+		intro:
+			'Vous étudiez et avez besoin de nouvelle tech ? Les étudiants bénéficient de 10 % de réduction sur les produits à prix plein chez TechDova. Il s’agit d’une réduction démo : aucun code n’est émis et rien n’est facturé sur ce site.',
+		discountLabel: '10 % de réduction sur les produits à prix plein',
+		eligibilityTitle: 'Qui peut en bénéficier',
+		eligibility: [
+			'Vous êtes inscrit dans un établissement scolaire, un collège ou une université.',
+			'Vous pouvez présenter une carte d’étudiant valide ou une attestation d’inscription.',
+			'Une seule réduction par étudiant et par semestre, dans cette démo.',
+			'La réduction s’applique uniquement aux produits à prix plein — pas aux offres, aux articles outlet ni aux cartes cadeaux.'
+		],
+		howTitle: 'Comment ça fonctionnerait',
+		steps: [
+			{
+				title: 'Vérifiez votre statut',
+				text: 'Présentez votre carte d’étudiant en magasin ou vérifiez en ligne avec votre adresse e-mail scolaire.'
+			},
+			{
+				title: 'Recevez votre code',
+				text: 'Vous recevez un code démo à usage unique lié à votre statut d’étudiant.'
+			},
+			{
+				title: 'Utilisez-le à la caisse',
+				text: 'Saisissez le code à la caisse et 10 % sont déduits des produits à prix plein.'
+			}
+		],
+		note: 'Démo uniquement : aucune vérification n’a lieu et aucun code n’est émis sur ce site.',
+		shopButton: 'Voir les produits à prix plein'
+	},
+	businessPage: {
+		title: 'TechDova pour les entreprises',
+		description:
+			'Tarifs de volume, facturation et accompagnement pour les petites équipes qui achètent de la tech — une offre entreprise démo de TechDova.',
+		intro:
+			'Vous équipez une équipe, une salle de classe ou un petit bureau ? TechDova pour les entreprises propose des tarifs de volume, une facturation simple et un interlocuteur unique. Il s’agit d’une offre démo : aucune commande n’est passée et aucune facture n’est émise sur ce site.',
+		benefitsTitle: 'Ce que vous obtenez',
+		benefits: [
+			{
+				title: 'Tarifs de volume',
+				text: 'Des prix unitaires plus bas à mesure que votre commande grandit — voir les paliers démo ci-dessous.'
+			},
+			{
+				title: 'Facturation',
+				text: 'Une seule facture mensuelle pour toutes vos commandes, avec les détails dont votre service comptable a besoin.'
+			},
+			{
+				title: 'Un interlocuteur dédié',
+				text: 'Une seule personne qui connaît votre équipe et votre installation, au lieu d’un agent différent à chaque fois.'
+			},
+			{
+				title: 'Aide à la configuration',
+				text: 'Nous aidons votre équipe à démarrer : comptes, appareils et accessoires, prêts à l’emploi.'
+			}
+		],
+		tiersTitle: 'Paliers de volume démo',
+		tiers: [
+			'5 à 9 unités : 5 % de réduction sur le prix catalogue',
+			'10 à 24 unités : 8 % de réduction sur le prix catalogue',
+			'25 unités et plus : 12 % de réduction sur le prix catalogue — demandez-nous un devis'
+		],
+		contactTitle: 'Parler à l’équipe entreprises',
+		contactText:
+			'Dites-nous combien de personnes vous équipez et ce dont vous avez besoin. Dans cette démo, le formulaire de la page contact est le moyen de nous joindre — rien n’est envoyé.',
+		contactButton: 'Contacter l’équipe entreprises',
+		note: 'Démo uniquement : aucun compte entreprise n’est créé et aucun devis n’est émis sur ce site.'
+	},
+	repairsPage: {
+		title: 'Réparations et service',
+		description:
+			'Réservez un rendez-vous de réparation ou de service : écran, batterie, aide logicielle ou contrôle complet. Démo uniquement — rien n’est réservé pour de vrai.',
+		intro:
+			'Écran fissuré, batterie fatiguée ou appareil capricieux ? Réservez un créneau de service et apportez votre appareil en magasin. Il s’agit d’une réservation démo : aucun rendez-vous n’est pris et aucun appareil n’est collecté.',
+		demoNote:
+			'Réservation démo : le calendrier affiche les 14 prochains jours et les créneaux sont fictifs. Votre réservation est enregistrée uniquement dans ce navigateur.',
+		formTitle: 'Réserver un créneau de service',
+		deviceLabel: 'Votre appareil',
+		devicePlaceholder: 'Choisissez un appareil',
+		serviceLabel: 'De quoi avez-vous besoin ?',
+		services: ['Réparation d’écran', 'Remplacement de batterie', 'Aide logicielle', 'Contrôle complet'],
+		dateLabel: 'Choisissez un jour',
+		slotLabel: 'Choisissez un horaire',
+		chooseDateFirst: 'Choisissez d’abord un jour pour voir les horaires disponibles.',
+		nameLabel: 'Votre nom',
+		emailLabel: 'E-mail',
+		phoneLabel: 'Téléphone (facultatif)',
+		submitButton: 'Réserver mon créneau',
+		successTitle: 'Réservation démo confirmée',
+		successText:
+			'Votre réservation démo est enregistrée uniquement dans ce navigateur. Présentez cette référence en magasin : {reference}. Nous ne vous contacterons pas — il s’agit d’une démonstration.',
+		referenceLabel: 'Référence de réservation',
+		bookAnotherButton: 'Réserver un autre créneau',
+		takenLabel: 'Réservé',
+		validationError: 'Veuillez choisir un appareil, un service, un jour, un horaire, ainsi que votre nom et votre e-mail.'
+	},
+	storePage: {
+		hoursLabel: 'Horaires d’ouverture',
+		phoneLabel: 'Téléphone',
+		addressLabel: 'Adresse',
+		servicesHeading: 'Services dans ce magasin',
+		pickupTitle: 'Retrait en magasin',
+		pickupText:
+			'Commandez en ligne et retirez votre commande démo dans ce magasin. Dans cette démo, le retrait est une option fictive — aucune commande n’est préparée et rien n’est retiré.',
+		directions: 'Itinéraire',
+		directionsLabel: 'Itinéraire vers {name} (s’ouvre dans un nouvel onglet)',
+		backToStores: 'Tous les magasins',
+		demoNote:
+			'Boutique démo : cette adresse, ses horaires et son numéro de téléphone sont fictifs, et aucun vrai magasin n’existe ici.'
+	},
+	giftOptions: {
+		title: 'Offrir en cadeau',
+		text: 'Ajoutez un emballage cadeau et un message personnel. Le prix n’apparaît jamais dans le colis — ceci est une démo, rien n’est imprimé ni expédié.',
+		wrapLabel: 'Emballage cadeau (gratuit, démo)',
+		wrapHint: 'Emballé dans du papier cadeau TechDova avec un ruban.',
+		messageLabel: 'Message cadeau',
+		messagePlaceholder: 'Écrivez un court message pour la personne…',
+		messageHint: 'Votre message est enregistré uniquement sur cet appareil.',
+		sendAsGiftLabel: 'Envoyer en cadeau',
+		sendAsGiftHint: 'Masquer les prix sur le bon de livraison (démo).',
+		savedNote: 'Options cadeau enregistrées — elles apparaîtront dans votre panier et à la caisse (démo).',
+		cartTitle: 'Emballage cadeau + message',
+		cartMessage: 'Message cadeau : « {message} »',
+		cartSendAsGift: 'Envoyé en cadeau — prix masqués (démo)',
+		cartFree: 'Gratuit',
+		clearLabel: 'Retirer les options cadeau'
+	},
+	priceAlerts: {
+		title: 'Alerte prix',
+		text: 'Soyez averti sur cet appareil quand le prix passe sous votre seuil. Démo uniquement — aucun e-mail ne sera jamais envoyé.',
+		targetLabel: 'M’alerter quand le prix passe sous',
+		targetHint: 'Prix actuel : {price}',
+		setButton: 'Définir une alerte prix (démo)',
+		setSuccess:
+			'Alerte prix définie — elle sera signalée sur cet appareil si le prix passe sous {price}. Aucun e-mail ne sera envoyé.',
+		alreadySet: 'Alerte prix active sous {price}.',
+		removeButton: 'Retirer l’alerte',
+		listTitle: 'Vos alertes prix',
+		listEmpty: 'Aucune alerte prix pour le moment. Définissez-en une depuis une page produit.',
+		listTarget: 'Alerte sous {price}',
+		listCurrent: 'Prix actuel : {price}',
+		listBelowTarget: 'Sous votre seuil !',
+		listRemove: 'Retirer l’alerte pour {name}',
+		demoNote: 'Les alertes démo vivent uniquement dans ce navigateur.'
+	},
+	warrantyUpsell: {
+		title: 'Protégez votre achat',
+		text: 'Ajoutez une garantie prolongée d’un an pour {price} (démo). Elle couvre les réparations au-delà de la garantie fabricant de 2 ans.',
+		addButton: 'Ajouter la garantie prolongée — {price}',
+		addedLabel: 'Garantie prolongée ajoutée',
+		removeButton: 'Retirer la garantie',
+		cartTitle: 'Garantie prolongée (1 an)',
+		cartNote: 'Option démo — aucune vraie couverture n’est vendue.',
+		inCart: 'Garantie incluse'
+	},
+	loadingStates: {
+		shopGrid: 'Chargement des produits…',
+		gallery: 'Chargement des images du produit…',
+		searchResults: 'Chargement des résultats de recherche…'
 	}
 };

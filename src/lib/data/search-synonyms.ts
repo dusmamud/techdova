@@ -93,3 +93,8 @@ export function normalizeSearchTerm(term: string): string {
 export function getSynonymCategories(term: string): CategorySlug[] {
 	return synonymMap[normalizeSearchTerm(term)] ?? [];
 }
+
+/** All synonym terms, for typo-tolerant search ("did you mean"). */
+export function getSynonymTerms(): string[] {
+	return Object.keys(synonymMap);
+}

@@ -8,9 +8,11 @@
 	} from '#lib/components/FilterBar.svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import Seo from '#lib/components/Seo.svelte';
+	import SkeletonCard from '#lib/components/SkeletonCard.svelte';
 	import { categories, getCategory, type CategorySlug } from '#lib/data/categories';
 	import { filterProducts, products, sortProducts, type SortKey } from '#lib/data/products';
-	import { getSynonymCategories } from '#lib/data/search-synonyms';
+	import { suggestCorrection } from '#lib/data/search-fuzzy';
+	import { getSynonymCategories, getSynonymTerms, normalizeSearchTerm } from '#lib/data/search-synonyms';
 	import { interpolate } from '#lib/format';
 	import { getDictionary, localize } from '#lib/i18n/index';
 	import { localizedPath } from '#lib/paths';
@@ -21,13 +23,34 @@
 	const lang = $derived(data.lang);
 	const t = $derived(getDictionary(lang));
 
+	// Vocabulary for typo-tolerant search (M5): product name + brand
+	// words in both locales, plus every synonym term. Normalized once —
+	// the catalogue is static.
+	const searchCandidates = [
+		...new Set(
+			products
+				.flatMap((product) => [
+					...localize(product.name, 'en').split(/\s+/),
+					...localize(product.name, 'fr').split(/\s+/),
+					...product.brand.split(/\s+/)
+				])
+				.map((word) => normalizeSearchTerm(word))
+				.filter((word) => word.length >= 3)
+		),
+		...getSynonymTerms()
+	];
+
 	// The query string is unavailable during prerendering: read ?q= only on
 	// the client, after mount. The input then filters live via `query`.
 	let query = $state('');
+	// Until the ?q= read runs, the results area shows skeleton cards
+	// (G-07): the SSR shell would otherwise be empty until hydration.
+	let searchBooted = $state(false);
 
 	onMount(() => {
 		const q = new URLSearchParams(window.location.search).get('q');
 		if (q) query = q;
+		searchBooted = true;
 	});
 
 	const trimmed = $derived(query.trim());
@@ -38,6 +61,23 @@
 			filterProducts(products, { query: trimmed, category: selectedCategory }, lang),
 			sort
 		)
+	);
+	// "Did you mean" (M5): when the query has no exact match, suggest the
+	// closest correction — but only when the correction actually finds
+	// products, so the suggestion never leads to another empty page. The
+	// typed query stays in the box until the shopper accepts it.
+	const suggestion = $derived(
+		trimmed !== '' && results.length === 0
+			? suggestCorrection(trimmed, searchCandidates)
+			: null
+	);
+	const suggestionResults = $derived(
+		suggestion
+			? filterProducts(products, { query: suggestion, category: selectedCategory }, lang)
+			: []
+	);
+	const didYouMean = $derived(
+		suggestion !== null && suggestionResults.length > 0 ? suggestion : null
 	);
 	// True when any query word maps to a category via the synonym map (same
 	// word-splitting `filterProducts` uses), so the note only shows when a
@@ -154,7 +194,18 @@
 		{/if}
 	{/if}
 
-	{#if trimmed === ''}
+	{#if !searchBooted}
+		<div
+			role="status"
+			aria-label={t.searchPage.loadingLabel}
+			class="mt-8 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
+			data-testid="search-skeletons"
+		>
+			{#each [0, 1, 2, 3] as i (i)}
+				<SkeletonCard />
+			{/each}
+		</div>
+	{:else if trimmed === ''}
 		<section aria-labelledby="popular-heading" class="mt-8">
 			<h2 id="popular-heading" class="text-sm font-semibold text-ink">
 				{t.searchPage.popularLabel}
@@ -177,6 +228,22 @@
 			<h2 class="text-xl font-bold text-ink">
 				{interpolate(t.searchPage.noResults, { query: trimmed })}
 			</h2>
+			{#if didYouMean}
+				<div data-testid="did-you-mean">
+					<p class="text-sm font-semibold text-ink">
+						{interpolate(t.searchPage.didYouMean, { suggestion: didYouMean })}
+					</p>
+					<button
+						type="button"
+						onclick={() => {
+							query = didYouMean;
+						}}
+						class="mt-2 inline-flex min-h-11 items-center rounded-full bg-brand-700 px-5 text-sm font-semibold text-white hover:bg-brand-800"
+					>
+						{interpolate(t.searchPage.didYouMeanButton, { suggestion: didYouMean })}
+					</button>
+				</div>
+			{/if}
 			<p class="max-w-sm text-muted">{t.searchPage.noResultsHint}</p>
 			<ul class="max-w-sm list-disc space-y-1 pl-5 text-left text-sm text-muted">
 				{#each t.searchPage.noResultsTips as tip (tip)}

@@ -111,7 +111,34 @@ export const en = {
 			'Demo extended warranty and protection plans: compare cover levels and fictional prices. No plan is sold and no claim can be filed.',
 		cookiesTitle: 'Cookie and storage policy | TechDova',
 		cookiesDescription:
-			'How TechDova stores data honestly: no tracking cookies, no analytics — only local browser storage for your cart, wishlist, theme and language.'
+			'How TechDova stores data honestly: no tracking cookies, no analytics — only local browser storage for your cart, wishlist, theme and language.',
+		categoriesTitle: 'All categories | TechDova',
+		categoriesDescription:
+			'Browse every TechDova category: smartphones, computers, audio, smartwatches, gaming and accessories.',
+		outletTitle: 'Outlet: open-box, refurbished and clearance | TechDova',
+		outletDescription:
+			'Demo outlet: open-box, refurbished and clearance tech at lower prices, with the condition of each item stated honestly.',
+		giftFinderTitle: 'Gift finder: find the perfect tech gift | TechDova',
+		giftFinderDescription:
+			'Answer a few questions and get demo gift recommendations from the TechDova catalogue — everything stays in your browser.',
+		guidesTitle: 'Buying guides | TechDova',
+		guidesDescription:
+			'TechDova buying guides: plain-language advice on headphones, laptops, smartwatches and more, linked to the products they cover.',
+		priceMatchTitle: 'Price match promise | TechDova',
+		priceMatchDescription:
+			'Demo price-match policy: how TechDova would match a lower advertised price, and the terms that apply.',
+		studentTitle: 'Student discount | TechDova',
+		studentDescription:
+			'Demo student discount at TechDova: 10% off for students, with honest demo eligibility terms.',
+		businessTitle: 'TechDova for business | TechDova',
+		businessDescription:
+			'Demo business sales: volume pricing, invoicing and support for small teams buying tech at TechDova.',
+		repairsTitle: 'Repairs and service booking | TechDova',
+		repairsDescription:
+			'Book a demo repair or service appointment at TechDova: pick a device, a service and a time slot. Nothing is booked for real.',
+		storeTitle: '{store} | TechDova',
+		storeDescription:
+			'Visit {store}: demo opening hours, services and in-store pickup. Fictional demo store — no real shop exists at this address.'
 	},
 	nav: {
 		home: 'Home',
@@ -131,6 +158,8 @@ export const en = {
 		skipToContent: 'Skip to main content',
 		switchTo: 'Switch to {language}',
 		deals: 'Deals',
+		outlet: 'Outlet',
+		giftFinder: 'Gift finder',
 		wishlist: 'Wishlist',
 		compare: 'Compare'
 	},
@@ -294,7 +323,13 @@ export const en = {
 		textError: 'Please write at least 10 characters.',
 		ratingOption: '{n} out of 5 stars',
 		sampleNote:
-			'Showing a 3-review sample, including one critical review. Averages reflect all {count} reviews.'
+			'Showing a 3-review sample, including one critical review. Averages reflect all {count} reviews.',
+		staffReplyLabel: 'TechDova team',
+		staffReplyTitle: 'Reply from TechDova',
+		reviewPhotosTitle: 'Photos from this review (demo)',
+		reviewPhotoNote: 'Demo reviewer photos reuse product images for illustration.',
+		photoLabel: 'Reviewer photo {n}',
+		lightboxLabel: 'Reviewer photo {current} of {total}'
 	},
 	promo: {
 		eyebrow: 'Special offer',
@@ -473,7 +508,10 @@ export const en = {
 		categoryFilterLabel: 'Filter by category',
 		allCategories: 'All categories',
 		synonymsNote:
-			'Related terms are matched too: “laptop”, “phone” and similar words find their categories.'
+			'Related terms are matched too: “laptop”, “phone” and similar words find their categories.',
+		didYouMean: 'Did you mean “{suggestion}”?',
+		didYouMeanButton: 'Search for “{suggestion}”',
+		loadingLabel: 'Loading search results…'
 	},
 	wishlistPage: {
 		title: 'Your wishlist',
@@ -582,7 +620,9 @@ export const en = {
 		bundleAdded: 'Bundle added to cart',
 		variantsNote: 'Available in {count} variants, from {price}',
 		variantsLabel: 'Variants',
-		scrollProgressLabel: 'Page progress'
+		scrollProgressLabel: 'Page progress',
+		pricePerGb: '{amount}/GB',
+		priceMatchLink: 'Our price-match promise'
 	},
 	cart: {
 		title: 'Your cart',
@@ -617,7 +657,8 @@ export const en = {
 		returnNudgeTitle: 'Welcome back',
 		returnNudgeText: 'Your cart is waiting — {count} items are still there.',
 		returnNudgeTextOne: 'Your cart is waiting — 1 item is still there.',
-		returnNudgeDismiss: 'Dismiss'
+		returnNudgeDismiss: 'Dismiss',
+		warrantyTotal: 'Extended warranties'
 	},
 	cartDrawer: {
 		title: 'Your cart',
@@ -675,7 +716,9 @@ export const en = {
 		cvcError: 'Please enter a 3–4 digit demo CVC.',
 		errorSummary: 'Please correct the following errors:',
 		summaryTitle: 'Order summary',
-		lineQty: '× {qty}'
+		lineQty: '× {qty}',
+		editStep: 'Edit this step',
+		summaryEditLabel: 'Edit {step}'
 	},
 	orderConfirmation: {
 		itemsTitle: 'Your items',
@@ -685,7 +728,21 @@ export const en = {
 		emptyTitle: 'No recent order found',
 		emptyText:
 			'We could not find a demo order on this device. Place an order from your cart to see its confirmation here.',
-		lineQty: '× {qty}'
+		lineQty: '× {qty}',
+		createAccountTitle: 'Create an account (demo)',
+		createAccountText:
+			'Save your details on this device with one password, so your next demo checkout is prefilled.',
+		createAccountDemoNote:
+			'Demo only: the account lives in this browser only. There is no real backend and no password is ever sent anywhere.',
+		passwordLabel: 'Choose a password',
+		passwordPlaceholder: 'At least 8 characters',
+		confirmPasswordLabel: 'Confirm password',
+		passwordError: 'Please enter a password of at least 8 characters.',
+		passwordMismatch: 'The passwords do not match.',
+		createAccountButton: 'Create demo account',
+		createAccountSuccess:
+			'Demo account created on this device — your next checkout will be prefilled.',
+		alreadySignedIn: 'You are already signed in on this device as {email}.'
 	},
 	trackOrder: {
 		title: 'Track your order',
@@ -1111,6 +1168,8 @@ export const en = {
 		phoneLabel: 'Phone',
 		directions: 'Get directions',
 		directionsLabel: 'Get directions to {name} (opens in a new tab)',
+		viewStore: 'View store',
+		viewStoreLabel: 'View details of {name}',
 		results: '{count} stores',
 		resultOne: '1 store',
 		noResults: 'No stores in this city yet',
@@ -1576,5 +1635,311 @@ export const en = {
 		searchButton: 'Search',
 		bestSellersTitle: 'Our best sellers',
 		popularTitle: 'Popular pages'
+	},
+	// Elevation round 2 (2026-11-20) — sections reserved for build workers.
+	// B1 (new pages) fills: outletPage, giftFinderPage, guidesPage,
+	// priceMatchPage, studentPage, businessPage, repairsPage, categoriesPage,
+	// storePage. B2 (commerce) fills: giftOptions, priceAlerts,
+	// warrantyUpsell. B3 (motion/chrome) fills: loadingStates.
+	// Each section must be filled IDENTICALLY in en.ts and fr.ts
+	// (Dictionary = typeof en; parity is compile-time enforced).
+	categoriesPage: {
+		title: 'All categories',
+		description: 'Browse the catalogue by department — every category in one place.',
+		count: '{count} categories',
+		productsCount: '{count} products',
+		shopAll: 'Shop all products',
+		viewCategory: 'Shop {category}'
+	},
+	outletPage: {
+		title: 'Outlet',
+		description:
+			'Open-box, refurbished and clearance tech at lower demo prices. Every item states its condition honestly — no surprises, no fake scarcity.',
+		demoNote:
+			'Demo outlet: these prices are fictional. An outlet item links to its product page, and the demo cart always uses the catalogue price.',
+		conditionOpenBox: 'Open-box',
+		conditionRefurbished: 'Refurbished',
+		conditionClearance: 'Clearance',
+		filterAll: 'All outlet items',
+		results: '{count} outlet items',
+		resultOne: '1 outlet item',
+		outletPriceLabel: 'Outlet price',
+		cataloguePriceLabel: 'Catalogue price',
+		saveLabel: 'Save {amount}',
+		viewProduct: 'View product',
+		whatIsTitle: 'What do the conditions mean?',
+		whatIsOpenBox:
+			'Open-box: returned within 14 days, box opened, device as new and fully checked.',
+		whatIsRefurbished:
+			'Refurbished: checked, cleaned and restored by our service team, with a 6-month demo warranty.',
+		whatIsClearance:
+			'Clearance: last units of a line being cleared, sold at a lower price.'
+	},
+	giftFinderPage: {
+		title: 'Gift finder',
+		description:
+			'Answer 7 quick questions and we will suggest 3–5 products from the catalogue, with a reason for each pick. Your answers never leave your browser.',
+		startTitle: 'Find a gift in under a minute',
+		startText:
+			'Tell us who it is for, what they love and your budget. No account, no email — the quiz runs entirely on this page.',
+		startButton: 'Start the quiz',
+		questionLabel: 'Question {current} of {total}',
+		backButton: 'Back',
+		nextButton: 'Next',
+		seeResultsButton: 'See my gift ideas',
+		resultsTitle: 'Your gift ideas',
+		resultsDescription:
+			'Picked from the TechDova catalogue for your answers. Tap any product to see it in full.',
+		resultsEmpty: 'No product matches those answers yet',
+		resultsEmptyHint: 'Try widening the budget or choosing “Any brand” — the catalogue is small, so a narrow combination can come up empty.',
+		whyLabel: 'Why this fits',
+		viewProduct: 'View product',
+		retakeButton: 'Retake the quiz',
+		questions: [
+			{
+				question: 'Who is the gift for?',
+				options: ['Myself', 'My partner', 'A parent', 'A teenager', 'A colleague', 'A friend']
+			},
+			{
+				question: 'What is your budget?',
+				options: ['Under 200 DA', '200 – 500 DA', '500 – 1,000 DA', 'Over 1,000 DA']
+			},
+			{
+				question: 'What do they love most?',
+				options: ['Music', 'Gaming', 'Fitness and health', 'Work and study', 'Photos and video', 'Everyday essentials']
+			},
+			{
+				question: 'How comfortable are they with tech?',
+				options: ['Beginner — keep it simple', 'Comfortable', 'Expert — they want the best specs']
+			},
+			{
+				question: 'What is the occasion?',
+				options: ['Birthday', 'Holiday', 'Graduation', 'Just because']
+			},
+			{
+				question: 'Any brand preference?',
+				options: ['Apple', 'Samsung', 'Any brand']
+			},
+			{
+				question: 'What matters most to them?',
+				options: ['Battery life', 'Camera', 'Sound quality', 'Big, bright screen']
+			}
+		],
+		whyTemplates: {
+			interest: 'Matches their love of {interest} — a strong pick in this category.',
+			budget: 'Fits your budget of {budget} with room to spare.',
+			brand: 'From {brand}, the brand you asked for.',
+			battery: 'Known for long battery life — great for all-day use.',
+			camera: 'A strong camera for photos and video.',
+			sound: 'Excellent sound for music and calls.',
+			screen: 'A big, bright screen that is easy on the eyes.'
+		}
+	},
+	guidesPage: {
+		title: 'Buying guides',
+		description:
+			'Plain-language buying guides from the TechDova blog, linked to the categories and products they cover.',
+		guidesHeading: 'All guides',
+		categoriesHeading: 'Browse guides by category',
+		readGuide: 'Read the guide',
+		readingMinutes: '{minutes} min read',
+		shopCategory: 'Shop {category}'
+	},
+	priceMatchPage: {
+		title: 'Price match promise',
+		description:
+			'Found the same product advertised for less elsewhere? Our demo price-match promise explains how we would match it — and the terms that apply.',
+		intro:
+			'If you find the same product, in stock, advertised at a lower price by a qualifying retailer, we will match that price. This is a demo policy: no price match can be claimed on this demonstration site.',
+		howTitle: 'How it works',
+		steps: [
+			{
+				title: 'Find a lower price',
+				text: 'The same product, same model and same condition, advertised in stock by a retailer we can verify.'
+			},
+			{
+				title: 'Show us before you buy',
+				text: 'Share the advertised price with our team before completing your purchase, so we can check it while it is still live.'
+			},
+			{
+				title: 'We verify it',
+				text: 'We check the price, the stock status and that the offer is current — not a clearance, auction or marketplace listing.'
+			},
+			{
+				title: 'We match it',
+				text: 'If everything checks out, you pay the matched price. One matched price per product, per order.'
+			}
+		],
+		termsTitle: 'Terms that apply',
+		terms: [
+			'The product must be identical: same brand, model, storage and colour, and in the same condition (new, not open-box or refurbished).',
+			'The lower price must be advertised by a retailer, in stock, and verifiable at the time you ask.',
+			'Marketplace sellers, auctions, used items, clearance lines and prices that include a trade-in or bundle are excluded.',
+			'The matched price must include any delivery charge the other retailer applies.',
+			'Price matches cannot be combined with other offers, promo codes or the student discount.',
+			'This page is a demonstration policy. No price match can be claimed, and no payment is processed on this site.'
+		],
+		note: 'Questions about a price you found? Contact us and mention the product and the advertised price.'
+	},
+	studentPage: {
+		title: 'Student discount',
+		description:
+			'Students get 10% off at TechDova in this demo. Check the honest demo eligibility terms and how verification would work.',
+		intro:
+			'Studying and need new tech? Students get 10% off full-price products at TechDova. This is a demo discount: no code is issued and nothing is charged on this site.',
+		discountLabel: '10% off full-price products',
+		eligibilityTitle: 'Who can use it',
+		eligibility: [
+			'You are enrolled at a school, college or university.',
+			'You can show a valid student ID or enrolment letter.',
+			'One discount per student, per term, in this demo.',
+			'The discount applies to full-price products only — not to deals, outlet items or gift cards.'
+		],
+		howTitle: 'How it would work',
+		steps: [
+			{
+				title: 'Verify your status',
+				text: 'Show your student ID in store or verify online with your school email address.'
+			},
+			{
+				title: 'Get your code',
+				text: 'You receive a single-use demo code tied to your student status.'
+			},
+			{
+				title: 'Use it at checkout',
+				text: 'Enter the code at checkout and 10% comes off full-price products.'
+			}
+		],
+		note: 'Demo only: no verification takes place and no code is issued on this site.',
+		shopButton: 'Shop full-price products'
+	},
+	businessPage: {
+		title: 'TechDova for business',
+		description:
+			'Volume pricing, invoicing and support for small teams buying tech — a demo business offer from TechDova.',
+		intro:
+			'Equipping a team, a classroom or a small office? TechDova for Business offers volume pricing, simple invoicing and a single point of contact. This is a demo offer: no order is placed and no invoice is issued on this site.',
+		benefitsTitle: 'What you get',
+		benefits: [
+			{
+				title: 'Volume pricing',
+				text: 'Lower per-unit prices as your order grows — see the demo tiers below.'
+			},
+			{
+				title: 'Invoicing',
+				text: 'One monthly invoice for all your orders, with the details your accounts team needs.'
+			},
+			{
+				title: 'A named contact',
+				text: 'One person who knows your team and your setup, instead of a different agent each time.'
+			},
+			{
+				title: 'Setup help',
+				text: 'We help your team get started: accounts, devices and accessories, ready to go.'
+			}
+		],
+		tiersTitle: 'Demo volume tiers',
+		tiers: [
+			'5–9 units: 5% off the catalogue price',
+			'10–24 units: 8% off the catalogue price',
+			'25+ units: 12% off the catalogue price — ask us for a quote'
+		],
+		contactTitle: 'Talk to the business team',
+		contactText:
+			'Tell us how many people you are equipping and what you need. In this demo, the form on the contact page is the way to reach us — nothing is sent anywhere.',
+		contactButton: 'Contact the business team',
+		note: 'Demo only: no business account is created and no quote is issued on this site.'
+	},
+	repairsPage: {
+		title: 'Repairs and service',
+		description:
+			'Book a repair or service appointment: screen, battery, software help or a full check-up. Demo only — nothing is booked for real.',
+		intro:
+			'Cracked screen, tired battery or a device that misbehaves? Book a service slot and bring your device to a store. This is a demo booking: no appointment is made and no device is collected.',
+		demoNote:
+			'Demo booking: the calendar shows the next 14 days and the time slots are fictional. Your booking is stored only in this browser.',
+		formTitle: 'Book a service slot',
+		deviceLabel: 'Your device',
+		devicePlaceholder: 'Choose a device',
+		serviceLabel: 'What do you need?',
+		services: ['Screen repair', 'Battery replacement', 'Software help', 'Full check-up'],
+		dateLabel: 'Choose a day',
+		slotLabel: 'Choose a time',
+		chooseDateFirst: 'Pick a day first to see the available times.',
+		nameLabel: 'Your name',
+		emailLabel: 'Email',
+		phoneLabel: 'Phone (optional)',
+		submitButton: 'Book my slot',
+		successTitle: 'Demo booking confirmed',
+		successText:
+			'Your demo booking is saved in this browser only. Show this reference in store: {reference}. We will not contact you — this is a demonstration.',
+		referenceLabel: 'Booking reference',
+		bookAnotherButton: 'Book another slot',
+		takenLabel: 'Booked',
+		validationError: 'Please choose a device, a service, a day, a time and your name and email.'
+	},
+	storePage: {
+		hoursLabel: 'Opening hours',
+		phoneLabel: 'Phone',
+		addressLabel: 'Address',
+		servicesHeading: 'Services at this store',
+		pickupTitle: 'In-store pickup',
+		pickupText:
+			'Order online and collect your demo order from this store. In this demo, pickup is a fictional option — no order is prepared and nothing is collected.',
+		directions: 'Get directions',
+		directionsLabel: 'Get directions to {name} (opens in a new tab)',
+		backToStores: 'All stores',
+		demoNote:
+			'Demo store: this address, its hours and its phone number are fictional, and no real shop exists here.'
+	},
+	giftOptions: {
+		title: 'Send as a gift',
+		text: 'Add gift wrap and a personal message. The price is never shown in the box — this is a demo, so nothing is printed or shipped.',
+		wrapLabel: 'Gift wrap (free, demo)',
+		wrapHint: 'Wrapped in TechDova gift paper with a ribbon.',
+		messageLabel: 'Gift message',
+		messagePlaceholder: 'Write a short message for the recipient…',
+		messageHint: 'Your message is saved on this device only.',
+		sendAsGiftLabel: 'Send as a gift',
+		sendAsGiftHint: 'Hide prices on the packing slip (demo).',
+		savedNote: 'Gift options saved — they will show in your cart and at checkout (demo).',
+		cartTitle: 'Gift wrap + message',
+		cartMessage: 'Gift message: “{message}”',
+		cartSendAsGift: 'Sent as a gift — prices hidden (demo)',
+		cartFree: 'Free',
+		clearLabel: 'Remove gift options'
+	},
+	priceAlerts: {
+		title: 'Price alert',
+		text: 'Get notified on this device when the price drops below your target. Demo only — no email is ever sent.',
+		targetLabel: 'Alert me when the price drops below',
+		targetHint: 'Current price: {price}',
+		setButton: 'Set price alert (demo)',
+		setSuccess:
+			'Price alert set — it will be flagged on this device if the price drops below {price}. No email will be sent.',
+		alreadySet: 'Price alert active below {price}.',
+		removeButton: 'Remove alert',
+		listTitle: 'Your price alerts',
+		listEmpty: 'No price alerts yet. Set one from a product page.',
+		listTarget: 'Alert below {price}',
+		listCurrent: 'Current price: {price}',
+		listBelowTarget: 'Below your target price!',
+		listRemove: 'Remove alert for {name}',
+		demoNote: 'Demo alerts live only in this browser.'
+	},
+	warrantyUpsell: {
+		title: 'Protect your purchase',
+		text: 'Add a 1-year extended warranty for {price} (demo). It covers repairs beyond the 2-year manufacturer warranty.',
+		addButton: 'Add extended warranty — {price}',
+		addedLabel: 'Extended warranty added',
+		removeButton: 'Remove warranty',
+		cartTitle: 'Extended warranty (1 year)',
+		cartNote: 'Demo add-on — no real coverage is sold.',
+		inCart: 'Warranty included'
+	},
+	loadingStates: {
+		shopGrid: 'Loading products…',
+		gallery: 'Loading product images…',
+		searchResults: 'Loading search results…'
 	}
 };

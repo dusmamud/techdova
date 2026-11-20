@@ -84,6 +84,30 @@
 	function ratingLabel(product: Product): string {
 		return `${interpolate(t.product.ratingLabel, { rating: formatDecimal(product.rating, intlLocale) })} — ${interpolate(t.product.reviewsLabel, { count: formatCount(product.reviewCount, intlLocale) })}`;
 	}
+
+	// Compare-table scroll hint (elevation round 2, G-12): the lg+ table
+	// is wider than a phone/tablet viewport and scrolls inside its
+	// container. The fade edge (below) shows only while there is more
+	// table to the right, and the scroller is keyboard-focusable with a
+	// label so keyboard users can discover the scroll too. The first
+	// (label) column is already sticky — this only adds the affordance.
+	let compareScroller: HTMLDivElement | undefined = $state();
+	let compareCanScrollRight = $state(false);
+
+	function updateCompareScrollHint(): void {
+		const el = compareScroller;
+		if (!el) return;
+		compareCanScrollRight = el.scrollWidth - el.clientWidth - el.scrollLeft > 4;
+	}
+
+	$effect(() => {
+		void compared.length;
+		const el = compareScroller;
+		if (!el) return;
+		updateCompareScrollHint();
+		window.addEventListener('resize', updateCompareScrollHint);
+		return () => window.removeEventListener('resize', updateCompareScrollHint);
+	});
 </script>
 
 <Seo
@@ -281,8 +305,17 @@
 			{/each}
 		</div>
 
-		<div class="mt-6 hidden overflow-x-auto rounded-3xl bg-surface ring-1 ring-line lg:block">
-			<table class="w-full min-w-[38rem] border-collapse">
+		<div class="relative mt-6 hidden lg:block">
+			<!-- svelte-ignore a11y_no_noninteractive_tabindex: scrollable region — WAI guidance is that a scrollable region must be keyboard-focusable so keyboard users can scroll it; the table inside is not otherwise reachable by keyboard. -->
+			<div
+				bind:this={compareScroller}
+				onscroll={updateCompareScrollHint}
+				tabindex="0"
+				role="region"
+				aria-label={t.comparePage.tableLabel}
+				class="overflow-x-auto rounded-3xl bg-surface ring-1 ring-line"
+			>
+				<table class="w-full min-w-[38rem] border-collapse">
 				<caption class="sr-only">{t.comparePage.tableLabel}</caption>
 				<thead>
 					<tr class="border-b border-line">
@@ -459,6 +492,13 @@
 					</tr>
 				</tbody>
 			</table>
+			</div>
+			{#if compareCanScrollRight}
+				<div
+					aria-hidden="true"
+					class="pointer-events-none absolute inset-y-0 right-0 w-16 rounded-r-3xl bg-gradient-to-l from-surface via-surface/70 to-transparent"
+				></div>
+			{/if}
 		</div>
 	{/if}
 </div>

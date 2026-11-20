@@ -1,18 +1,23 @@
 <script lang="ts">
 	import { browser } from '$app/env';
-	import { Minus, Plus, ShoppingCart, Trash2, X } from '@lucide/svelte';
+	import { Gift, Minus, Plus, ShoppingCart, Trash2, X } from '@lucide/svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { formatPrice, interpolate } from '#lib/format';
 	import { localize, type Dictionary, type Locale } from '#lib/i18n/index';
 	import { variantPrice } from '#lib/data/products';
 	import { localizedPath, productPath } from '#lib/paths';
 	import { cart } from '#lib/stores/cart.svelte';
+	import { giftOptions } from '#lib/stores/gift-options.svelte';
+	import { warranty, warrantyPrice, warrantyTotalFor } from '#lib/stores/warranty.svelte';
 	import Picture from './Picture.svelte';
+	import WarrantyUpsell from './WarrantyUpsell.svelte';
 
 	let { lang, t }: { lang: Locale; t: Dictionary } = $props();
 
 	let closeButton: HTMLButtonElement | undefined = $state();
 	const intlLocale = $derived(t.meta.intlLocale);
+	const warrantyTotal = $derived(warrantyTotalFor(cart.detailed));
+	const grandTotal = $derived(cart.totals.total + warrantyTotal);
 
 	let promoInput = $state('');
 	let promoError = $state(false);
@@ -165,6 +170,27 @@
 										{formatPrice(unitPrice * line.qty, intlLocale)}
 									</span>
 								</div>
+								<div class="mt-2">
+									{#if warranty.has(line.product.slug)}
+										<p class="text-sm">
+											<span class="font-semibold text-brand-800 dark:text-brand-200">
+												{t.warrantyUpsell.inCart} — {formatPrice(
+													warrantyPrice(unitPrice) * line.qty,
+													intlLocale
+												)}
+											</span>
+											<button
+												type="button"
+												onclick={() => warranty.toggle(line.product.slug)}
+												class="ml-2 inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-ink-soft ring-1 ring-line hover:bg-surface-soft"
+											>
+												{t.warrantyUpsell.removeButton}
+											</button>
+										</p>
+									{:else}
+										<WarrantyUpsell {lang} {t} product={line.product} {unitPrice} compact />
+									{/if}
+								</div>
 							</div>
 							<button
 								type="button"
@@ -178,6 +204,25 @@
 					{/each}
 				</ul>
 				<div class="border-t border-line px-5 py-4">
+					{#if giftOptions.active}
+						<div
+							class="mb-3 rounded-2xl bg-brand-50 p-3 dark:bg-surface-soft"
+							data-testid="gift-line"
+						>
+							<p class="flex items-center gap-2 text-sm font-semibold text-ink">
+								<Gift class="h-4 w-4 shrink-0 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+								{t.giftOptions.cartTitle} — {t.giftOptions.cartFree}
+							</p>
+							{#if giftOptions.message.trim()}
+								<p class="mt-1 text-sm text-muted">
+									{interpolate(t.giftOptions.cartMessage, { message: giftOptions.message.trim() })}
+								</p>
+							{/if}
+							{#if giftOptions.sendAsGift}
+								<p class="mt-1 text-sm text-muted">{t.giftOptions.cartSendAsGift}</p>
+							{/if}
+						</div>
+					{/if}
 					<p class="flex items-baseline justify-between text-sm">
 						<span class="text-muted">{t.cartDrawer.subtotal}</span>
 						<span class="text-base font-bold text-ink">
@@ -205,6 +250,20 @@
 							<span class="text-muted">{t.cart.total}</span>
 							<span class="text-base font-bold text-ink">
 								{formatPrice(cart.totals.total, intlLocale)}
+							</span>
+						</p>
+					{/if}
+					{#if warrantyTotal > 0}
+						<p class="mt-1 flex items-baseline justify-between text-sm">
+							<span class="text-muted">{t.cart.warrantyTotal}</span>
+							<span class="font-semibold text-ink">
+								{formatPrice(warrantyTotal, intlLocale)}
+							</span>
+						</p>
+						<p class="mt-1 flex items-baseline justify-between text-sm">
+							<span class="text-muted">{t.cart.total}</span>
+							<span class="text-base font-bold text-ink">
+								{formatPrice(grandTotal, intlLocale)}
 							</span>
 						</p>
 					{/if}

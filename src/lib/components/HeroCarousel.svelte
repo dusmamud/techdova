@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { browser } from '$app/env';
 	import { ArrowRight, ChevronLeft, ChevronRight, Headphones, Pause, Play, ShieldCheck, Sparkles, Truck } from '@lucide/svelte';
+	import { animate, scroll } from 'motion';
+	import { prefersReducedMotion } from '#lib/fly-cart';
+	import { pressSpring } from '#lib/actions/press';
 	import { interpolate } from '#lib/format';
 	import type { Dictionary, Locale } from '#lib/i18n/index';
 	import { localizedPath, shopPath } from '#lib/paths';
@@ -93,8 +96,77 @@
 		touchStartX = null;
 		touchStartY = null;
 	}
+
+	// Scroll-linked hero parallax (elevation round 2, Motion verdict §4.3
+	// job (b)): `scroll()` drives the image wrapper's Y off the hero
+	// section's scroll progress (off the main thread where ScrollTimeline
+	// is supported). Vanilla `from "motion"`, attached — never at module
+	// scope, never during prerender — and a no-op under reduced motion
+	// (Motion's vanilla API has no automatic reduced-motion handling).
+	// The wrapper carries `scale-[1.12]` in markup so the ±36px travel
+	// never exposes an edge; the scale uses the CSS `scale` property,
+	// Motion writes `transform`, so the two compose instead of fighting.
+	function heroParallax(node: HTMLElement): (() => void) | void {
+		if (!browser || prefersReducedMotion()) return;
+		const section = node.closest('section');
+		if (!section) return;
+		return scroll(animate(node, { y: [0, 36] }), {
+			target: section,
+			offset: ['start start', 'end start']
+		});
+	}
 </script>
 
+<!-- Dots + pause controls, rendered twice: overlaid on the image at lg+
+	(where the image is large enough to carry them) and as a row BELOW
+	the hero on <lg (G-10 — the pill no longer covers the product shot
+	on small screens). One is display:none at any width, so assistive
+	tech sees a single group. -->
+{#snippet dotsControls()}
+	{#each t.hero.slides as _, i (i)}
+		<button
+			type="button"
+			onclick={() => goTo(i)}
+			aria-label={interpolate(t.hero.goToSlide, { n: i + 1 })}
+			aria-current={i === active ? 'true' : undefined}
+			class="grid h-10 w-10 place-items-center rounded-full"
+		>
+			<span
+				class="relative h-2 overflow-hidden rounded-full motion-safe:transition-colors motion-safe:duration-200 motion-safe:ease-enter {i === active
+					? reduceMotion
+						? 'w-6 bg-brand-700 dark:bg-brand-300'
+						: 'w-7 bg-brand-200 dark:bg-white/25'
+					: 'w-2 bg-brand-300/80 dark:bg-brand-400/60'}"
+			>
+				{#if i === active && !reduceMotion}
+					<span
+						class="absolute inset-0 origin-left animate-dot-progress rounded-full bg-brand-700 dark:bg-brand-300"
+						style:animation-play-state={hoverPaused || userPaused ? 'paused' : 'running'}
+					></span>
+				{/if}
+			</span>
+		</button>
+	{/each}
+	{#if !reduceMotion}
+		<button
+			type="button"
+			onclick={() => {
+				userPaused = !userPaused;
+			}}
+			aria-label={userPaused ? t.hero.play : t.hero.pause}
+			aria-pressed={userPaused}
+			class="grid h-10 w-10 place-items-center rounded-full text-ink-soft hover:bg-brand-50 dark:hover:bg-surface-soft"
+		>
+			{#if userPaused}
+				<Play class="h-4 w-4" aria-hidden="true" />
+			{:else}
+				<Pause class="h-4 w-4" aria-hidden="true" />
+			{/if}
+		</button>
+	{/if}
+{/snippet}
+
+<div>
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions: carousel region pauses auto-advance on hover/focus, supports arrow keys from its controls, and swipe gestures -->
 <section
 	aria-roledescription="carousel"
@@ -155,6 +227,7 @@
 						<a
 							href={slideTargets[i]}
 							tabindex={i === active ? undefined : -1}
+							use:pressSpring
 							class="group mt-5 inline-flex animate-fade-up min-h-12 items-center gap-2 self-start rounded-full bg-brand-800 px-6 text-sm font-semibold text-white shadow-sm [animation-delay:225ms] hover:bg-brand-900 motion-safe:transition-colors motion-safe:duration-200 sm:mt-6"
 						>
 							{slide.cta}
@@ -183,22 +256,30 @@
 							{/each}
 						</ul>
 					</div>
+					<!-- G-11: taller mobile crop (4:3) so the product leads on the
+						first mobile screen; desktop unchanged (lg:aspect-auto,
+						min-h 440px). The inner div is the parallax layer
+						(G-10/Motion §4.3b): scale 1.12 gives the ±36px travel
+						bleed room; it carries no CSS animation of its own. -->
 					<div
-						class="relative aspect-[16/10] animate-fade-up overflow-hidden rounded-3xl [animation-delay:300ms] sm:aspect-[21/9] lg:aspect-auto lg:min-h-[440px] lg:rounded-none"
+						data-testid="hero-slide-image"
+						class="relative aspect-[4/3] animate-fade-up overflow-hidden rounded-3xl [animation-delay:300ms] sm:aspect-[21/9] lg:aspect-auto lg:min-h-[440px] lg:rounded-none"
 					>
-						<Picture
-							base={image.src}
-							alt={slide.imageAlt}
-							width={image.width}
-							height={image.height}
-							loading={i === 0 ? 'eager' : 'lazy'}
-							fetchPriority={i === 0 ? 'high' : undefined}
-							decoding="async"
-							sizes="(max-width: 1023px) 100vw, 680px"
-							class="absolute inset-0 h-full w-full object-cover {i === active
-								? 'animate-ken-burns'
-								: ''}"
-						/>
+						<div {@attach heroParallax} class="absolute inset-0 scale-[1.12]">
+							<Picture
+								base={image.src}
+								alt={slide.imageAlt}
+								width={image.width}
+								height={image.height}
+								loading={i === 0 ? 'eager' : 'lazy'}
+								fetchPriority={i === 0 ? 'high' : undefined}
+								decoding="async"
+								sizes="(max-width: 1023px) 100vw, 680px"
+								class="absolute inset-0 h-full w-full object-cover {i === active
+									? 'animate-ken-burns'
+									: ''}"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -226,48 +307,22 @@
 	<div
 		role="group"
 		aria-label={t.hero.dotsLabel}
-		class="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-0.5 rounded-full bg-surface/85 py-1 pl-1.5 pr-1 shadow-md ring-1 ring-line backdrop-blur-sm"
+		data-testid="hero-dots-desktop"
+		class="absolute bottom-4 left-1/2 z-20 hidden -translate-x-1/2 items-center gap-0.5 rounded-full bg-surface/85 py-1 pl-1.5 pr-1 shadow-md ring-1 ring-line backdrop-blur-sm lg:flex"
 	>
-		{#each t.hero.slides as _, i (i)}
-			<button
-				type="button"
-				onclick={() => goTo(i)}
-				aria-label={interpolate(t.hero.goToSlide, { n: i + 1 })}
-				aria-current={i === active ? 'true' : undefined}
-				class="grid h-10 w-10 place-items-center rounded-full"
-			>
-				<span
-					class="relative h-2 overflow-hidden rounded-full motion-safe:transition-colors motion-safe:duration-200 motion-safe:ease-enter {i === active
-						? reduceMotion
-							? 'w-6 bg-brand-700 dark:bg-brand-300'
-							: 'w-7 bg-brand-200 dark:bg-white/25'
-						: 'w-2 bg-brand-300/80 dark:bg-brand-400/60'}"
-				>
-					{#if i === active && !reduceMotion}
-						<span
-							class="absolute inset-0 origin-left animate-dot-progress rounded-full bg-brand-700 dark:bg-brand-300"
-							style:animation-play-state={hoverPaused || userPaused ? 'paused' : 'running'}
-						></span>
-					{/if}
-				</span>
-			</button>
-		{/each}
-		{#if !reduceMotion}
-			<button
-				type="button"
-				onclick={() => {
-					userPaused = !userPaused;
-				}}
-				aria-label={userPaused ? t.hero.play : t.hero.pause}
-				aria-pressed={userPaused}
-				class="grid h-10 w-10 place-items-center rounded-full text-ink-soft hover:bg-brand-50 dark:hover:bg-surface-soft"
-			>
-				{#if userPaused}
-					<Play class="h-4 w-4" aria-hidden="true" />
-				{:else}
-					<Pause class="h-4 w-4" aria-hidden="true" />
-				{/if}
-			</button>
-		{/if}
+		{@render dotsControls()}
 	</div>
 </section>
+
+	<!-- G-10: dots below the hero image on <lg. -->
+	<div class="mt-3 flex justify-center lg:hidden">
+		<div
+			role="group"
+			aria-label={t.hero.dotsLabel}
+			data-testid="hero-dots-mobile"
+			class="flex items-center gap-0.5 rounded-full bg-surface/85 py-1 pl-1.5 pr-1 shadow-md ring-1 ring-line backdrop-blur-sm"
+		>
+			{@render dotsControls()}
+		</div>
+	</div>
+</div>

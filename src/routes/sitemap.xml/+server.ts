@@ -2,6 +2,7 @@ import { SITE_URL } from '#lib/config';
 import { blogPosts } from '#lib/data/blog';
 import { categorySlugs } from '#lib/data/categories';
 import { products } from '#lib/data/products';
+import { stores } from '#lib/data/stores';
 import { defaultLocale, locales } from '#lib/i18n/index';
 
 export const prerender = true;
@@ -36,7 +37,15 @@ const staticPaths = [
 	'/trade-in',
 	'/financing',
 	'/warranty',
-	'/cookies'
+	'/cookies',
+	'/categories',
+	'/outlet',
+	'/gift-finder',
+	'/guides',
+	'/price-match',
+	'/student',
+	'/business',
+	'/repairs'
 ];
 
 function absoluteUrl(locale: string, path: string): string {
@@ -48,7 +57,8 @@ export function GET(): Response {
 		...staticPaths,
 		...categorySlugs.map((slug) => `/category/${slug}`),
 		...blogPosts.map((p) => `/blog/${p.slug}`),
-		...products.map((p) => `/product/${p.slug}`)
+		...products.map((p) => `/product/${p.slug}`),
+		...stores.map((store) => `/stores/${store.slug}`)
 	];
 	const entries = paths.flatMap((path) =>
 		locales.map((locale) => {

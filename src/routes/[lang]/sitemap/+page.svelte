@@ -7,6 +7,7 @@
 	import { blogPosts } from '#lib/data/blog';
 	import { categories } from '#lib/data/categories';
 	import { products } from '#lib/data/products';
+	import { stores } from '#lib/data/stores';
 	import { getDictionary, locales, localize } from '#lib/i18n/index';
 	import { localizedPath } from '#lib/paths';
 	import type { PageProps } from './$types';
@@ -50,7 +51,11 @@
 	const shopEntries = $derived<Entry[]>([
 		{ path: '/', label: t.sitemapPage.labels.home },
 		{ path: '/shop', label: t.sitemapPage.labels.shop },
+		{ path: '/categories', label: t.categoriesPage.title },
 		{ path: '/deals', label: t.sitemapPage.labels.deals },
+		{ path: '/outlet', label: t.outletPage.title },
+		{ path: '/gift-finder', label: t.giftFinderPage.title },
+		{ path: '/guides', label: t.guidesPage.title },
 		{ path: '/new-arrivals', label: t.sitemapPage.labels.newArrivals },
 		{ path: '/best-sellers', label: t.sitemapPage.labels.bestSellers },
 		{ path: '/gift-cards', label: t.sitemapPage.labels.giftCards },
@@ -82,15 +87,26 @@
 		{ path: '/track-order', label: t.sitemapPage.labels.trackOrder },
 		{ path: '/trade-in', label: t.footer.tradeIn },
 		{ path: '/financing', label: t.footer.financing },
-		{ path: '/warranty', label: t.footer.warranty }
+		{ path: '/warranty', label: t.footer.warranty },
+		{ path: '/price-match', label: t.priceMatchPage.title },
+		{ path: '/repairs', label: t.repairsPage.title }
 	]);
 
 	const companyEntries = $derived<Entry[]>([
 		{ path: '/about', label: t.sitemapPage.labels.about },
 		{ path: '/stores', label: t.sitemapPage.labels.stores },
+		{ path: '/student', label: t.studentPage.title },
+		{ path: '/business', label: t.businessPage.title },
 		{ path: '/testimonials', label: t.sitemapPage.labels.testimonials },
 		{ path: '/blog', label: t.sitemapPage.labels.blog }
 	]);
+
+	const storeEntries = $derived<Entry[]>(
+		stores.map((store) => ({
+			path: `/stores/${store.slug}`,
+			label: localize(store.name, lang)
+		}))
+	);
 
 	const postEntries = $derived<Entry[]>(
 		blogPosts.map((post) => ({
@@ -173,6 +189,8 @@
 		<section use:reveal={{ delay: 120 }}>
 			<h2 class="text-lg font-bold text-ink">{t.sitemapPage.companyHeading}</h2>
 			{@render entryList(companyEntries)}
+			<h3 class="mt-6 font-semibold text-ink">{t.sitemapPage.labels.stores}</h3>
+			{@render entryList(storeEntries)}
 			<h3 class="mt-6 font-semibold text-ink">{t.sitemapPage.postsLabel}</h3>
 			{@render entryList(postEntries)}
 			<div class="mt-6">

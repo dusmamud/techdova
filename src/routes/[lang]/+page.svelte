@@ -112,7 +112,7 @@
 				{t.categoriesSection.heading}
 			</h2>
 			<a
-				href={localizedPath(lang, '/shop')}
+				href={localizedPath(lang, '/categories')}
 				class="inline-flex min-h-11 shrink-0 items-center gap-1 text-sm font-semibold text-brand-700 dark:text-brand-300 hover:text-brand-800 dark:hover:text-brand-200"
 			>
 				{t.categoriesSection.viewAll}
@@ -120,8 +120,12 @@
 			</a>
 		</div>
 		<div class="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
-			{#each categories as category (category.slug)}
-				<a href={localizedPath(lang, `/category/${category.slug}`)} class="group block text-center">
+			{#each categories as category, i (category.slug)}
+				<a
+					href={localizedPath(lang, `/category/${category.slug}`)}
+					class="group block text-center"
+					use:reveal={{ variant: 'scale', delay: Math.min(i * 60, 300) }}
+				>
 					<span class="block aspect-square overflow-hidden rounded-[2rem] bg-brand-50 ring-1 ring-line">
 						<Picture
 							base={category.image}
@@ -215,8 +219,10 @@
 			</a>
 		</div>
 		<div class="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:gap-5 lg:grid-cols-4">
-			{#each newProducts as product (product.slug)}
-				<ProductCard {product} {lang} {t} />
+			{#each newProducts as product, i (product.slug)}
+				<div use:reveal={{ variant: 'scale', delay: Math.min(i * 60, 300) }}>
+					<ProductCard {product} {lang} {t} />
+				</div>
 			{/each}
 		</div>
 	</section>
@@ -229,7 +235,7 @@
 		<section
 			aria-labelledby="deal-heading"
 			class="overflow-hidden rounded-[2rem] bg-brand-50 ring-1 ring-brand-100 dark:bg-surface-soft"
-			use:reveal
+			use:reveal={{ variant: 'slide' }}
 		>
 			<div class="grid items-center gap-4 p-5 sm:gap-5 sm:p-6 lg:grid-cols-2 lg:gap-8 lg:p-8">
 				<div>

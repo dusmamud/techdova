@@ -172,7 +172,7 @@ export const products: Product[] = [
 		reviewCount: 98,
 		stock: 9,
 		image: '/images/product-macbook-air-m2',
-		images: ['/images/product-macbook-air-m2', '/images/product-macbook-air-m2-2'],
+		images: ['/images/product-macbook-air-m2', '/images/product-macbook-air-m2-2', '/images/product-macbook-air-m2-3'],
 		variants: [
 			{ id: 'storage-256', sku: 'TD-MBA-M2-256', kind: 'storage', label: { en: '256 GB', fr: '256 Go' }, priceDelta: 0, stock: 9 },
 			{ id: 'storage-512', sku: 'TD-MBA-M2-512', kind: 'storage', label: { en: '512 GB', fr: '512 Go' }, priceDelta: 200, stock: 6 },

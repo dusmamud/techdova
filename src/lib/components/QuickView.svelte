@@ -50,6 +50,9 @@
 	let timer: ReturnType<typeof setTimeout> | undefined;
 	let closeButton: HTMLButtonElement | undefined = $state();
 	let opener: HTMLElement | null = null;
+	// Elevation round 2, G-02: the fly-to-cart source is the product
+	// image inside this wrapper, not the ATC button.
+	let imageWrap: HTMLDivElement | undefined = $state();
 
 	$effect(() => {
 		if (!browser) return;
@@ -71,7 +74,9 @@
 
 	function addToCart(event: MouseEvent): void {
 		const source = event.currentTarget;
-		if (source instanceof HTMLElement) flyToCart(source, displayImage);
+		const quickViewImg = imageWrap?.querySelector('img');
+		if (quickViewImg) void flyToCart(quickViewImg, displayImage);
+		else if (source instanceof HTMLElement) void flyToCart(source, displayImage);
 		cart.add(product.slug, 1, selectedVariant?.id);
 		added = true;
 		toasts.push(interpolate(t.live.addedToCart, { name }));
@@ -108,7 +113,7 @@
 				<X class="h-5 w-5" aria-hidden="true" />
 			</button>
 			<div class="grid gap-6 p-5 sm:grid-cols-2 sm:p-6">
-				<div class="overflow-hidden rounded-2xl bg-brand-50">
+				<div bind:this={imageWrap} class="overflow-hidden rounded-2xl bg-brand-50">
 					<div class="aspect-[4/5]">
 						<Picture
 							base={displayImage}

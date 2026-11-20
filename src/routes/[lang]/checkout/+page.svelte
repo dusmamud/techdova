@@ -14,6 +14,8 @@
 	import { localizedPath } from '#lib/paths';
 	import { account } from '#lib/stores/account.svelte';
 	import { cart } from '#lib/stores/cart.svelte';
+	import { giftOptions } from '#lib/stores/gift-options.svelte';
+	import { warranty, warrantyTotalFor } from '#lib/stores/warranty.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -143,6 +145,20 @@
 		{ value: 'cod' as const, label: t.checkout.paymentCod, hint: t.checkout.paymentCodHint },
 		{ value: 'bnpl' as const, label: t.checkout.paymentBnpl, hint: t.checkout.paymentBnplHint }
 	]);
+
+	// Completed-step summaries (M10): the values entered in earlier
+	// steps, reviewable at a glance, with an edit button back to the step.
+	const warrantyTotal = $derived(warrantyTotalFor(cart.detailed));
+	const grandTotal = $derived(cart.totals.total + warrantyTotal);
+	const countryLabel = $derived(
+		countries.find((option) => option.value === country)?.label ?? country
+	);
+	const deliveryLabel = $derived(
+		deliveryOptions.find((option) => option.value === delivery)?.label ?? delivery
+	);
+	const paymentLabel = $derived(
+		paymentOptions.find((option) => option.value === payment)?.label ?? payment
+	);
 
 	const fieldMeta: Record<1 | 2 | 3, { field: ErrorField; id: string; label: string }[]> = $derived({
 		1: [
@@ -279,9 +295,10 @@
 			qty: line.qty,
 			unitPrice: variantPrice(line.product, line.variant)
 		}));
-		// The snapshot total is what the shopper saw: cart.totals.total is
-		// already post-promo-discount. Promo fields are recorded only when a
-		// promo is applied; read them before cart.clear() below.
+		// The snapshot total is what the shopper saw: grandTotal is the
+		// post-promo cart total plus any extended warranty. Promo fields
+		// are recorded only when a promo is applied; read them before
+		// cart.clear() below.
 		const promoDiscount = cart.totals.promoDiscount ?? 0;
 		saveDemoOrder({
 			id: generateOrderId(),
@@ -289,12 +306,23 @@
 			name: name.trim(),
 			email: email.trim(),
 			lines,
-			total: cart.totals.total,
+			total: grandTotal,
+			...(warrantyTotal > 0 ? { warrantyTotal } : {}),
+			...(giftOptions.active
+				? {
+						gift: {
+							message: giftOptions.message.trim(),
+							sendAsGift: giftOptions.sendAsGift
+						}
+					}
+				: {}),
 			...(cart.appliedPromo
 				? { promoCode: cart.appliedPromo.code, promoDiscount }
 				: {})
 		});
 		cart.clear();
+		warranty.clear();
+		giftOptions.clear();
 		try {
 			sessionStorage.removeItem(CHECKOUT_STORAGE_KEY);
 		} catch {
@@ -306,6 +334,14 @@
 	async function goBack(): Promise<void> {
 		showSummary = false;
 		step = (step - 1) as 1 | 2 | 3;
+		await tick();
+		stepHeading?.focus();
+	}
+
+	// Jump back to a completed step from its summary card.
+	async function editStep(target: 1 | 2 | 3): Promise<void> {
+		showSummary = false;
+		step = target;
 		await tick();
 		stepHeading?.focus();
 	}
@@ -348,6 +384,55 @@
 		<div class="mt-6 sm:mt-8">
 			<CheckoutSteps current={step} labels={t.checkoutSteps} />
 		</div>
+
+		{#if step > 1}
+			<div class="mt-6 space-y-3" data-testid="checkout-step-summaries">
+				<section
+					aria-label={t.checkoutSteps.contact}
+					class="rounded-3xl bg-surface p-5 ring-1 ring-line"
+					data-testid="step-summary-1"
+				>
+					<div class="flex flex-wrap items-start justify-between gap-3">
+						<div class="min-w-0">
+							<h2 class="text-base font-bold text-ink">{t.checkoutSteps.contact}</h2>
+							<p class="mt-1 text-sm text-muted">{name}</p>
+							<p class="text-sm text-muted">{email}</p>
+						</div>
+						<button
+							type="button"
+							onclick={() => editStep(1)}
+							class="inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-sm font-semibold text-brand-800 dark:text-brand-200 dark:hover:text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
+						>
+							{interpolate(t.checkout.summaryEditLabel, { step: t.checkoutSteps.contact })}
+						</button>
+					</div>
+				</section>
+				{#if step > 2}
+					<section
+						aria-label={t.checkoutSteps.shipping}
+						class="rounded-3xl bg-surface p-5 ring-1 ring-line"
+						data-testid="step-summary-2"
+					>
+						<div class="flex flex-wrap items-start justify-between gap-3">
+							<div class="min-w-0">
+								<h2 class="text-base font-bold text-ink">{t.checkoutSteps.shipping}</h2>
+								<p class="mt-1 text-sm text-muted">
+									{address}, {city} {postal}, {countryLabel}
+								</p>
+								<p class="text-sm text-muted">{deliveryLabel}</p>
+							</div>
+							<button
+								type="button"
+								onclick={() => editStep(2)}
+								class="inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-sm font-semibold text-brand-800 dark:text-brand-200 dark:hover:text-brand-800 ring-1 ring-brand-700 hover:bg-brand-50"
+							>
+								{interpolate(t.checkout.summaryEditLabel, { step: t.checkoutSteps.shipping })}
+							</button>
+						</div>
+					</section>
+				{/if}
+			</div>
+		{/if}
 
 		<div class="mt-6 grid gap-6 sm:mt-8 lg:grid-cols-[1fr_380px] lg:gap-8">
 			<form onsubmit={submit} novalidate class="space-y-4">
@@ -675,7 +760,7 @@
 					</span>
 					<span class="flex shrink-0 items-center gap-2">
 						<span class="text-base font-bold text-ink">
-							{formatPrice(cart.totals.total, intlLocale)}
+							{formatPrice(grandTotal, intlLocale)}
 						</span>
 						<ChevronDown
 							class="h-5 w-5 shrink-0 text-muted transition-transform duration-200 {responsiveOrderSummaryOpen
@@ -710,6 +795,24 @@
 							</li>
 						{/each}
 					</ul>
+					{#if giftOptions.active}
+						<div
+							class="mt-4 rounded-2xl bg-brand-50 p-4 dark:bg-surface-soft"
+							data-testid="gift-line"
+						>
+							<p class="text-sm font-semibold text-ink">
+								{t.giftOptions.cartTitle} — {t.giftOptions.cartFree}
+							</p>
+							{#if giftOptions.message.trim()}
+								<p class="mt-1 text-sm text-muted">
+									{interpolate(t.giftOptions.cartMessage, { message: giftOptions.message.trim() })}
+								</p>
+							{/if}
+							{#if giftOptions.sendAsGift}
+								<p class="mt-1 text-sm text-muted">{t.giftOptions.cartSendAsGift}</p>
+							{/if}
+						</div>
+					{/if}
 					<dl class="mt-4 space-y-3 text-sm">
 						<div class="flex items-baseline justify-between">
 							<dt class="text-muted">{t.cart.subtotal}</dt>
@@ -735,13 +838,21 @@
 								</dd>
 							</div>
 						{/if}
+						{#if warrantyTotal > 0}
+							<div class="flex items-baseline justify-between">
+								<dt class="text-muted">{t.cart.warrantyTotal}</dt>
+								<dd class="font-semibold text-ink">
+									{formatPrice(warrantyTotal, intlLocale)}
+								</dd>
+							</div>
+						{/if}
 						<div class="flex items-baseline justify-between">
 							<dt class="text-muted">{t.cart.shipping}</dt>
 							<dd class="font-semibold text-ink">{t.cart.shippingFree}</dd>
 						</div>
 						<div class="flex items-baseline justify-between border-t border-line pt-3 text-base">
 							<dt class="font-bold text-ink">{t.cart.total}</dt>
-							<dd class="font-bold text-ink">{formatPrice(cart.totals.total, intlLocale)}</dd>
+							<dd class="font-bold text-ink">{formatPrice(grandTotal, intlLocale)}</dd>
 						</div>
 					</dl>
 					<p class="mt-4 text-xs text-muted">{t.checkout.demoNote}</p>

@@ -398,3 +398,90 @@ with, or quoted, the authoritative docs.
 - https://www.globalwebsitespeedtest.com/blog/browser-caching
 - https://tips.ojapp.app/en/pwa-manifest-screenshots-install-ui-2/
 - https://whatpwacando.today/installation/
+
+## Elevation round 2 — research (2026-11-20)
+
+Research gathered for the 2026-11-20 elevation round 2 (research report:
+`~/workspace/goals/techdova-tech-e-commerce-website/hidden_files/elevation2/research-findings.md`).
+Each claim was cross-verified against at least two sources where possible;
+authoritative sources (Baymard, NN/g, motion.dev, SvelteKit docs, npm
+registry) are listed first per group. Registry versions below were verified
+directly against `registry.npmjs.org` on 2026-11-20, not copied from blog
+posts.
+
+### Premium e-commerce UX checklists (PDP, checkout, navigation, search, trust)
+
+- https://baymard.com/research-articles/current-state-ecommerce-product-page-ux — Baymard Institute (updated 2026-03-18) — 10 PDP best practices from 30,000+ usability scores: button selectors, in-scale images, human-model images, guest wishlist, price per unit, total order cost near buy box, returns link on PDP, gifting options, staff replies to negative reviews, cross-review image navigation.
+- https://baymard.com/research-articles/current-state-of-checkout-ux — Baymard Institute (2026) — 10 checkout best practices from 44,000+ usability scores: account creation saved for confirmation step, collapse completed steps into summaries, delivery date not speed, cutoff-time countdown, all fulfillment options in shipping selector.
+- https://baymard.com/blog/ux-audit-checklist-template — Baymard Institute — full-journey UX audit checklist (homepage/navigation, product lists, product pages, checkout, mobile pass).
+- https://www.nngroup.com/reports/mobile-website-and-application-usability/?lm=infinite-scrolling-when&pt=youtubevideo — Nielsen Norman Group — 713-page mobile usability report, 374 guidelines (5th edition: PWA, skeleton screens, passkeys, OTP/minimal login, bottom navigation, infinite lists).
+- https://websitesdesigner.com/insights/checkout-page-design/ — Websites Designer — Baymard-based checkout summary: guest checkout prominence, full cost before checkout, delivery date, 70.22% average cart abandonment.
+- https://www.fixreports.com/blog/product-page-checklist-what-stops-shoppers — FixReports — PDP checklist restating Baymard 2026 figures (67% no total-cost estimate, 44% no returns link on PDP).
+
+### Mobile-first responsive (thumb zones, sticky CTAs, touch targets, PDP order)
+
+- https://www.locallylost.com/guides/mobile-ecommerce-ux-2026/ — Locally Lost (2026-04-19) — mobile = 66% of e-commerce revenue 2026, mobile conversion ~half of desktop; thumb-zone bottom nav (48px targets), sticky add-to-cart with price, mobile PDP scroll order, single-page checkout, 16px inputs (no iOS auto-zoom).
+- https://aestheticweb.eu/journal/shopify-mobile-product-page-checklist/ — Aesthetic Web (2026-09-15) — mobile PDP checklist: image/name/price/variant in first screen, ATC one short scroll away, sticky ATC only after main button scrolls out, 48×48px targets, delivery/returns next to button.
+- https://github.com/eneryleen/ai-web-design-codex/blob/HEAD/03-site-types/ecommerce-ux.md — ai-web-design-codex (GitHub) — Baymard-grounded e-commerce UX: tap targets ≥44×44px (Apple HIG) / 48×48dp (Material 3) / 24×24px WCAG 2.5.8 minimum; bottom tab nav beats hamburger (20–30% discovery loss); sticky bottom CTA above safe-area inset; keyboard covers 40–50% of screen.
+- https://marketinglib.com/thumb-zone-design-optimizing-your-shopify-mobile-store-for-how-people-actually-hold-their-phones/ — MarketingLib — thumb-zone map (comfortable = lower 60%, dead zone = top 35%), sticky-footer CTA as the single biggest mobile fix.
+- https://webdesignerindia.medium.com/mobile-first-ux-patterns-conversion-optimization-ecaf0b2689ae — Medium / WebDesignerIndia — thumb-zone optimization, gesture controls (pinch-to-zoom), progressive disclosure; cites NN/g + Baymard.
+- https://olympianthemes.com/website-navigation-best-practices/ — Olympian Themes (2026-09-27) — navigation synthesis from Baymard, NN/g, W3C/WAI, Material Design: visible search (~30 chars), task shortcuts, mobile top-level category surfacing.
+
+### Search UX (autocomplete, typo tolerance, facets, zero results)
+
+- https://m.tengence.com/en/blog/article/site-search-ux-optimization — Tengence — search as closed loop: autocomplete after 2–3 chars in 100–250ms, typo correction + synonyms push zero-result rate to single digits, live facet counts, zero-result recovery; Baymard: ~56% of sites fail search needs.
+- https://www.sparq.ai/blogs/search-bar-ui — Sparq (2026) — 12 search-bar rules: visual suggestions with images/prices, typo tolerance recovers 10–15% of failed searches, zero-result page must offer a path forward, search-type ladder (keyword → autocomplete → faceted → typo-tolerant → AI).
+- https://www.xtalsearch.com/blog/ecommerce-site-search-best-practices — XTAL Search — autocomplete on 80% of sites but only 19% get details right (Baymard); synonym dictionary, dynamic facet counts, mobile slide-up filter drawer with 44px targets.
+- https://ux.detroit3d.com/patterns/search-filtering.html — UX Encyclopedia — Baymard search findings: 3–5 reformulations before abandonment, keep query in box on results page, ARIA combobox keyboard pattern, zero-result as design surface.
+
+### Motion / animation best practice 2026
+
+- https://adamarant.com/en/blog/functional-ui-animation-in-2026-the-checklist-before-it-ships — Adamarant (2026) — functional animation checklist: micro 100–200ms, component 200–300ms, page 300–500ms; animate opacity + transform only; interruptible animations; prefers-reduced-motion at root + JS guard.
+- https://github.com/nemolabsdev/conversion-craft/blob/HEAD/curriculum/research/motion-performance.md — conversion-craft (GitHub, Nemo Labs) — motion-performance rules: transform/opacity only (web.dev), Material Design 3 duration scale 50–500ms, never exceed ~500ms per step on a sales page; CSS `animation-timeline: scroll()` case studies.
+- https://ww38.theuxshop.com/patterns/micro-interactions-feedback-language/ — The UX Shop (updated 2026-04-12) — micro-interactions: 100–300ms, match scale to action, real-physics easing, reduced-motion variants (essential → instant-appear, decorative → suppressed).
+- https://dcs.colorado.gov/ids/digital-guidelines/design-tokens/motion-interaction — Colorado DCS — motion must be purposeful, subtle, consistent, controllable, reduced-motion aware; no flash >3×/second.
+
+### Motion (motion.dev) + Svelte — compatibility (verified first, primary sources)
+
+- https://motion.dev/docs/svelte — Motion official docs (published 2026-10-09) — official Svelte 5 guide: `npm install motion`; `{@attach}` needs Svelte 5.29+, same functions work as `use:` actions on earlier Svelte 5; `hover`/`press`/`animate`/`scroll`/`inView`/`animateView`/`animateLayout` patterns; `flushSync` required for `animateView`/`animateLayout`; "Motion doesn't have an official Svelte component API… The JavaScript API above covers gestures, scroll, layout and view animations"; community declarative option `@humanspeak/svelte-motion` named.
+- https://www.npmjs.com/package/motion — npm registry (verified via registry API 2026-11-20) — `motion` 14.14.0 (published 2026-11-13), MIT; dependencies `tslib` + `framer-motion` 14.14.0 (thin wrapper re-export); peerDependencies `react`/`react-dom`/`remix` ALL marked `optional: true` in `peerDependenciesMeta` (vanilla install pulls no React); `sideEffects: false`; exports `.` (vanilla JS), `./mini`, `./react`, `./react-m`, `./react-mini`.
+- https://www.npmjs.com/package/motion-dom — npm registry (verified 2026-11-20) — `motion-dom` 14.14.0, MIT, sole dependency `motion-utils`, no peer dependencies (the pure vanilla engine underneath `motion`).
+- https://www.npmjs.com/package/@humanspeak/svelte-motion — npm registry + https://motion.svelte.page/ — `@humanspeak/svelte-motion` 2.12.0, MIT; dependencies `motion` 14.12.0 + `motion-dom` 14.12.0; peerDependency `svelte ^5.0.0`; declarative `motion.<tag>` components, AnimatePresence, gestures, FLIP layout, springs, "SSR-safe by default" (vendor claim).
+- https://socket.dev/npm/package/@humanspeak/svelte-motion — Socket — svelte-motion capability table (initial/animate/transition, variants, whileHover/whileTap/whileFocus/whileInView, drag, AnimatePresence, MotionConfig reducedMotion); known gaps (no Framer-style whileInView viewport options yet); 676 unit + 290 E2E tests claimed.
+- https://motion.svelte.page/blog/migrating-from-svelte-motion — Svelte Motion docs (2026-08-23) — unscoped `svelte-motion` dormant (no release since Feb 2024); migrate to `@humanspeak/svelte-motion` for Svelte 5 runes + SSR-safe SvelteKit support.
+- https://motion.svelte.page/compare/framer-motion — Svelte Motion compare — "Framer Motion is React-only. Svelte Motion is its Svelte 5 counterpart" (declarative component API sense; the vanilla `motion` JS API is framework-agnostic — see motion.dev/docs/svelte).
+- https://motion.svelte.page/compare/gsap — Svelte Motion compare — declarative component library vs GSAP timeline engine; "the two can coexist: Svelte Motion for UI animation, GSAP when you need its timeline engine."
+- https://www.hontran.dev/blog/gsap-vs-framer-motion — Hon Tran (2026) — Motion vs GSAP: full `motion` component ~34KB gzip, LazyMotion + `m` ~4.6KB initial (React-only pattern); GSAP core ~23KB gzip, ScrollTrigger ~+10KB; "Motion's ergonomic API is React-specific (vanilla `animate()` exists but lacks the component/gesture/layout ergonomics)".
+- https://tessl.io/registry/skills/github/secondsky/claude-skills/motion — Tessl — Motion 12.43.0 bundle figures: full component ~34KB, LazyMotion + `m` ~4.6KB, useAnimate mini 2.3KB (React figures; vanilla `motion/mini` ~2.6KB per Motion docs pattern).
+- https://ui.soralabs.studio/docs/performance — Sora UI — Motion bundle table: buttons/links/card hovers = Tailwind transitions (0KB Motion); imperative event animation = useAnimate mini ~2.3KB.
+
+### View Transitions API + SvelteKit (zero-dependency page transitions)
+
+- https://svelte.dev/docs/kit/faq — SvelteKit official FAQ — "How do I use the view transitions API? … you can call `document.startViewTransition` in `onNavigate`"; official code pattern quoted in research report.
+- https://blog.teliaz.com/2026/08/10/view-transitions-api-native-page-animations-without-a-javascript-framework/ — Teliaz (2026-08-10) — same-document Baseline; cross-document `@view-transition { navigation: auto; }` in Chrome 126+ / Safari 18.2+, Firefox in progress; support matrix table.
+- https://blogs.abhipanseriya.dev/blog/view-transitions-went-cross-browser-the-spa-lost-its-best-excuse — Abhipanseriya — same-document view transitions became Baseline 2026-10-14 (Chrome, Safari, Firefox all shipped); cross-document in Chrome 126 + Safari 18.2.
+- https://codexskills.dev/skills/frontend/view-transitions/ — Codex Skills (2026-11-06) — support model late 2026: same-document yes everywhere; cross-document Chrome 126+/Safari 18.2+/Firefox not yet; reduced-motion fallback `@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }`.
+
+### GSAP / Lenis with SvelteKit (alternatives)
+
+- https://github.com/yzavyas/claude-1337/blob/HEAD/plugins/experience-1337/skills/build-experience/SKILL.md — build-experience skill — Svelte-first animation decision tree: simple enter/exit → Svelte transitions; state values → spring()/tweened(); timeline → GSAP; complex scrub/pin → GSAP ScrollTrigger + Lenis; GSAP ~23KB core, Lenis ~3KB; GSAP cleanup on unmount mandatory; SSR guards; prefers-reduced-motion.
+- https://github.com/farid22022/nexacart/blob/HEAD/.claude/skills/frontend/SKILL.md — nexacart frontend skill — Svelte/SvelteKit: Three.js + GSAP in `onMount` with SSR guard; GSAP 3 + ScrollTrigger + Lenis pairing.
+- https://www.npmjs.com/package/gsap — npm registry (verified 2026-11-20) — `gsap` 3.15.1, no dependencies, no peer dependencies, standard (free) license.
+- https://www.npmjs.com/package/lenis — npm registry (verified 2026-11-20) — `lenis` 1.3.27, MIT, no dependencies; peerDependencies `vue`/`react`/`@nuxt/kit` all marked `optional: true` (vanilla install clean).
+
+### Leading-store features (missing-page inventory)
+
+- https://grabon.com/blog/guide-on-bestbuy-products-services/ — Grabon — Best Buy services: Geek Squad setup/repair (24/7, appointments), expert shopping (virtual/in-store/in-home), AppleCare+ via membership, protection plans.
+- https://www.bestbuy.com/site/best-buy-trade-in/trade-in-offers/pcmcat1774297472214.c?id — Best Buy — trade-in flow (estimate → backup/reset → in-store/mail-in → gift card), trade-in promotions, recycling ("We take all kinds of tech for recycling"), 12-month financing, price-match note.
+- https://thekrazycouponlady.com/tips/store-hacks/best-buy-hacks-save-on-electronics — Krazy Coupon Lady — student discount (.edu), trade-in, refurbished, Best Buy Outlet (open-box up to 60% off), floor-model discount, price match.
+- https://thegadgetbuyer.com/buy-from-best-buy-vs-apple-store-new-macbook-pro/ — The Gadget Buyer — Apple Education Store pricing (students/teachers), Best Buy price-match guarantee naming Apple as qualified competitor, membership tiers, 60-day member returns.
+- https://gfxsaga.com/blogs/content-marketing/ecommerce-content-marketing-examples/ — GfxSaga (checked 2026-10-20 and 2026-11-16) — REI Expert Advice hub (buying guides), Patagonia care/repair guides, Sephora Shade Finder quiz, Warby Parker virtual try-on + style quiz, IKEA planners; formats: buying guides, gift guides, quizzes/product finders.
+- https://triggerbee.com/blog/discount-strategies — Triggerbee — gift guides (SEO + conversion), clearance/outlet rebranding ("Outlet" as ongoing clearance without brand damage), flash sales, pre-launch/waitlist.
+- https://outgrow.co/blog/shopify-quiz-funnel-guide — Outgrow (2026) — product recommendation quizzes: 88% of shoppers want personalized recommendations (Epsilon 2024); quiz conversion 25–40% vs ~2.86% site average (vendor-reported, directional); ideal length 6–10 questions; results = 3–5 matches + why + CTAs.
+
+### Other packages checked (registry-verified 2026-11-20)
+
+- https://www.npmjs.com/package/embla-carousel-svelte — npm registry — `embla-carousel-svelte` 8.6.0, peer `svelte ^3.49.0 || ^4.0.0 || ^5.0.0`; deps `embla-carousel` 8.6.0.
+- https://www.npmjs.com/package/bits-ui — npm registry — `bits-ui` 2.21.0, MIT; peer `svelte ^5.33.0` (site has 5.57.3 ✓); deps `runed`, `tabbable`, `@floating-ui/dom`.
+- https://www.npmjs.com/package/svelte-sonner — npm registry — `svelte-sonner` 1.2.3, peer `svelte ^5.0.0`, zero dependencies.
+- https://www.npmjs.com/package/@neoconfetti/svelte — npm registry — `@neoconfetti/svelte` 2.2.2, peer `svelte ^3 || ^4 || ^5`.

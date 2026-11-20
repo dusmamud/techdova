@@ -5,7 +5,8 @@
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { formatDate, formatPrice, interpolate } from '#lib/format';
-	import { getDictionary } from '#lib/i18n/index';
+	import { getDictionary, localize } from '#lib/i18n/index';
+	import { getProduct } from '#lib/data/products';
 	import {
 		loadDemoOrders,
 		statusFromAge,
@@ -16,6 +17,7 @@
 	import { account, type NotificationPreferenceKey } from '#lib/stores/account.svelte';
 	import { addresses, type AddressInput } from '#lib/stores/addresses.svelte';
 	import { cart } from '#lib/stores/cart.svelte';
+	import { priceAlerts } from '#lib/stores/price-alerts.svelte';
 	import { wishlist } from '#lib/stores/wishlist.svelte';
 	import type { PageProps } from './$types';
 
@@ -515,6 +517,83 @@
 					</label>
 				{/each}
 			</div>
+		</section>
+
+		<!-- Price-drop alerts (M8): set on product pages, listed here.
+			Demo only — stored on this device, no email is ever sent. -->
+		<section
+			aria-labelledby="account-price-alerts-heading"
+			class="mt-8"
+			data-testid="price-alerts-list"
+			use:reveal
+		>
+			<h2 id="account-price-alerts-heading" class="flex items-center gap-2 text-xl font-bold text-ink">
+				<Bell class="h-5 w-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+				{t.priceAlerts.listTitle}
+			</h2>
+			<p class="mt-1 text-sm leading-relaxed text-muted">{t.priceAlerts.demoNote}</p>
+			{#if priceAlerts.alerts.length === 0}
+				<div class="mt-4 rounded-3xl bg-surface p-6 text-center ring-1 ring-line">
+					<p class="font-semibold text-ink">{t.priceAlerts.listEmpty}</p>
+					<a
+						href={localizedPath(lang, '/shop')}
+						class="mt-4 inline-flex min-h-11 items-center rounded-full bg-brand-700 px-6 text-sm font-semibold text-white hover:bg-brand-800"
+					>
+						{t.cart.continueShopping}
+					</a>
+				</div>
+			{:else}
+				<ul class="mt-4 space-y-3">
+					{#each priceAlerts.alerts as alert (alert.slug)}
+						{@const alertProduct = getProduct(alert.slug)}
+						<li class="rounded-3xl bg-surface p-5 ring-1 ring-line">
+							<div class="flex flex-wrap items-start justify-between gap-3">
+								<div class="min-w-0">
+									<p class="font-semibold text-ink">
+										{#if alertProduct}
+											<a
+												href={localizedPath(lang, `/product/${alert.slug}`)}
+												class="underline-offset-2 hover:underline"
+											>
+												{localize(alertProduct.name, lang)}
+											</a>
+										{:else}
+											{alert.slug}
+										{/if}
+									</p>
+									<p class="mt-1 text-sm text-muted">
+										{interpolate(t.priceAlerts.listTarget, {
+											price: formatPrice(alert.targetPrice, intlLocale)
+										})}
+									</p>
+									{#if alertProduct}
+										<p class="text-sm text-muted">
+											{interpolate(t.priceAlerts.listCurrent, {
+												price: formatPrice(alertProduct.price, intlLocale)
+											})}
+											{#if alertProduct.price <= alert.targetPrice}
+												{' '}<span class="font-semibold text-brand-700 dark:text-brand-300">
+													{t.priceAlerts.listBelowTarget}
+												</span>
+											{/if}
+										</p>
+									{/if}
+								</div>
+								<button
+									type="button"
+									onclick={() => priceAlerts.remove(alert.slug)}
+									aria-label={interpolate(t.priceAlerts.listRemove, {
+										name: alertProduct ? localize(alertProduct.name, lang) : alert.slug
+									})}
+									class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold text-ink-soft ring-1 ring-line hover:bg-surface-soft"
+								>
+									{t.priceAlerts.removeButton}
+								</button>
+							</div>
+						</li>
+					{/each}
+				</ul>
+			{/if}
 		</section>
 
 		{#if ordersLoaded}

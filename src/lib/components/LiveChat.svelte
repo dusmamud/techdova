@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onDestroy, tick } from 'svelte';
 	import { MessageCircle, Send, X } from '@lucide/svelte';
+	import { pressSpring } from '#lib/actions/press';
 	import type { Dictionary, Locale } from '#lib/i18n/index';
 	import { compare } from '#lib/stores/compare.svelte';
 	import { cookieBanner } from '#lib/stores/cookie-banner.svelte';
@@ -30,6 +31,27 @@
 	let fabEl: HTMLButtonElement | undefined = $state();
 	let inputEl: HTMLInputElement | undefined = $state();
 	let logEl: HTMLDivElement | undefined = $state();
+
+	// Scroll-aware auto-hide (elevation round 2, G-01): while the user
+	// scrolls DOWN on a small screen the FAB slides away, so it never
+	// covers a product-card CTA mid-scroll; it returns on scroll-up (or
+	// whenever the panel is open). Desktop keeps the FAB always visible.
+	// Derived from `scrollingDown` so opening the panel re-shows the FAB
+	// (it carries the close affordance) even mid-scroll.
+	let scrollingDown = $state(false);
+	let lastScrollY = $state(0);
+	const fabHidden = $derived(!open && scrollingDown);
+
+	$effect(() => {
+		if (typeof window === 'undefined') return;
+		const onScroll = (): void => {
+			const y = window.scrollY;
+			scrollingDown = y > lastScrollY + 4 && y > 200;
+			lastScrollY = y;
+		};
+		window.addEventListener('scroll', onScroll, { passive: true });
+		return () => window.removeEventListener('scroll', onScroll);
+	});
 
 	// Keyword lists are matching logic, never displayed, so they live here
 	// per locale; every reply shown comes from the dictionary.
@@ -131,15 +153,26 @@
 	]);
 </script>
 
-<div class="fixed right-4 z-50" style:bottom="{fabBottom}px">
+<!-- Elevation round 2, G-01: on <sm the FAB moves to bottom-LEFT (it
+	used to sit bottom-right on top of product-card CTAs) and slides away
+	while scrolling down; on sm+ it keeps its old bottom-right spot.
+	The safe-area inset is folded into the bottom offset. -->
+<div
+	class="fixed left-4 z-50 sm:left-auto sm:right-4"
+	style:bottom="calc({fabBottom}px + env(safe-area-inset-bottom, 0px))"
+>
 	<button
 		type="button"
+		data-testid="chat-fab"
+		use:pressSpring
 		bind:this={fabEl}
 		onclick={() => void toggle()}
 		aria-expanded={open}
 		aria-controls="techdova-chat-panel"
 		aria-label={open ? t.chatWidget.closeLabel : t.chatWidget.buttonLabel}
-		class="grid h-14 w-14 place-items-center rounded-full bg-brand-700 text-white shadow-lg hover:bg-brand-800"
+		class="grid h-14 w-14 place-items-center rounded-full bg-brand-700 text-white shadow-lg hover:bg-brand-800 motion-safe:transition-[opacity,transform] motion-safe:duration-200 {fabHidden
+			? 'max-sm:pointer-events-none max-sm:translate-y-40 max-sm:opacity-0'
+			: ''}"
 	>
 		{#if open}
 			<X class="h-6 w-6" aria-hidden="true" />
@@ -156,8 +189,8 @@
 		tabindex="-1"
 		aria-label={t.chatWidget.title}
 		onkeydown={onKeydown}
-		class="fixed right-4 z-50 flex w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-3xl bg-surface shadow-xl ring-1 ring-line"
-		style:bottom="{panelBottom}px"
+		class="fixed left-4 z-50 flex w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-3xl bg-surface shadow-xl ring-1 ring-line sm:left-auto sm:right-4"
+		style:bottom="calc({panelBottom}px + env(safe-area-inset-bottom, 0px))"
 		style:height="min(30rem, calc(100dvh - {panelBottom + 48}px))"
 	>
 	>

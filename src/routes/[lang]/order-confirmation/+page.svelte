@@ -13,6 +13,7 @@
 		type OrderStatus
 	} from '#lib/orders';
 	import { localizedPath } from '#lib/paths';
+	import { account } from '#lib/stores/account.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -23,6 +24,31 @@
 
 	let order = $state<DemoOrder | null>(null);
 	let checked = $state(false);
+
+	// Demo account creation (H8): one-password step, localStorage only.
+	// The password is validated locally and never stored or sent anywhere
+	// — the demo account keeps name + email only, like the account page.
+	let password = $state('');
+	let confirmPassword = $state('');
+	let passwordError = $state('');
+	let accountCreated = $state(false);
+
+	function createAccount(event: SubmitEvent): void {
+		event.preventDefault();
+		if (password.length < 8) {
+			passwordError = t.orderConfirmation.passwordError;
+			return;
+		}
+		if (password !== confirmPassword) {
+			passwordError = t.orderConfirmation.passwordMismatch;
+			return;
+		}
+		passwordError = '';
+		if (order) account.signIn(order.name, order.email);
+		password = '';
+		confirmPassword = '';
+		accountCreated = true;
+	}
 
 	onMount(() => {
 		order = loadDemoOrders()[0] ?? null;
@@ -134,10 +160,111 @@
 					</li>
 				{/each}
 			</ul>
+			{#if order.warrantyTotal}
+				<p class="mt-4 flex items-baseline justify-between text-sm">
+					<span class="text-muted">{t.cart.warrantyTotal}</span>
+					<span class="font-semibold text-ink">{formatPrice(order.warrantyTotal, intlLocale)}</span>
+				</p>
+			{/if}
 			<p class="mt-4 flex items-baseline justify-between border-t border-line pt-4 text-base">
 				<span class="font-bold text-ink">{t.cart.total}</span>
 				<span class="font-bold text-ink">{formatPrice(order.total, intlLocale)}</span>
 			</p>
+		</section>
+
+		{#if order.gift}
+			<section
+				aria-label={t.giftOptions.cartTitle}
+				class="mt-8 rounded-3xl bg-surface p-6 ring-1 ring-line"
+				data-testid="gift-line"
+				use:reveal
+			>
+				<h2 class="text-lg font-bold text-ink">{t.giftOptions.cartTitle}</h2>
+				{#if order.gift.message.trim()}
+					<p class="mt-2 text-sm text-muted">
+						{interpolate(t.giftOptions.cartMessage, { message: order.gift.message.trim() })}
+					</p>
+				{/if}
+				{#if order.gift.sendAsGift}
+					<p class="mt-1 text-sm text-muted">{t.giftOptions.cartSendAsGift}</p>
+				{/if}
+				{#if !order.gift.message.trim() && !order.gift.sendAsGift}
+					<p class="mt-2 text-sm text-muted">{t.giftOptions.wrapHint}</p>
+				{/if}
+			</section>
+		{/if}
+
+		<section
+			aria-labelledby="create-account-heading"
+			class="mt-8 rounded-3xl bg-surface p-6 ring-1 ring-line"
+			data-testid="create-account"
+			use:reveal
+		>
+			<h2 id="create-account-heading" class="text-lg font-bold text-ink">
+				{t.orderConfirmation.createAccountTitle}
+			</h2>
+			{#if accountCreated}
+				<p role="status" class="mt-2 text-sm font-medium text-brand-800 dark:text-brand-200">
+					{t.orderConfirmation.createAccountSuccess}
+				</p>
+			{:else if account.profile}
+				<p class="mt-2 text-sm text-muted">
+					{interpolate(t.orderConfirmation.alreadySignedIn, { email: account.profile.email })}
+				</p>
+			{:else}
+				<p class="mt-2 text-sm leading-relaxed text-muted">
+					{t.orderConfirmation.createAccountText}
+				</p>
+				<p class="mt-2 text-sm text-muted">{t.orderConfirmation.createAccountDemoNote}</p>
+				<form onsubmit={createAccount} novalidate class="mt-4 space-y-4">
+					<div>
+						<label for="create-account-password" class="mb-1 block text-sm font-medium text-ink-soft">
+							{t.orderConfirmation.passwordLabel}
+						</label>
+						<input
+							id="create-account-password"
+							name="password"
+							type="password"
+							bind:value={password}
+							placeholder={t.orderConfirmation.passwordPlaceholder}
+							autocomplete="new-password"
+							aria-invalid={passwordError ? 'true' : undefined}
+							aria-describedby={passwordError ? 'create-account-password-error' : undefined}
+							class="h-12 w-full rounded-2xl bg-surface px-4 text-sm text-ink ring-1 ring-line placeholder:text-muted"
+						/>
+					</div>
+					<div>
+						<label
+							for="create-account-confirm-password"
+							class="mb-1 block text-sm font-medium text-ink-soft"
+						>
+							{t.orderConfirmation.confirmPasswordLabel}
+						</label>
+						<input
+							id="create-account-confirm-password"
+							name="confirmPassword"
+							type="password"
+							bind:value={confirmPassword}
+							placeholder={t.orderConfirmation.passwordPlaceholder}
+							autocomplete="new-password"
+							aria-invalid={passwordError ? 'true' : undefined}
+							aria-describedby={passwordError ? 'create-account-password-error' : undefined}
+							class="h-12 w-full rounded-2xl bg-surface px-4 text-sm text-ink ring-1 ring-line placeholder:text-muted"
+						/>
+					</div>
+					{#if passwordError}
+						<p id="create-account-password-error" role="alert" class="text-sm text-red-600 dark:text-red-400">
+							{passwordError}
+						</p>
+					{/if}
+					<button
+						type="submit"
+						class="inline-flex min-h-12 items-center justify-center rounded-full bg-brand-700 px-6 text-sm font-semibold text-white hover:bg-brand-800"
+					>
+						{t.orderConfirmation.createAccountButton}
+					</button>
+				</form>
+			{/if}
 		</section>
 
 		<div class="mt-8 flex flex-col justify-center gap-2 sm:flex-row" use:reveal>

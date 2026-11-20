@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Check, Eye, Heart, Scale, ShoppingCart } from '@lucide/svelte';
+	import { pressSpring } from '#lib/actions/press';
 	import type { Product } from '#lib/data/products';
 	import { flyToCart } from '#lib/fly-cart';
 	import { formatCount, formatDecimal, formatPrice, interpolate } from '#lib/format';
@@ -93,12 +94,17 @@
 	);
 
 	function addToCart(sourceEl: HTMLElement): void {
-		// Fly-to-cart is a safe no-op under reduced motion / without a
-		// header target; the cart update below never depends on it.
-		flyToCart(sourceEl, product.image);
+		// Fly-to-cart (elevation round 2, G-02): fly from the card's
+		// product image, not the button, and open the drawer only after
+		// the flight lands + the badge pop — a safe no-op under reduced
+		// motion / without a header target; the cart update below never
+		// depends on it.
+		const cardImg = sourceEl.closest('article')?.querySelector('img');
+		void flyToCart(cardImg ?? sourceEl, product.image).then(() => {
+			cart.openDrawer();
+		});
 		cart.add(product.slug, 1);
 		added = true;
-		cart.openDrawer();
 		clearTimeout(timer);
 		timer = setTimeout(() => {
 			added = false;
@@ -158,6 +164,7 @@
 		{/if}
 		<button
 			type="button"
+			use:pressSpring
 			aria-pressed={wished}
 			aria-label="{wished ? t.productCard.removeFromWishlist : t.productCard.addToWishlist} ({name})"
 			onclick={toggleWishlist}
@@ -224,6 +231,7 @@
 		</p>
 		<button
 			type="button"
+			use:pressSpring
 			disabled={outOfStock}
 			onclick={(event) => addToCart(event.currentTarget)}
 			class="mt-2 flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white motion-safe:transition-[background-color,transform] motion-safe:duration-200 motion-safe:ease-enter hover:bg-brand-800 motion-safe:active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"

@@ -11,6 +11,10 @@ export type DemoOrder = {
 	email: string;
 	lines: DemoOrderLine[];
 	total: number;
+	/** Extended-warranty snapshot: when present, `total` includes it. */
+	warrantyTotal?: number;
+	/** Gift snapshot: recorded only when gift options were active. */
+	gift?: { message: string; sendAsGift: boolean };
 	/** Promo snapshot: when present, `total` is the post-discount amount. */
 	promoCode?: string;
 	promoDiscount?: number;

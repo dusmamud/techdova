@@ -9,6 +9,7 @@
 	} from '#lib/components/FilterBar.svelte';
 	import FilterDrawer from '#lib/components/FilterDrawer.svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
+	import SkeletonCard from '#lib/components/SkeletonCard.svelte';
 	import JsonLd from '#lib/components/JsonLd.svelte';
 	import Seo from '#lib/components/Seo.svelte';
 	import { SITE_URL } from '#lib/config';
@@ -168,6 +169,26 @@
 		sliderValue = applied.maxPrice ?? SLIDER_MAX;
 	});
 
+	// Grid loading state (elevation round 2, G-07): every filter change
+	// (search, sort, price, brand, rating, stock/sale toggles, drawer
+	// Apply) flashes the skeleton grid for 250ms while the URL-synced
+	// filter state re-applies — the same skeleton pattern as the search
+	// page, so a filter change never reads as a frozen grid. Initial
+	// load shows the prerendered products immediately (no artificial
+	// delay); category-chip navigations remount the page and reveal
+	// with the stagger below instead.
+	const GRID_LOADING_MS = 250;
+	let gridLoading = $state(false);
+	let gridLoadingTimer: ReturnType<typeof setTimeout> | undefined;
+
+	function flashGridLoading(): void {
+		gridLoading = true;
+		clearTimeout(gridLoadingTimer);
+		gridLoadingTimer = setTimeout(() => {
+			gridLoading = false;
+		}, GRID_LOADING_MS);
+	}
+
 	function updateParams(mutator: (params: URLSearchParams) => void): void {
 		// Build from the effective URL (see the $effect above): after a
 		// replaceState, `page.url` is stale, so building from it would drop
@@ -176,6 +197,7 @@
 		mutator(url.searchParams);
 		// Update the URL without navigating: keeps focus in the controls while
 		// the $effect above re-applies the new filter state from the URL.
+		flashGridLoading();
 		replaceState(url, {});
 	}
 
@@ -794,7 +816,18 @@
 		</div>
 	</FilterDrawer>
 
-	{#if filtered.length === 0}
+	{#if gridLoading}
+		<div
+			role="status"
+			aria-label={t.loadingStates.shopGrid}
+			aria-busy="true"
+			class="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
+		>
+			{#each Array.from({ length: 8 }) as _, i (i)}
+				<SkeletonCard />
+			{/each}
+		</div>
+	{:else if filtered.length === 0}
 		<div class="mt-6 flex flex-col items-center gap-3 rounded-3xl bg-brand-50 px-6 py-14 text-center dark:bg-surface-soft">
 			<SearchX class="h-10 w-10 text-brand-700 dark:text-brand-300" aria-hidden="true" />
 			<h2 class="text-xl font-bold text-ink">{t.shop.noResults}</h2>
@@ -811,8 +844,11 @@
 			<div
 				class="mt-6 grid animate-grid-in grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
 			>
-				{#each filtered as product (product.slug)}
-					<ProductCard {product} {lang} {t} />
+				{#each filtered as product, i (product.slug)}
+					<!-- G-17: the home best-sellers stagger, scale variant. -->
+					<div use:reveal={{ variant: 'scale', delay: Math.min(i * 60, 300) }}>
+						<ProductCard {product} {lang} {t} />
+					</div>
 				{/each}
 			</div>
 		{/key}

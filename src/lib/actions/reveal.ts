@@ -1,5 +1,7 @@
 import type { ActionReturn } from 'svelte/action';
 
+export type RevealVariant = 'rise' | 'scale' | 'slide';
+
 export type RevealOptions = {
 	/**
 	 * Stagger delay in ms before the reveal transition starts. Clamped to
@@ -14,6 +16,14 @@ export type RevealOptions = {
 	 * does not re-hide the node on exit.
 	 */
 	once?: boolean;
+	/**
+	 * Entrance shape (elevation round 2, G-15). All variants share the
+	 * one 400ms / ease-enter system in app.css — only the starting
+	 * transform differs: `rise` (default, fade + 12px rise), `scale`
+	 * (fade + 0.96 scale, for tiles/cards), `slide` (fade + 16px slide
+	 * from the left, for strips/bands).
+	 */
+	variant?: RevealVariant;
 };
 
 /**
@@ -51,7 +61,7 @@ export type RevealOptions = {
  */
 export function reveal(
 	node: HTMLElement,
-	{ delay = 0, once: _once = true }: RevealOptions = {}
+	{ delay = 0, once: _once = true, variant = 'rise' }: RevealOptions = {}
 ): ActionReturn<RevealOptions> {
 	// `_once` is intentionally unused: the reveal always fires once.
 	void _once;
@@ -62,6 +72,7 @@ export function reveal(
 
 	const clampedDelay = Math.max(0, Math.min(delay, 300));
 	node.classList.add('reveal');
+	if (variant !== 'rise') node.classList.add(`reveal--${variant}`);
 	if (clampedDelay > 0) node.style.transitionDelay = `${clampedDelay}ms`;
 
 	let clearTimer: ReturnType<typeof setTimeout> | undefined;

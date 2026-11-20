@@ -12,6 +12,11 @@ export type DemoReview = {
 	title: LocalizedString;
 	text: LocalizedString;
 	helpful: number;
+	/**
+	 * Staff reply from the TechDova team (demo copy, shown styled
+	 * distinctly from the review). Only some reviews carry one.
+	 */
+	staffReply?: LocalizedString;
 };
 
 export const demoReviews: DemoReview[] = [
@@ -49,7 +54,11 @@ export const demoReviews: DemoReview[] = [
 			en: 'Overall I am pleased: it does everything I needed and feels well made. My only note is that the setup instructions could be clearer for first-time users.',
 			fr: 'Dans l’ensemble, je suis satisfaite : il fait tout ce dont j’avais besoin et semble bien fabriqué. Ma seule remarque est que les instructions d’installation pourraient être plus claires pour les débutants.'
 		},
-		helpful: 6
+		helpful: 6,
+		staffReply: {
+			en: 'Thank you for the feedback! We have rewritten the quick-start guide with clearer first-time setup steps — the new version is already in the box. — TechDova team',
+			fr: 'Merci pour votre retour ! Nous avons réécrit le guide de démarrage avec des étapes d’installation plus claires pour les débutants — la nouvelle version est déjà dans la boîte. — Équipe TechDova'
+		}
 	},
 	{
 		id: 'review-4',
@@ -97,7 +106,11 @@ export const demoReviews: DemoReview[] = [
 			en: 'It works as described, but I had a small issue during setup and the packaging could have been better. Fair for the price, though I expected a bit more polish.',
 			fr: 'Il fonctionne comme décrit, mais j’ai eu un petit souci lors de l’installation et l’emballage aurait pu être meilleur. Correct pour le prix, même si j’attendais un peu plus de finition.'
 		},
-		helpful: 3
+		helpful: 3,
+		staffReply: {
+			en: 'Sorry about the setup hiccup and the packaging — we have added extra padding to every box and a step-by-step setup card. If anything is still missing, our support team will send a replacement. — TechDova team',
+			fr: 'Désolés pour le souci d’installation et l’emballage — nous avons ajouté un rembourrage supplémentaire dans chaque boîte ainsi qu’une fiche d’installation étape par étape. S’il manque encore quelque chose, notre service client enverra un remplacement. — Équipe TechDova'
+		}
 	},
 	{
 		id: 'review-8',
@@ -109,7 +122,11 @@ export const demoReviews: DemoReview[] = [
 			en: 'The product itself is fine, but delivery took longer than promised and one accessory was missing from the box. Support resolved it eventually, but the experience was frustrating.',
 			fr: 'Le produit lui-même est correct, mais la livraison a pris plus de temps que promis et un accessoire manquait dans la boîte. Le service client a fini par résoudre le problème, mais l’expérience a été frustrante.'
 		},
-		helpful: 5
+		helpful: 5,
+		staffReply: {
+			en: 'We are sorry the delivery ran late and an accessory was missing — that is not the experience we want. The missing accessory has been sent, and we have tightened our packing checks so every box leaves complete. — TechDova team',
+			fr: 'Nous sommes désolés du retard de livraison et de l’accessoire manquant — ce n’est pas l’expérience que nous voulons offrir. L’accessoire manquant a été envoyé et nous avons renforcé nos contrôles d’emballage pour que chaque boîte parte complète. — Équipe TechDova'
+		}
 	}
 ];
 

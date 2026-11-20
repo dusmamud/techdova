@@ -27,6 +27,14 @@ on the site are placeholders.
 - Home: https://techdova.pages.dev/en and https://techdova.pages.dev/fr
 - Shop (all products, search, filters, sorting): https://techdova.pages.dev/en/shop
 - Deals: https://techdova.pages.dev/en/deals
+- Outlet (open-box, refurbished, clearance — demo): https://techdova.pages.dev/en/outlet
+- All categories: https://techdova.pages.dev/en/categories
+- Gift finder (demo quiz): https://techdova.pages.dev/en/gift-finder
+- Buying guides: https://techdova.pages.dev/en/guides
+- Price match promise (demo policy): https://techdova.pages.dev/en/price-match
+- Student discount (demo): https://techdova.pages.dev/en/student
+- TechDova for business (demo): https://techdova.pages.dev/en/business
+- Repairs and service booking (demo): https://techdova.pages.dev/en/repairs
 - New arrivals: https://techdova.pages.dev/en/new-arrivals
 - Best sellers: https://techdova.pages.dev/en/best-sellers
 - Gift cards (demo): https://techdova.pages.dev/en/gift-cards
@@ -37,6 +45,7 @@ on the site are placeholders.
 - Extended warranty (demo): https://techdova.pages.dev/en/warranty
 - Cookie and storage policy: https://techdova.pages.dev/en/cookies
 - Our stores (fictional demo stores): https://techdova.pages.dev/en/stores
+- Store detail (demo): https://techdova.pages.dev/en/stores/algiers-centre (also oran-front-de-mer, constantine-centre)
 - Help centre: https://techdova.pages.dev/en/help
 - Search results: https://techdova.pages.dev/en/search
 - Category pages: https://techdova.pages.dev/en/category/smartphones (also computers, audio, smartwatches, gaming, accessories)
@@ -71,5 +80,5 @@ French equivalents use the /fr prefix, e.g. https://techdova.pages.dev/fr/shop.
 
 ## Machine-readable files
 
-- Sitemap: https://techdova.pages.dev/sitemap.xml (50 paths x 2 locales, with hreflang alternates)
+- Sitemap: https://techdova.pages.dev/sitemap.xml (61 paths x 2 locales, with hreflang alternates)
 - Robots: https://techdova.pages.dev/robots.txt

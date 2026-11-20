@@ -285,9 +285,47 @@
 		transform var(--duration-400) var(--ease-enter);
 }
 
+/* Reveal variants (elevation round 2, G-15): same 400ms / ease-enter
+   system, only the starting transform differs. `.reveal-visible` below
+   (higher specificity) always wins once the node is revealed. */
+.reveal--scale {
+	transform: scale(0.96);
+}
+
+.reveal--slide {
+	transform: translateX(-16px);
+}
+
 .reveal.reveal-visible {
 	opacity: 1;
 	transform: translateY(0);
+}
+
+/* Back-to-top FAB (elevation round 2, G-01): the bottom offset differs
+   below/above `sm` — on mobile the button stacks above the chat FAB (and
+   above the sticky mobile ATC bar), on desktop it keeps its old offset.
+   The two custom properties are set inline by BackToTop.svelte (with a
+   safe-area inset folded in); this rule picks the right one per width,
+   which a single inline `bottom:` could not do. */
+.back-to-top-fab {
+	bottom: var(--btt-bottom-mobile, 16px);
+}
+
+@media (min-width: 640px) {
+	.back-to-top-fab {
+		bottom: var(--btt-bottom-desktop, 16px);
+	}
+}
+
+/* View Transitions API (elevation round 2, G-06): same-document
+   navigations cross-fade in 200ms via `onNavigate` in +layout.svelte.
+   No cross-document `@view-transition` opt-in (Firefox support
+   incomplete). Disabled under reduced motion (the JS guard in the
+   layout skips the transition; this is the backstop). */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 200ms;
+	animation-timing-function: var(--ease-enter);
 }
 
 /* Card hover lift: subtle rise + shadow, fine pointers only (no sticky hover
@@ -314,7 +352,9 @@
    elsewhere; these rules additionally remove the hidden/offset states. */
 @media (prefers-reduced-motion: reduce) {
 	.reveal,
-	.reveal-visible {
+	.reveal-visible,
+	.reveal--scale,
+	.reveal--slide {
 		opacity: 1 !important;
 		transform: none !important;
 		transition: none !important;
@@ -342,6 +382,11 @@
 	.animate-heart-burst,
 	.animate-grid-in,
 	.animate-dot-progress {
+		animation: none !important;
+	}
+
+	::view-transition-old(root),
+	::view-transition-new(root) {
 		animation: none !important;
 	}
 }
